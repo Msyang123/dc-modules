@@ -7,7 +7,7 @@
         type="com.lhiot.dc.data.domain.ProductStandard" >
         <id column="id" property="id"/>
         <result column="product_id" property="productId" />
-        <result column="apply_type" property="applyType" />
+        <result column="application_type" property="applicationType" />
         <result column="product_code" property="productCode" />
         <result column="product_name" property="productName" />
         <result column="group_id" property="groupId" />
@@ -39,7 +39,7 @@
         <trim suffixOverrides="," >
             id,
             product_id,
-            apply_type,
+            application_type,
             product_code,
             product_name,
             group_id,
@@ -77,8 +77,8 @@
             <if test="productId != null ">
                 product_id,
             </if>
-            <if test="applyType != null ">
-                apply_type,
+            <if test="applicationType != null ">
+                application_type,
             </if>
             <if test="productCode != null ">
                 product_code,
@@ -160,8 +160,8 @@
             <if test="productId != null ">
                 #{productId},
             </if>
-            <if test="applyType != null ">
-                #{applyType},
+            <if test="applicationType != null ">
+                #{applicationType},
             </if>
             <if test="productCode != null ">
                 #{productCode},
@@ -251,8 +251,8 @@
             <if test="productId != null ">
                 product_id = #{productId},
             </if>
-            <if test="applyType != null ">
-                apply_type = #{applyType},
+            <if test="applicationType != null ">
+                application_type = #{applicationType},
             </if>
             <if test="productCode != null ">
                 product_code = #{productCode},
@@ -375,8 +375,8 @@
             <if test="productCode != null and productCode != ''">
                 and t1.product_code like concat('%',#{productCode},'%')
             </if>
-            <if test="applyType != null ">
-                and t1.apply_type = #{applyType}
+            <if test="applicationType != null ">
+                and t1.application_type = #{applicationType}
             </if>
             <if test="productSectionId != null and productSectionId != ''">
                 and EXISTS (select 1 from product_section_relation t2 where t1.id = t2.product_standard_id and t2.product_section_id =  #{productSectionId})
@@ -424,7 +424,7 @@
         t1.base_qty baseQty,
         t1.product_description productDescription,
         t1.product_code AS productCode,
-        t1.apply_type AS applyType,
+        t1.application_type AS applicationType,
         t1.base_barcode AS baseBarcode,
         t3.unit_name AS productUnit,
         t4.group_name AS groupName,
@@ -445,14 +445,11 @@
             from product_standard t1
         <include refid="pageWxSmallProductStandardsWhere" />
     </select>
-    <update id="deleteProductSale">
-        delete from  product_sale
-    </update>
     <insert id="recordSaleCount">
-        INSERT into product_sale(product_standard_id,sale_count,apply_type,create_time)
-        select * from ( select standard_id,sum(product_qty) sale_count,apply_type,now() from
-        (select t1.standard_id,t2.apply_type,t1.product_qty from sgsl_order.order_product t1 join sgsl_order.base_order t2 on t1.order_id =
-        t2.id where t1.refund_status = 'NOT_REFUND') t3 group by t3.standard_id,t3.apply_type )t4;
+        INSERT into product_sale(product_standard_id,sale_count,application_type,create_time)
+        select * from ( select standard_id,sum(product_qty) sale_count,application_type,now() from
+        (select t1.standard_id,t2.application_type,t1.product_qty from sgsl_order.order_product t1 join sgsl_order.base_order t2 on t1.order_id =
+        t2.id where t1.refund_status = 'NOT_REFUND') t3 group by t3.standard_id,t3.application_type )t4;
     </insert>
 
     <!-- 限时抢购定时任务-批量跟新 add by huangmk-->

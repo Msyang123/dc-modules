@@ -98,16 +98,16 @@ public class AssortmentApi {
 
     @SuppressWarnings("unchecked")
 	@GetMapping("/list/{ids}")
-    @ApiOperation(value = "根据ids查找套餐或者套餐及商品列表,供订单服务feign调用")
-    public ResponseEntity<Multiple<Assortment>> findAssortments(@PathVariable(required=true,value="ids") @NotNull String ids,
-                                                                   @RequestParam(required=false,value="flag",defaultValue="no") String flag) {
+    @ApiOperation(value = "根据ids查找套餐或者套餐及商品列表,供订单服务feign调用",response = Multiple.class)
+    public ResponseEntity findAssortments(@PathVariable(value="ids") @NotNull String ids,
+                                          @RequestParam(required=false,value="flag",defaultValue="no") String flag) {
         log.debug("根据ids查找套餐或者套餐及商品列表", ids);
         return ResponseEntity.ok(Multiple.of(assortmentService.findAssortments(ids, flag)));
     }
 
     @GetMapping("/page/assortments/{ids}")
     @ApiOperation(value = "查询商品套餐分页列表")
-    public ResponseEntity<PagerResultObject<Assortment>> pageAssortments(@PathVariable(required=true,value="ids") @NotNull String ids){
+    public ResponseEntity<PagerResultObject<Assortment>> pageAssortments(@PathVariable(value="ids") @NotNull String ids){
 
         return ResponseEntity.ok(assortmentService.pageAssortmentList(ids));
     }

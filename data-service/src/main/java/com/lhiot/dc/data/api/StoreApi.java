@@ -5,6 +5,7 @@ import com.lhiot.dc.data.common.PagerResultObject;
 import com.lhiot.dc.data.common.util.CommonUtils;
 import com.lhiot.dc.data.domain.LocationParam;
 import com.lhiot.dc.data.domain.Store;
+import com.lhiot.dc.data.domain.enums.ApplicationTypeEnum;
 import com.lhiot.dc.data.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -64,11 +65,13 @@ public class StoreApi {
     }
 
     @ApiOperation(value = "根据id查询门店", notes = "根据id查询门店")
-    @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long")
-    @GetMapping("/{id}")
-    public ResponseEntity<Store> findStore(@PathVariable("id") Long id) {
-
-        return ResponseEntity.ok(storeService.selectById(id));
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = "path", name = "applicationType", value = "应用类型", required = true, dataType = "ApplicationTypeEnum")
+    })
+    @GetMapping("/{id}/{applicationType}")
+    public ResponseEntity<Store> findStore(@PathVariable("id") Long id,@PathVariable("applicationType") ApplicationTypeEnum applicationType) {
+        return ResponseEntity.ok(storeService.selectById(id,applicationType));
     }
 
     @GetMapping("/by-code/{code}")
@@ -88,26 +91,26 @@ public class StoreApi {
 
     @GetMapping("position")
     @ApiOperation(value = "根据位置查询门店所有列表")
-    public ResponseEntity<Multiple> findPosition(LocationParam param){
+    public ResponseEntity<Multiple> findPosition(LocationParam param,ApplicationTypeEnum applicationType){
         log.debug("根据位置查询门店列表\t param:{}",param);
 
-        return ResponseEntity.ok(Multiple.of(storeService.findStoresSortByDistance(param)));
+        return ResponseEntity.ok(Multiple.of(storeService.findStoresSortByDistance(param,applicationType)));
     }
 
     @GetMapping("position/lately")
     @ApiOperation(value = "根据位置返回最近的门店")
-    public ResponseEntity<Store> findPositionLately(LocationParam param){
+    public ResponseEntity<Store> findPositionLately(LocationParam param, ApplicationTypeEnum applicationTypeEnum){
         log.debug("根据位置返回最近的门店\t param:{}",param);
-        List<Store> resultList = storeService.findStoresSortByDistance(param);
+        List<Store> resultList = storeService.findStoresSortByDistance(param,applicationTypeEnum);
 
         return ResponseEntity.ok((Store)CommonUtils.getCollectionsFirst(resultList));
     }
 
     @ApiOperation(value = "根据用户位置查询附近(200km内)门店", notes = "定标位置查询附近(200km内)门店列表")
     @GetMapping(value = "/nearstores")
-    public ResponseEntity<Multiple> findNearbyStores(LocationParam param){
+    public ResponseEntity<Multiple> findNearbyStores(LocationParam param,ApplicationTypeEnum applicationType){
         log.debug("根据用户位置查询附近(200km内)门店\t param:{}",param);
-        List<Store> list = storeService.findUserNearbyStores(param.getLocationX(), param.getLocationY(), 200, 22);
+        List<Store> list = storeService.findUserNearbyStores(param.getLocationX(), param.getLocationY(), 200, 22,applicationType);
         return ResponseEntity.ok(Multiple.of(list));
     }
 
@@ -127,8 +130,8 @@ public class StoreApi {
     @ApiOperation(value = "后台管理-获取所有门店信息")
     public ResponseEntity<Multiple> findAllStores(){
         log.debug("后台管理-获取所有门店信息");
-
-        return ResponseEntity.ok(Multiple.of(storeService.findAllStores()));
+        //不查询门店位置信息
+        return ResponseEntity.ok(Multiple.of(storeService.findAllStores(null)));
     }
 
 }

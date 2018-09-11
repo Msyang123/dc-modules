@@ -4,8 +4,11 @@ import com.lhiot.dc.data.common.PagerResultObject;
 import com.lhiot.dc.data.common.util.DistUtil;
 import com.lhiot.dc.data.domain.LocationParam;
 import com.lhiot.dc.data.domain.Store;
+import com.lhiot.dc.data.domain.StorePosition;
+import com.lhiot.dc.data.domain.enums.ApplicationTypeEnum;
 import com.lhiot.dc.data.domain.enums.StoreStatusEnum;
 import com.lhiot.dc.data.mapper.StoreMapper;
+import com.lhiot.dc.data.mapper.StorePositionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +29,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class StoreService {
 
+    private final StorePositionMapper storePositionMapper;
     private final StoreMapper storeMapper;
 
     @Autowired
-    public StoreService(StoreMapper storeMapper) {
+    public StoreService(StorePositionMapper storePositionMapper, StoreMapper storeMapper) {
+        this.storePositionMapper = storePositionMapper;
         this.storeMapper = storeMapper;
     }
 
@@ -77,8 +82,16 @@ public class StoreService {
     * @author Limiaojun
     * @date 2018/06/02 09:04:50
     */
-    public Store selectById(Long id){
-        return this.storeMapper.selectById(id);
+    public Store selectById(Long id,ApplicationTypeEnum applicationType){
+        Store store = this.storeMapper.selectById(id);
+
+        if(Objects.isNull(store))
+            return null;
+        StorePosition searchStorePosition=new StorePosition();
+        searchStorePosition.setStoreId(store.getId());
+        searchStorePosition.setApplicationType(applicationType);
+        store.setStorePosition(this.storePositionMapper.selectByStoreId(searchStorePosition));
+        return store;
     }
 
     /**
@@ -140,10 +153,10 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018-05-30 11:35
      */
-    public List<Store> findAllStores() {
+    public List<Store> findAllStores(ApplicationTypeEnum applicationType) {
         Store store = new Store();
         store.setStoreStatus(StoreStatusEnum.ENABLED);
-        return this.list(store);
+        return this.list(store,applicationType);
     }
 
     /**
@@ -153,11 +166,30 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018-05-30 11:35
      */
-    public List<Store> list(Store store) {
+    public List<Store> list(Store store,ApplicationTypeEnum applicationType) {
         if(!Objects.isNull(store)) {
             store.setRows(null);
         }
-        return this.storeMapper.pageStores(store);
+        List<Store> storeList = this.storeMapper.pageStores(store);
+
+        if(Objects.nonNull(storeList)&&Objects.nonNull(applicationType)) {
+            List<Long> storeIds = storeList.parallelStream()
+                .map(Store::getId)
+                .collect(Collectors.toList());
+
+            StorePosition storePosition=new StorePosition();
+            storePosition.setApplicationType(applicationType);
+            storePosition.setStoreIds(storeIds);
+            //批量查询门店位置
+            List<StorePosition> storePositionList = this.storePositionMapper.selectByStoreIds(storePosition);
+
+            //给每个门店赋值门店位置
+            storeList.forEach(storeItem->
+                storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(),storePositionItem.getStoreId()))
+                        .forEach(storePositionItem ->storeItem.setStorePosition(storePosition))
+            );
+        }
+        return storeList;
     }
 
     /**
@@ -168,8 +200,8 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/05/30 10:30:51
      */
-    public List<Store> findStoresSortByDistance(LocationParam positionParam) {
-        List<Store> listStore = this.findAllStores();
+    public List<Store> findStoresSortByDistance(LocationParam positionParam,ApplicationTypeEnum applicationTypeEnum) {
+        List<Store> listStore = this.findAllStores(applicationTypeEnum);
 
         return storesSortByDistance(positionParam, listStore);
     }
@@ -183,20 +215,15 @@ public class StoreService {
     * @Date: 2018/8/30 11:50
     */
     private List<Store> storesSortByDistance(LocationParam positionParam, List<Store> listStore) {
-        List<Store> nearbyStores=this.convertAndSortByDistance(listStore, positionParam.getLocationX(), positionParam.getLocationY());
-        //将地推门店放置到第二个选项
-        Store temp=null;
-        for(Store item:nearbyStores){
-                if(item.getStoreId()==73L){
-                        temp=item;
-                        nearbyStores.remove(item);
-                        break;
-                }
-        }
-        if(temp != null){
-                nearbyStores.add(1, temp);
-        }
-        return nearbyStores;
+        return listStore.stream().map(store -> {
+            double distance = DistUtil.getDistance(store.getStorePosition().getStoreCoordx(), store.getStorePosition().getStoreCoordy(), positionParam.getLocationX(), positionParam.getLocationY());
+            store.setDistance(String.format("%.2f", distance));
+            return store;
+        }).sorted((o1, o2) -> {
+            int distance1 = (int) (Double.parseDouble(o1.getDistance()) * 10);
+            int distance2 = (int) (Double.parseDouble(o2.getDistance()) * 10);
+            return distance1 - distance2;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -208,13 +235,13 @@ public class StoreService {
      * @param hourLimit 时间约束（大于这个时间将视频改成录播）
      * @return 门店集合
      */
-    public List<Store> findUserNearbyStores(double lat, double lng, int km, int hourLimit){
+    public List<Store> findUserNearbyStores(double lat, double lng, int km, int hourLimit,ApplicationTypeEnum applicationTypeEnum){
 
-        List<Store> allStore = this.findAllStores();
+        List<Store> allStore = this.findAllStores(applicationTypeEnum);
 
         List<Store> nearbyStores = new ArrayList<>();
         allStore.forEach(store -> {
-            double distance = DistUtil.getDistance(Double.valueOf(store.getStoreCoordx() + ""), Double.valueOf(store.getStoreCoordy() + ""), lat, lng);
+            double distance = DistUtil.getDistance(store.getStorePosition().getStoreCoordx(), store.getStorePosition().getStoreCoordy(), lat, lng);
             store.setDistance(String.format("%.2f", distance));
 
             if (distance <= km) {
@@ -225,39 +252,7 @@ public class StoreService {
                 nearbyStores.add(store);
             }
         });
-        //将地推门店放置到第二个选项
-        Store temp=null;
-        for(Store item:nearbyStores){
-                if(item.getStoreId()==73L){
-                        temp=item;
-                        nearbyStores.remove(item);
-                        nearbyStores.add(1, temp);
-                        break;
-                }
-        }
         return nearbyStores;
-    }
-
-
-
-    /**
-     * Map转JavaBean，并按输入的经纬度坐标，按距离排序
-     *
-     * @param stores 要计算远近跟排序的源集合
-     * @param lat    当前坐标纬度
-     * @param lng    当前坐标经度
-     * @return 排序后的门店信息集合
-     */
-    private List<Store> convertAndSortByDistance(List<Store> stores, double lat, double lng) {
-        return stores.stream().map(store -> {
-            double distance = DistUtil.getDistance(Double.valueOf(store.getStoreCoordx() + ""), Double.valueOf(store.getStoreCoordy() + ""), lat, lng);
-            store.setDistance(String.format("%.2f", distance));
-            return store;
-        }).sorted((o1, o2) -> {
-            int distance1 = (int) (Double.parseDouble(o1.getDistance()) * 10);
-            int distance2 = (int) (Double.parseDouble(o2.getDistance()) * 10);
-            return distance1 - distance2;
-        }).collect(Collectors.toList());
     }
     
     public Store findByCode(String storeCode){

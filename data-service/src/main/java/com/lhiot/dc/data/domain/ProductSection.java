@@ -2,7 +2,7 @@ package com.lhiot.dc.data.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.dc.data.common.PagerRequestObject;
-import com.lhiot.dc.data.domain.enums.ApplyEnum;
+import com.lhiot.dc.data.domain.enums.ApplicationTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -74,8 +74,8 @@ public class ProductSection extends PagerRequestObject {
     /**
      *应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序
      */
-    @ApiModelProperty(value = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序 WXSMALL_SHOP 微商城小程序", dataType = "ApplyEnum")
-    private ApplyEnum applyType;
+    @ApiModelProperty(value = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序 WXSMALL_SHOP 微商城小程序", dataType = "ApplicationTypeEnum")
+    private ApplicationTypeEnum applicationType;
 
     /**
      *子版块

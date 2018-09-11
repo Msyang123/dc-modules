@@ -73,14 +73,14 @@ public class ProductSectionApi {
     }
     @GetMapping("/findByPositionName")
     @ApiOperation(value = "根据位置查询板块信息")
-    public ResponseEntity<ProductSectionSubResult> findByPositionName(String  positionName, String applyType, String storeId ){
-        ProductSectionSubResult productSectionResult = productSectionService.findSubByPositionName(positionName,applyType,storeId);
+    public ResponseEntity<ProductSectionSubResult> findByPositionName(String  positionName, String applicationType, String storeId ){
+        ProductSectionSubResult productSectionResult = productSectionService.findSubByPositionName(positionName,applicationType,storeId);
         return ResponseEntity.ok(productSectionResult);
     }
     @GetMapping("/products")
     @ApiOperation(value = "查询板块商品信息")
-    public ResponseEntity<ProductSectionProductResult> findByProducts(String storeId, String positionName, String applyType){
-        ProductSectionProductResult productSectionProductResult = productSectionService.findProductByPositionName(positionName,applyType,storeId);
+    public ResponseEntity<ProductSectionProductResult> findByProducts(String storeId, String positionName, String applicationType){
+        ProductSectionProductResult productSectionProductResult = productSectionService.findProductByPositionName(positionName,applicationType,storeId);
         return ResponseEntity.ok(productSectionProductResult);
     }
     @ApiOperation(value = "商品板块信息树查询", notes = "后台管理--商品板块信息树查询")

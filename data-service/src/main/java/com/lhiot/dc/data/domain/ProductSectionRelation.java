@@ -54,7 +54,7 @@ public class ProductSectionRelation extends PagerRequestObject {
      *应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序 FRUIT_DOCTOR-鲜果师商城
      */
     @ApiModelProperty(value = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序 FRUIT_DOCTOR-鲜果师商城  WXSMALL_SHOP 微商城小程序", dataType = "String")
-    private String applyType;
+    private String applicationType;
 
     /**
      *商品编码

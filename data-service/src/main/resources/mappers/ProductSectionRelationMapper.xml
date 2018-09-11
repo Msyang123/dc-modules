@@ -17,7 +17,7 @@
             product_standard_id,
             product_section_id,
             product_id,
-            apply_type,
+            application_type,
             product_code,
             product_name,
             group_id,
@@ -140,8 +140,8 @@
             <if test="productCode != null and productCode != ''">
                 and t2.product_code like concat('%',#{productCode},'%')
             </if>
-            <if test="applyType != null ">
-                and t2.apply_type = #{applyType}
+            <if test="applicationType != null ">
+                and t2.application_type = #{applicationType}
             </if>
         </where>
     </sql>

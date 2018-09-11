@@ -1,7 +1,7 @@
 package com.lhiot.dc.data.domain;
 
 import com.lhiot.dc.data.common.PagerRequestObject;
-import com.lhiot.dc.data.domain.enums.ApplyEnum;
+import com.lhiot.dc.data.domain.enums.ApplicationTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -42,8 +42,8 @@ public class ProductGroup extends PagerRequestObject {
     /**
     *应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序
     */
-    @ApiModelProperty(notes = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序", dataType = "ApplyEnum")
-    private ApplyEnum applyType;
+    @ApiModelProperty(notes = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序", dataType = "ApplicationTypeEnum")
+    private ApplicationTypeEnum applicationType;
 
     /**
     *排序字段

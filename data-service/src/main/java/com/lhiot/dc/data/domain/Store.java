@@ -26,7 +26,7 @@ public class Store extends PagerRequestObject{
     *门店id
     */
     @ApiModelProperty(notes = "门店id", dataType = "Long")
-    private Long storeId;
+    private Long id;
 
     /**
     *门店编码
@@ -63,18 +63,6 @@ public class Store extends PagerRequestObject{
     */
     @ApiModelProperty(notes = "所属区域", dataType = "String")
     private String storeArea;
-
-    /**
-    *坐标位置（经度）
-    */
-    @ApiModelProperty(notes = "坐标位置（经度）", dataType = "Double")
-    private Double storeCoordy;
-
-    /**
-    *坐标位置（纬度）
-    */
-    @ApiModelProperty(notes = "坐标位置（纬度）", dataType = "Double")
-    private Double storeCoordx;
 
     /**
     *门店状态(0-未开启  1-开启)
@@ -120,5 +108,8 @@ public class Store extends PagerRequestObject{
 
     @ApiModelProperty(notes="距离用户多远",dataType="String")
     private String distance;
+
+    @ApiModelProperty(notes="门店位置信息",dataType="StorePosition")
+    private StorePosition storePosition;
 
 }

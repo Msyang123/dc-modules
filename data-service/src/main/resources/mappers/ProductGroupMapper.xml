@@ -8,7 +8,7 @@
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId" />
         <result column="group_name" property="groupName" />
-        <result column="apply_type" property="applyType" />
+        <result column="application_type" property="applicationType" />
         <result column="rank" property="rank" />
     </resultMap>
 
@@ -18,7 +18,7 @@
             id,
             parent_id,
             group_name,
-            apply_type,
+            application_type,
             rank,
         </trim>
     </sql>
@@ -36,8 +36,8 @@
             <if test="groupName != null ">
                 group_name,
             </if>
-            <if test="applyType != null ">
-                apply_type,
+            <if test="applicationType != null ">
+                application_type,
             </if>
             <if test="rank != null ">
                 rank,
@@ -53,8 +53,8 @@
             <if test="groupName != null ">
                 #{groupName},
             </if>
-            <if test="applyType != null ">
-                #{applyType},
+            <if test="applicationType != null ">
+                #{applicationType},
             </if>
             <if test="rank != null ">
                 #{rank},
@@ -72,8 +72,8 @@
             <if test="groupName != null ">
                 group_name = #{groupName},
             </if>
-            <if test="applyType != null ">
-                apply_type = #{applyType},
+            <if test="applicationType != null ">
+                application_type = #{applicationType},
             </if>
             <if test="rank != null ">
                 rank = #{rank},
@@ -109,8 +109,8 @@
             <if test="groupName != null ">
                 and group_name like concat('%',#{groupName},'%')
             </if>
-            <if test="applyType != null ">
-                and apply_type = #{applyType}
+            <if test="applicationType != null ">
+                and application_type = #{applicationType}
             </if>
             <if test="rank != null ">
                 and rank = #{rank}

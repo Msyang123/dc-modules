@@ -32,7 +32,7 @@ public class ProductStandardResult {
 
     @JsonProperty("applicationType")
     @ApiModelProperty(notes = "应用类型:APP-视食 WECHAT_MALL-微商城 S_MALL-小程序 FRUIT_DOCTOR-小程序", dataType = "String")
-    private String applyType;
+    private String applicationType;
 
     @ApiModelProperty(notes = "商品编码", dataType = "String")
     private String productCode;

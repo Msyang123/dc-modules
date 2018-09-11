@@ -136,11 +136,6 @@ public class ProducStandardService {
     }
 
 
-    /**
-     * @param productList
-     * @param store_id
-     * @return
-     */
  /*   public void productInv(String StoreCode,List<ProductStandard> productList){
         //要查询的商品的base_barcode
         String[] productCodes = new String[productList.size()];

@@ -24,14 +24,12 @@ public class ProductSectionService {
     private final ProductSectionMapper productSectionMapper;
     private final ProducStandardService producStandardService;
     private final StoreService storeService;
-    private final ProductSaleService productSaleService;
     @Autowired
     public ProductSectionService(ProductSectionMapper productSectionMapper,
-                                 ProducStandardService producStandardService,StoreService storeService,ProductSaleService productSaleService) {
+                                 ProducStandardService producStandardService,StoreService storeService) {
         this.productSectionMapper = productSectionMapper;
         this.producStandardService=producStandardService;
         this.storeService=storeService;
-        this.productSaleService = productSaleService;
     }
 
     /** 
@@ -111,10 +109,10 @@ public class ProductSectionService {
               this.productSectionMapper.pageProductSections(productSection));
     }
 
-    public ProductSectionSubResult findSubByPositionName(String positionName, String applyType,String storeId) {
+    public ProductSectionSubResult findSubByPositionName(String positionName, String applicationType,String storeId) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("positionName",positionName);
-        map.put("applyType",applyType);
+        map.put("applicationType",applicationType);
         ProductSection productSection = productSectionMapper.findByPositionName(map);
         ProductSectionSubResult productSectionResult = new ProductSectionSubResult();
         com.leon.microx.util.BeanUtils.of(productSectionResult).populate(productSection);
@@ -125,7 +123,7 @@ public class ProductSectionService {
             List<ProductSection> productSections = productSectionMapper.findByParentId(parentIds);
             for(ProductSection subSection:productSections){
                 ProductStandard productStandard = new ProductStandard();
-                productStandard.setApplyType(applyType);
+                productStandard.setApplicationType(applicationType);
                 productStandard.setProductSectionId(subSection.getId());
                 productStandard.setRows(null);
                 List<ProductStandard> list = producStandardService.pageList(productStandard).getRows();
@@ -134,16 +132,15 @@ public class ProductSectionService {
                 if(null != store){
                     producStandardService.productInv(store.getStoreCode(),list);
                 }*/
-                productSaleService.setSaleCount(list,applyType);
             }
             productSectionResult.setSubSectionList(productSections);
         }
         return productSectionResult;
     }
-    public ProductSectionProductResult findProductByPositionName(String positionName, String applyType,String storeId) {
+    public ProductSectionProductResult findProductByPositionName(String positionName, String applicationType,String storeId) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("positionName",positionName);
-        map.put("applyType",applyType);
+        map.put("applicationType",applicationType);
         ProductSection productSection = productSectionMapper.findByPositionName(map);
         if(null == productSection){
             return null;
@@ -151,7 +148,7 @@ public class ProductSectionService {
             ProductSectionProductResult productSectionResult = new ProductSectionProductResult();
             com.leon.microx.util.BeanUtils.of(productSectionResult).populate(productSection);
             ProductStandard productStandard = new ProductStandard();
-            productStandard.setApplyType(applyType);
+            productStandard.setApplicationType(applicationType);
             productStandard.setProductSectionId(productSectionResult.getId());
             productStandard.setRows(null);
             List<ProductStandard> list = producStandardService.pageList(productStandard).getRows();
@@ -160,7 +157,6 @@ public class ProductSectionService {
             if(null != store){
                 producStandardService.productInv(store.getStoreCode(),list);
             }*/
-            productSaleService.setSaleCount(list,applyType);
             return productSectionResult;
         }
     }

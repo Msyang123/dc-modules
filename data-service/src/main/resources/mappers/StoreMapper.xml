@@ -5,15 +5,13 @@
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
         type="com.lhiot.dc.data.domain.Store" >
-        <result column="store_id" property="storeId" />
+        <result column="id" property="id" />
         <result column="store_code" property="storeCode" />
         <result column="store_name" property="storeName" />
         <result column="store_address" property="storeAddress" />
         <result column="store_phone" property="storePhone" />
         <result column="store_image" property="storeImage" />
         <result column="store_area" property="storeArea" />
-        <result column="store_coordy" property="storeCoordy" />
-        <result column="store_coordx" property="storeCoordx" />
         <result column="store_status" property="storeStatus" />
         <result column="store_flagship" property="storeFlagship" />
         <result column="store_type" property="storeType" />
@@ -26,15 +24,13 @@
     <!-- base查询字段  -->
     <sql id="Base_Column_List" >
         <trim suffixOverrides="," >
-            store_id,
+            id,
             store_code,
             store_name,
             store_address,
             store_phone,
             store_image,
             store_area,
-            store_coordy,
-            store_coordx,
             store_status,
             store_flagship,
             store_type,
@@ -46,11 +42,11 @@
     </sql>
 
     <!--新增门店-->
-    <insert id="create" parameterType="com.lhiot.dc.data.domain.Store" useGeneratedKeys="true" keyProperty="storeId">
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.Store" useGeneratedKeys="true" keyProperty="id">
         insert into store
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="storeId != null ">
-                store_id,
+            <if test="id != null ">
+                id,
             </if>
             <if test="storeCode != null ">
                 store_code,
@@ -69,12 +65,6 @@
             </if>
             <if test="storeArea != null ">
                 store_area,
-            </if>
-            <if test="storeCoordy != null ">
-                store_coordy,
-            </if>
-            <if test="storeCoordx != null ">
-                store_coordx,
             </if>
             <if test="storeStatus != null ">
                 store_status,
@@ -99,8 +89,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="storeId != null ">
-                #{storeId},
+            <if test="id != null ">
+                #{id},
             </if>
             <if test="storeCode != null ">
                 #{storeCode},
@@ -172,12 +162,6 @@
             <if test="storeArea != null ">
                 store_area = #{storeArea},
             </if>
-            <if test="storeCoordy != null ">
-                store_coordy = #{storeCoordy},
-            </if>
-            <if test="storeCoordx != null ">
-                store_coordx = #{storeCoordx},
-            </if>
             <if test="storeStatus != null ">
                 store_status = #{storeStatus},
             </if>
@@ -200,12 +184,12 @@
                 tape_url = #{tapeUrl},
             </if>
         </set>
-        where store_id=#{storeId}
+        where id=#{id}
     </update>
 
     <!--根据ids删除门店-->
     <delete id="deleteByIds" parameterType="java.util.List">
-        delete from store where store_id in
+        delete from store where id in
         <foreach collection="list" item="item" open="("
             separator="," close=")">
             #{item}
@@ -216,15 +200,15 @@
     <!-- 根据id查找门店 -->
 	<select id="selectById" resultMap="BaseResultMap"
 		parameterType="long"> select <include refid="Base_Column_List" />
-		from store where store_id = #{id}
+		from store where id = #{id}
 	</select>
 
 
     <!-- base where条件  -->
     <sql id="Base_Where_Condition" >
         <where>
-            <if test="storeId != null ">
-                and store_id like concat('%',#{storeId},'%')
+            <if test="id != null ">
+                and id like concat('%',#{id},'%')
             </if>
             <if test="storeCode != null ">
                 and store_code like concat('%',#{storeCode},'%')
@@ -243,12 +227,6 @@
             </if>
             <if test="storeArea != null ">
                 and store_area = #{storeArea}
-            </if>
-            <if test="storeCoordy != null ">
-                and store_coordy = #{storeCoordy}
-            </if>
-            <if test="storeCoordx != null ">
-                and store_coordx = #{storeCoordx}
             </if>
             <if test="storeStatus != null ">
                 and store_status = #{storeStatus}
@@ -296,7 +274,7 @@
         parameterType="List">
             select
               <include refid="Base_Column_List" />
-            from store where store_id in
+            from store where id in
             <foreach collection="list" item="item" open="("
                      separator="," close=")">
                 #{item}
