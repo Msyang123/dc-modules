@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.data.mapper.ProductSectionRelationMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.data.domain.ProductSectionRelation" >
+        <id column="id" property="id"/>
+        <result column="product_standard_id" property="productStandardId" />
+        <result column="product_section_id" property="productSectionId" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            t1.id,
+            product_standard_id,
+            product_section_id,
+            product_id,
+            application_type,
+            product_code,
+            product_name,
+            group_id,
+            source_code,
+            image,
+            small_image,
+            large_image,
+            status,
+            base_unit_id,
+            base_barcode,
+            hd_skuid,
+            video_url,
+            video_image,
+            base_qty,
+            product_description,
+            barcode,
+            specification,
+            standard_qty,
+            unit_id,
+            price,
+            sale_price,
+            rank,
+            description,
+            shelves_status,
+            t3.unit_name AS productUnit,
+        </trim>
+    </sql>
+
+    <!--新增板块商品关联-->
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.ProductSectionRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into product_section_relation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="productStandardId != null ">
+                product_standard_id,
+            </if>
+            <if test="productSectionId != null ">
+                product_section_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="productStandardId != null ">
+                #{productStandardId},
+            </if>
+            <if test="productSectionId != null ">
+                #{productSectionId},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改板块商品关联-->
+    <update id="updateById" parameterType="com.lhiot.dc.data.domain.ProductSectionRelation">
+        update product_section_relation
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="productStandardId != null ">
+                product_standard_id = #{productStandardId},
+            </if>
+            <if test="productSectionId != null ">
+                product_section_id = #{productSectionId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除板块商品关联-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from product_section_relation where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找板块商品关联 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from product_section_relation where id = #{id}
+	</select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and t1.id = #{id}
+            </if>
+            <if test="productStandardId != null ">
+                and t1.product_standard_id = #{productStandardId}
+            </if>
+            <if test="productSectionId != null ">
+                and t1.product_section_id = #{productSectionId}
+            </if>
+            <if test="barcode != null and barcode != ''">
+                and t2.barcode like concat('%',#{barcode},'%')
+            </if>
+            <if test="productName != null and productName != ''">
+                and t2.product_name like concat('%',#{productName},'%')
+            </if>
+            <if test="productId != null and productId != ''">
+                and t2.product_id  = #{productId}
+            </if>
+            <if test="shelvesStatus != null ">
+                and t2.shelves_status  = #{shelvesStatus}
+            </if>
+            <if test="minPrice != null and minPrice != ''">
+                and t2.price  &gt;= #{minPrice}
+            </if>
+            <if test="maxPrice != null and maxPrice != ''">
+                and t2.price  &lt;= #{maxPrice}
+            </if>
+            <if test="productCode != null and productCode != ''">
+                and t2.product_code like concat('%',#{productCode},'%')
+            </if>
+            <if test="applicationType != null ">
+                and t2.application_type = #{applicationType}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询板块商品关联列表-->
+     <select id="pageProductSectionRelations" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.data.domain.ProductSectionRelation">
+	        select <include refid="Base_Column_List" />
+	        from product_section_relation t1 left join  product_standard t2 on t1.product_standard_id = t2.id
+            LEFT JOIN product_unit t3 ON t2.base_unit_id = t3.id
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询板块商品关联总记录-->
+    <select id="pageProductSectionRelationCounts" resultType="long"
+        parameterType="com.lhiot.dc.data.domain.ProductSectionRelation">
+            select count(1)
+            from product_section_relation t1 left join  product_standard t2 on t1.product_standard_id = t2.id
+            <include refid="Base_Where_Condition" />
+    </select>
+
+
+    <!-- 根据id查找板块商品关联 -->
+    <select id="findByStandardIdAndSectionId" resultType="com.lhiot.dc.data.domain.ProductSectionRelation"
+            parameterType="map"> select *
+        from product_section_relation where product_standard_id = #{productStandardId} and product_section_id = #{productSectionId}
+    </select>
+</mapper>

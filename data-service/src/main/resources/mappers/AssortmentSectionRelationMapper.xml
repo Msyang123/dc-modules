@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.data.mapper.AssortmentSectionRelationMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.data.domain.AssortmentSectionRelation" >
+        <id column="id" property="id"/>
+        <result column="section_id" property="sectionId" />
+        <result column="assortment_id" property="assortmentId" />
+        <result column="rank_no" property="rankNo" />
+    </resultMap>
+    <!--套餐商品数据库字段关系映射-->
+    <resultMap id="AssortmentBaseResultMap"
+               type="com.lhiot.dc.data.domain.Assortment" >
+        <id column="id" property="id"/>
+        <result column="assortment_name" property="assortmentName" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="create_user" property="createUser" />
+        <result column="assortment_image" property="assortmentImage" />
+        <result column="detail" property="detail" />
+        <result column="introduce" property="introduce" />
+        <result column="price" property="price" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            section_id,
+            assortment_id,
+            rank_no,
+        </trim>
+    </sql>
+
+
+    <!-- 套餐商品查询字段  -->
+    <sql id="AssortmentBase_Column_List" >
+        <trim suffixOverrides="," >
+            a.id,
+            assortment_name,
+            status,
+            create_time,
+            create_user,
+            assortment_image,
+            detail,
+            introduce,
+            price,
+        </trim>
+    </sql>
+
+    <!--新增板块套餐关联-->
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.AssortmentSectionRelation" useGeneratedKeys="true" keyProperty="id">
+        insert into assortment_section_relation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="sectionId != null ">
+                section_id,
+            </if>
+            <if test="assortmentId != null ">
+                assortment_id,
+            </if>
+            <if test="rankNo != null ">
+                rank_no,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="sectionId != null ">
+                #{sectionId},
+            </if>
+            <if test="assortmentId != null ">
+                #{assortmentId},
+            </if>
+            <if test="rankNo != null ">
+                #{rankNo},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改板块套餐关联-->
+    <update id="updateById" parameterType="com.lhiot.dc.data.domain.AssortmentSectionRelation">
+        update assortment_section_relation
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="sectionId != null ">
+                section_id = #{sectionId},
+            </if>
+            <if test="assortmentId != null ">
+                assortment_id = #{assortmentId},
+            </if>
+            <if test="rankNo != null ">
+                rank_no = #{rankNo},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除板块套餐关联-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from assortment_section_relation where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找板块套餐关联 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from assortment_section_relation where id = #{id}
+	</select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="sectionId != null ">
+                and section_id = #{sectionId}
+            </if>
+            <if test="assortmentId != null ">
+                and assortment_id = #{assortmentId}
+            </if>
+            <if test="rankNo != null ">
+                and rank_no = #{rankNo}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="Relation_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="sectionId != null ">
+                and section_id = #{sectionId}
+            </if>
+            <if test="assortmentName != null ">
+                and assortment_name like concat('%',#{assortmentName},'%')
+            </if>
+            <if test="nameCn != null ">
+                and name_cn = #{nameCn}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询板块套餐关联列表-->
+     <select id="pageAssortmentSectionRelations" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.data.domain.AssortmentSectionRelation">
+	        select <include refid="Base_Column_List" />
+	        from assortment_section_relation
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询板块套餐关联列表-->
+    <select id="pageAssortmentSectionRelation" resultType="com.lhiot.dc.data.domain.out.AssortmentSectionRelationResult"
+            parameterType="com.lhiot.dc.data.domain.out.AssortmentSectionRelationResult">
+        select r.id,a.assortment_image,a.assortment_name,s.name_cn,a.price,r.rank_no from assortment_section_relation r
+        LEFT JOIN assortment_section s on s.id=r.section_id
+        LEFT JOIN assortment a on a.id=r.assortment_id
+        <include refid="Relation_Where_Condition" />
+        <include refid="common.pager" />
+    </select>
+
+    <!--查询板块套餐关联总记录-->
+    <select id="pageAssortmentSectionRelationCounts" resultType="long"
+        parameterType="com.lhiot.dc.data.domain.AssortmentSectionRelation">
+            select count(1)
+            from assortment_section_relation
+            <include refid="Base_Where_Condition" />
+    </select>
+
+    <!--查询板块套餐关联总记录-->
+    <select id="pageAssortmentSectionRelationResultCounts" resultType="long"
+            parameterType="com.lhiot.dc.data.domain.out.AssortmentSectionRelationResult">
+        select count(1) from assortment_section_relation r
+        LEFT JOIN assortment_section s on s.id=r.section_id
+        LEFT JOIN assortment a on a.id=r.assortment_id
+        <include refid="Relation_Where_Condition" />
+    </select>
+
+
+    <!-- 根据板块id查找板块套餐关联的商品套餐 -->
+    <select id="findAssortmentByAssortmentSectionId" resultMap="AssortmentBaseResultMap"
+            parameterType="long">
+        select
+        <include refid="AssortmentBase_Column_List" />
+        from assortment a left join assortment_section_relation r on a.id=r.assortment_id
+        where r.section_id = #{0} and a.status= 'VALID' order by r.rank_no asc
+    </select>
+
+</mapper>

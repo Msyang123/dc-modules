@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.data.mapper.ProductSectionMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.data.domain.ProductSection" >
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId" />
+        <result column="section_product_id" property="sectionProductId" />
+        <result column="section_img" property="sectionImg" />
+        <result column="rank_no" property="rankNo" />
+        <result column="position_name" property="positionName" />
+        <result column="application_type" property="applicationType" />
+        <result column="section_name" property="sectionName" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            parent_id,
+            section_product_id,
+            section_img,
+            rank_no,
+            position_name,
+            application_type,
+            section_name,
+        </trim>
+    </sql>
+
+    <!--新增商品板块-->
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.ProductSection" useGeneratedKeys="true" keyProperty="id">
+        insert into product_section
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+            <if test="sectionProductId != null ">
+                section_product_id,
+            </if>
+            <if test="sectionImg != null ">
+                section_img,
+            </if>
+            <if test="rankNo != null ">
+                rank_no,
+            </if>
+            <if test="positionName != null ">
+                position_name,
+            </if>
+            <if test="applicationType != null ">
+                application_type,
+            </if>
+            <if test="sectionName != null ">
+                section_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+            <if test="sectionProductId != null ">
+                #{sectionProductId},
+            </if>
+            <if test="sectionImg != null ">
+                #{sectionImg},
+            </if>
+            <if test="rankNo != null ">
+                #{rankNo},
+            </if>
+            <if test="positionName != null ">
+                #{positionName},
+            </if>
+            <if test="applicationType != null ">
+                #{applicationType},
+            </if>
+            <if test="sectionName != null ">
+                #{sectionName},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改商品板块-->
+    <update id="updateById" parameterType="com.lhiot.dc.data.domain.ProductSection">
+        update product_section
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="parentId != null ">
+                parent_id = #{parentId},
+            </if>
+            <if test="sectionProductId != null ">
+                section_product_id = #{sectionProductId},
+            </if>
+            <if test="sectionImg != null ">
+                section_img = #{sectionImg},
+            </if>
+            <if test="rankNo != null ">
+                rank_no = #{rankNo},
+            </if>
+            <if test="positionName != null ">
+                position_name = #{positionName},
+            </if>
+            <if test="applicationType != null ">
+                application_type = #{applicationType},
+            </if>
+            <if test="sectionName != null ">
+                section_name = #{sectionName},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除商品板块-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from product_section where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找商品板块 -->
+	<select id="selectById" resultType="com.lhiot.dc.data.domain.ProductSection"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from product_section where id = #{id}
+	</select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="parentId != null ">
+                and parent_id = #{parentId}
+            </if>
+            <if test="sectionProductId != null ">
+                and section_product_id = #{sectionProductId}
+            </if>
+            <if test="sectionImg != null ">
+                and section_img = #{sectionImg}
+            </if>
+            <if test="rankNo != null ">
+                and rank_no = #{rankNo}
+            </if>
+            <if test="positionName != null ">
+                and position_name = #{positionName}
+            </if>
+            <if test="applicationType != null ">
+                and application_type = #{applicationType}
+            </if>
+            <if test="sectionName != null ">
+                and section_name = #{sectionName}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询商品板块列表-->
+     <select id="pageProductSections" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.data.domain.ProductSection">
+	        select <include refid="Base_Column_List" />
+	        from product_section
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询商品板块总记录-->
+    <select id="pageProductSectionCounts" resultType="long"
+        parameterType="com.lhiot.dc.data.domain.ProductSection">
+            select count(1)
+            from product_section
+            <include refid="Base_Where_Condition" />
+    </select>
+
+    <select id="findByPositionName" resultMap="BaseResultMap"
+            parameterType="map"> select <include refid="Base_Column_List" />
+        from product_section where  position_name = #{positionName}
+        <if test="applicationType != null ">
+            and application_type = #{applicationType}
+        </if>
+    </select>
+
+    <select id="findByParentId" resultType="com.lhiot.dc.data.domain.ProductSection"
+            parameterType="java.util.List">
+     select * from product_section where  parent_Id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+        #{item}
+    </foreach>
+    </select>
+
+
+    <!-- 12月05日lynn 查询商品分类数结构 -->
+    <select id="sectionTree" resultType="com.lhiot.dc.data.domain.out.ProductSectionProductResult" parameterType="com.lhiot.dc.data.domain.ProductSection">
+		SELECT
+            id,
+            section_name as sectionName,
+            parent_id as parentId,
+            (SELECT section_name FROM product_section WHERE id=src.parent_id) AS parentSectionName,
+            rankNo
+        FROM (
+            SELECT id,section_name,parent_id,
+            @le:= IF (parent_id = 0 ,0, IF( LOCATE( CONCAT('|',parent_id,':'),@pathlevel) > 0 ,
+            SUBSTRING_INDEX( SUBSTRING_INDEX(@pathlevel,CONCAT('|',parent_id,':'),-1),'|',1) +1,@le+1) ) rankNo,
+            @pathlevel:= CONCAT(@pathlevel,'|',section_name,':', @le ,'|') pathlevel,
+            @pathnodes:= IF( parent_id =0,',0', CONCAT_WS(',',IF( LOCATE( CONCAT('|',parent_id,':'),@pathall) > 0 ,
+            SUBSTRING_INDEX( SUBSTRING_INDEX(@pathall,CONCAT('|',parent_id,':'),-1),'|',1),@pathnodes ) ,parent_id ) )paths,
+            @pathall:=CONCAT(@pathall,'|',section_name,':', @pathnodes ,'|') pathall
+            FROM product_section, (SELECT @le:=0,@pathlevel:='', @pathall:='',@pathnodes:='') vv
+            where 1 = 1
+            <if test="applicationType != null ">
+                and application_type = #{applicationType}
+            </if>
+            ORDER BY parent_id,section_name
+        ) src
+        ORDER BY parent_id,section_name
+    </select>
+</mapper>
