@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.data.mapper.AssortmentSectionMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.data.domain.AssortmentSection" >
+        <id column="id" property="id"/>
+        <result column="name_cn" property="nameCn" />
+        <result column="name_en" property="nameEn" />
+        <result column="parent_id" property="parentId" />
+        <result column="create_time" property="createTime" />
+        <result column="application_type" property="applicationType" />
+        <result column="rank_no" property="rankNo" />
+        <result column="banner" property="banner" />
+        <result column="subtitle" property="subtitle" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            name_cn,
+            name_en,
+            parent_id,
+            create_time,
+            application_type,
+            rank_no,
+            banner,
+            subtitle,
+        </trim>
+    </sql>
+
+    <!--新增套餐板块分类-->
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.AssortmentSection" useGeneratedKeys="true" keyProperty="id">
+        insert into assortment_section
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="nameCn != null ">
+                name_cn,
+            </if>
+            <if test="nameEn != null ">
+                name_en,
+            </if>
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+                create_time,
+            <if test="applicationType != null ">
+                application_type,
+            </if>
+            <if test="rankNo != null ">
+                rank_no,
+            </if>
+            <if test="banner != null ">
+                banner,
+            </if>
+            <if test="subtitle != null ">
+                subtitle,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="nameCn != null ">
+                #{nameCn},
+            </if>
+            <if test="nameEn != null ">
+                #{nameEn},
+            </if>
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+                now(),
+            <if test="applicationType != null ">
+                #{applicationType},
+            </if>
+            <if test="rankNo != null ">
+                #{rankNo},
+            </if>
+            <if test="banner != null ">
+                #{banner},
+            </if>
+            <if test="subtitle != null ">
+                #{subtitle},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改套餐板块分类-->
+    <update id="updateById" parameterType="com.lhiot.dc.data.domain.AssortmentSection">
+        update assortment_section
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="nameCn != null ">
+                name_cn = #{nameCn},
+            </if>
+            <if test="nameEn != null ">
+                name_en = #{nameEn},
+            </if>
+            <if test="parentId != null ">
+                parent_id = #{parentId},
+            </if>
+            <if test="createTime != null ">
+                create_time = #{createTime},
+            </if>
+            <if test="applicationType != null ">
+                application_type = #{applicationType},
+            </if>
+            <if test="rankNo != null ">
+                rank_no = #{rankNo},
+            </if>
+            <if test="banner != null ">
+                banner = #{banner},
+            </if>
+            <if test="subtitle != null ">
+                subtitle = #{subtitle},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除套餐板块分类-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from assortment_section where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找套餐板块分类 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from assortment_section where id = #{id}
+	</select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="nameCn != null ">
+                and name_cn like concat('%',#{nameCn},'%')
+            </if>
+            <if test="nameEn != null ">
+                and name_en like concat('%',#{nameEn},'%')
+            </if>
+            <if test="parentId != null ">
+                and parent_id = #{parentId}
+            </if>
+            <if test="createTime != null ">
+                and create_time = #{createTime}
+            </if>
+            <if test="applicationType != null ">
+                and application_type = #{applicationType}
+            </if>
+            <if test="rankNo != null ">
+                and rank_no = #{rankNo}
+            </if>
+            <if test="banner != null ">
+                and banner = #{banner}
+            </if>
+        </where>
+    </sql>
+
+    <!--查询套餐板块分类树列表-->
+    <select id="assortmentSections" resultMap="BaseResultMap"
+            parameterType="com.lhiot.dc.data.domain.AssortmentSection">
+        select <include refid="Base_Column_List" />
+        from assortment_section
+        <include refid="Base_Where_Condition" />
+    </select>
+
+    <!--查询套餐板块分类列表-->
+     <select id="pageAssortmentSections" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.data.domain.AssortmentSection">
+	        select <include refid="Base_Column_List" />
+	        from assortment_section
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询套餐板块分类总记录-->
+    <select id="pageAssortmentSectionCounts" resultType="long"
+        parameterType="com.lhiot.dc.data.domain.AssortmentSection">
+            select count(1)
+            from assortment_section
+            <include refid="Base_Where_Condition" />
+    </select>
+
+    <!-- 套餐版块查询 -->
+    <select id="findAssortmentSections" resultMap="BaseResultMap"
+            parameterType="map">
+        select <include refid="Base_Column_List" />
+        from assortment_section where name_en = #{nameEn}
+        and application_type =#{applicationType}
+    </select>
+
+</mapper>
