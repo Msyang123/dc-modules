@@ -67,18 +67,22 @@ public class StoreApi {
     @ApiOperation(value = "根据id查询门店", notes = "根据id查询门店")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "id", value = "主键id", required = true, dataType = "Long"),
-            @ApiImplicitParam(paramType = "path", name = "applicationType", value = "应用类型", required = true, dataType = "ApplicationTypeEnum")
+            @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", required = false, dataType = "ApplicationTypeEnum")
     })
-    @GetMapping("/{id}/{applicationType}")
-    public ResponseEntity<Store> findStore(@PathVariable("id") Long id,@PathVariable("applicationType") ApplicationTypeEnum applicationType) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Store> findStore(@PathVariable("id") Long id,@RequestParam("applicationType") ApplicationTypeEnum applicationType) {
         return ResponseEntity.ok(storeService.selectById(id,applicationType));
     }
 
     @GetMapping("/by-code/{code}")
     @ApiOperation(value = "根据门店编码查询门店信息")
-    public ResponseEntity<Store> findAllStores(@PathVariable("code") String code){
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "code", value = "门店编码", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", required = false, dataType = "ApplicationTypeEnum")
+    })
+    public ResponseEntity<Store> findAllStores(@PathVariable("code") String code,@RequestParam("applicationType") ApplicationTypeEnum applicationType){
         log.debug("后台管理-获取所有门店信息");
-        return ResponseEntity.ok(storeService.findByCode(code));
+        return ResponseEntity.ok(storeService.findByCode(code,applicationType));
     }
     
     @PostMapping("/page/query")
