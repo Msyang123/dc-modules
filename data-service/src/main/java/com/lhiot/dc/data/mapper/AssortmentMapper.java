@@ -22,7 +22,7 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract int create(Assortment assortment);
+    int create(Assortment assortment);
 
     /**
     * Description:根据id修改商品套餐
@@ -32,7 +32,7 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract int updateById(Assortment assortment);
+    int updateById(Assortment assortment);
 
     /**
     * Description:根据ids删除商品套餐
@@ -42,7 +42,7 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract int deleteByIds(List<String> ids);
+    int deleteByIds(List<String> ids);
 
     /**
     * Description:根据id查找商品套餐
@@ -52,7 +52,7 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract Assortment selectById(Long id);
+    Assortment selectById(Long id);
 
 
     /**
@@ -63,7 +63,7 @@ public interface AssortmentMapper {
      * @author yijun
      * @date 2018/07/24 09:55:48
      */
-    public abstract List<Assortment> findAssortmentByKeywords(Map param);
+    List<Assortment> findAssortmentByKeywords(Map param);
 
     /**
     * Description:查询商品套餐列表
@@ -73,7 +73,7 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract List<Assortment> pageAssortments(Assortment assortment);
+    List<Assortment> pageAssortments(Assortment assortment);
 
 
     /**
@@ -84,11 +84,11 @@ public interface AssortmentMapper {
     * @author yijun
     * @date 2018/07/24 09:55:48
     */
-    public abstract long pageAssortmentCounts(Assortment assortment);
+    long pageAssortmentCounts(Assortment assortment);
     
     //根据套餐id的集合查询套餐
-    public abstract List<Assortment> findByIds(List<Long> list);
+    List<Assortment> findByIds(List<Long> list);
 
-    public abstract long findByIdsCount(List<Long> list);
+    long findByIdsCount(List<Long> list);
 
 }

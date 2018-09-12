@@ -72,12 +72,7 @@ public class ProducStandardService {
     * @date 2018/07/20 15:33:33
     */ 
     public ProductStandard selectById(Long id){
-//        return this.producstandardMapper.selectById(id);
-        ProductStandard param = new ProductStandard();
-        param.setRows(null);
-        param.setId(id);
-
-        return (ProductStandard) CommonUtils.getCollectionsFirst(this.producstandardMapper.pageProducstandards(param));
+        return this.producstandardMapper.selectById(id);
     }
 
     /** 

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "套餐板块分类接口")
 @Slf4j
 @RestController
-@RequestMapping("/assortment-section")
+@RequestMapping("/assortments-section")
 public class AssortmentSectionApi {
 
     private final AssortmentSectionService assortmentSectionService;
