@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "板块套餐关联接口")
 @Slf4j
 @RestController
-@RequestMapping("/assortment-section-relation")
+@RequestMapping("/assortments-section-relation")
 public class AssortmentSectionRelationApi {
 
     private final AssortmentSectionRelationService assortmentSectionRelationService;

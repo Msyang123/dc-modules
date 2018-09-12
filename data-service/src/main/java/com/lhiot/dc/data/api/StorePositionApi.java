@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "门店位置接口")
 @Slf4j
 @RestController
-@RequestMapping("/storePosition")
+@RequestMapping("/store-position")
 public class StorePositionApi {
 
     private final StorePositionService storePositionService;

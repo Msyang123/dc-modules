@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @Api(description = "商品套餐接口")
 @Slf4j
 @RestController
-@RequestMapping("/assortment")
+@RequestMapping("/assortments")
 public class AssortmentApi {
 
     private final AssortmentService assortmentService;
