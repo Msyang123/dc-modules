@@ -87,10 +87,12 @@ public class StoreService {
 
         if(Objects.isNull(store))
             return null;
-        StorePosition searchStorePosition=new StorePosition();
-        searchStorePosition.setStoreId(store.getId());
-        searchStorePosition.setApplicationType(applicationType);
-        store.setStorePosition(this.storePositionMapper.selectByStoreId(searchStorePosition));
+        if(Objects.nonNull(applicationType)) {
+            StorePosition searchStorePosition = new StorePosition();
+            searchStorePosition.setStoreId(store.getId());
+            searchStorePosition.setApplicationType(applicationType);
+            store.setStorePosition(this.storePositionMapper.selectByStoreId(searchStorePosition));
+        }
         return store;
     }
 
@@ -186,7 +188,7 @@ public class StoreService {
             //给每个门店赋值门店位置
             storeList.forEach(storeItem->
                 storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(),storePositionItem.getStoreId()))
-                        .forEach(storePositionItem ->storeItem.setStorePosition(storePosition))
+                        .forEach(storePositionItem ->storeItem.setStorePosition(storePositionItem))
             );
         }
         return storeList;
@@ -255,8 +257,17 @@ public class StoreService {
         return nearbyStores;
     }
     
-    public Store findByCode(String storeCode){
-    	return storeMapper.findStoreByCode(storeCode);
+    public Store findByCode(String storeCode,ApplicationTypeEnum applicationType){
+        Store store = storeMapper.findStoreByCode(storeCode);
+        if(Objects.isNull(store))
+            return null;
+        if(Objects.nonNull(applicationType)) {
+            StorePosition searchStorePosition = new StorePosition();
+            searchStorePosition.setStoreId(store.getId());
+            searchStorePosition.setApplicationType(applicationType);
+            store.setStorePosition(this.storePositionMapper.selectByStoreId(searchStorePosition));
+        }
+    	return store;
     }
 }
 
