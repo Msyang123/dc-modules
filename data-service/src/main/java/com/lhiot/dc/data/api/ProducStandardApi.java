@@ -97,6 +97,7 @@ public class ProducStandardApi {
 
         return ResponseEntity.ok(Multiple.of(producstandardService.findGoodsStandards(key, value)));
     }
+
     @GetMapping("/detail")
     @ApiOperation(value = "根据规格id查询商品规格-前端使用", notes = "根据规格id查询商品规格-前端使用")
     public ResponseEntity<?> findProducstandard(Long storeId, Long productStandId, String applicationType) {

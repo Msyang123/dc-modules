@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.ProductMapper">
+    <insert id="insert" parameterType="com.lhiot.dc.base.model.Product" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO product (product_code,product_name,category_id,source_code,status,description,create_at)
+        VALUE (#{code},#{name},#{categoryId},#{sourceCode},#{status},#{description},#{createAt})
+    </insert>
+
+    <update id="updateById" parameterType="com.lhiot.dc.base.model.Product">
+        UPDATE product
+        <trim prefix="set" suffixOverrides=",">
+            <if test="code != null and code != ''">code = #{code}</if>
+            <if test="name != null and name != ''">product_name = #{name}</if>
+            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId}</if>
+            <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode}</if>
+            <if test="description != null and description != ''">description = #{description}</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM product WHERE id = #{0}
+    </delete>
+
+    <delete id="batchDeleteByIds" parameterType="list">
+        DELETE FROM product
+        WHERE id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

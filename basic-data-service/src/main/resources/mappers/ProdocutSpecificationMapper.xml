@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.ProductSpecificationMapper">
+    <select id="findById" parameterType="Long" resultType="com.lhiot.dc.base.model.ProductResult">
+        SELECT a.id AS specificationId,a.product_id AS productId,barcode,packaging_unit AS packagingUnit,weight,a.limit_inentory AS limitInentory
+        ,a.price,a.inventory_specification AS inventorySpecification ,a.available_status AS availableStatus,b.product_code AS productCode
+        ,b.product_name AS name,b.category_id AS categoryId,b.source_code AS sourceCode,b.status,b.description
+        FROM product_specification a
+        LEFT JOIN product b ON a.product_id = b.id
+        WHERE a.id = #{0}
+    </select>
+
+    <select id="countByProductId" parameterType="Long" resultType="int">
+        SELECT COUNT(id) FROM product_specification WHERE product_id = #{0}
+    </select>
+
+    <select id="findProductIdList" parameterType="list" resultType="map">
+        SELECT a.product_id,b.product_name AS name FROM product_specification a
+        LEFT JOIN product b ON a.product_id = b.id
+        WHERE
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

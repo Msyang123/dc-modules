@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.ProductAttachmentMapper">
+    <insert id="insert" parameterType="com.lhiot.dc.base.model.ProductAttachment">
+        INSERT INTO product_attachment (url,product_id,sorting,attachment_type)
+        VALUE (#{url},#{productId},#{sorting},#{attachmentType})
+    </insert>
+
+    <delete id="deleteByProductId" parameterType="Long">
+        DELETE FROM product_attachment WHERE product_id = #{0}
+    </delete>
+
+    <delete id="batchDeleteByProductIds" parameterType="list">
+        DELETE FROM product_attachment
+        WHERE product_id IN
+        <foreach collection="list" item="item" separator="," close=")" open="(">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
