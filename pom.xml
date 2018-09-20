@@ -12,6 +12,7 @@
 
     <modules>
         <module>data-service</module>
+        <module>basic-data-service</module>
     </modules>
 
     <groupId>com.lhiot.dc</groupId>
