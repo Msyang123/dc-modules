@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.ProductShelfMapper">
+    <select id="findById" parameterType="Long" resultType="com.lhiot.dc.base.model.ProductShelfResult">
+        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.specification_qty AS specificationQty,a.price,a.description
+        ,a.shelf_status AS shelfStatus,a.image AS shelfImage,a.original_price AS originalPrice,b.barcode,b.packaging_unit AS packagingUnit,b.weight
+        ,b.limit_inventory AS limitInventory,b.inventory_specification AS inventorySpecification,b.available_status,c.product_name AS productName
+        ,b.product_id AS productId,a.product_image AS productImage
+        FROM product_shelf a
+        LEFT JOIN product_specification b ON a.specification_id = b.id
+        LEFT JOIN product c ON b.product_id = c.id
+        WHERE a.id = #{0}
+    </select>
+
+    <select id="findListByIds" parameterType="list" resultType="com.lhiot.dc.base.model.ProductShelfResult">
+        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.specification_qty AS specificationQty,a.price,a.description
+        ,a.shelf_status AS shelfStatus,a.image AS shelfImage,a.original_price AS originalPrice,b.barcode,b.packaging_unit AS packagingUnit,b.weight
+        ,b.limit_inventory AS limitInventory,b.inventory_specification AS inventorySpecification,b.available_status,c.product_name AS productName
+        ,b.product_id AS productId,a.product_image AS productImage
+        FROM product_shelf a
+        LEFT JOIN product_specification b ON a.specification_id = b.id
+        LEFT JOIN product c ON b.product_id = c.id
+        WHERE a.id IN
+        <foreach collection="list" item="item" close=")" open="(" separator=",">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

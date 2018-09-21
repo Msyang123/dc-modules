@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,15 +32,15 @@ public class ProductApi {
     }
 
     @ApiOperation("添加商品")
-    @PostMapping
+    @PostMapping("")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Product product) {
         return productService.addProduct(product) ? ResponseEntity.ok().body(product.getId()) : ResponseEntity.badRequest().body("添加商品失败！");
     }
 
     @ApiOperation("修改商品信息")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "商品信息", dataType = "Product", required = true)
-    @PutMapping
+    @PutMapping("")
+    @ApiHideBodyProperty("createAt")
     public ResponseEntity update(@RequestBody Product product) {
         return productService.updateById(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
     }
@@ -61,7 +60,7 @@ public class ProductApi {
     @ApiOperation("根据Id集合批量删除商品")
     @ApiImplicitParam(paramType = "query", name = "ids", value = "商品Id", dataType = "String", required = true)
     @DeleteMapping
-    public ResponseEntity batchDelete(@PathVariable("ids") String productIds) {
+    public ResponseEntity batchDelete(@RequestParam("ids") String productIds) {
         List<String> productIdList = Arrays.asList(productIds.split(","));
         List<String> searchProductIdList = specificationService.findProductIdListByProductId(productIdList);
         if (!CollectionUtils.isEmpty(searchProductIdList)) {
@@ -73,9 +72,16 @@ public class ProductApi {
 
     @ApiOperation("添加商品附件信息")
     @PostMapping("/attachment")
-    @ApiImplicitParam(paramType = "body", name = "param", value = "商品附件信息", dataType = "ProductAttachment", required = true)
+    @ApiHideBodyProperty("id")
     public ResponseEntity createAttachment(@RequestBody ProductAttachment productAttachment) {
         return productService.addProductAttachment(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("添加商品附加信息失败");
+    }
+
+    @ApiOperation("修改商品附件信息")
+    @PutMapping("/attachment")
+    @ApiHideBodyProperty("productId")
+    public ResponseEntity updateAttachment(@RequestBody ProductAttachment productAttachment) {
+        return productService.updateById(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改商品附加信息失败");
     }
 
 }

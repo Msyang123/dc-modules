@@ -9,11 +9,11 @@
     <update id="updateById" parameterType="com.lhiot.dc.base.model.Product">
         UPDATE product
         <trim prefix="set" suffixOverrides=",">
-            <if test="code != null and code != ''">code = #{code}</if>
-            <if test="name != null and name != ''">product_name = #{name}</if>
-            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId}</if>
-            <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode}</if>
-            <if test="description != null and description != ''">description = #{description}</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="name != null and name != ''">product_name = #{name},</if>
+            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId},</if>
+            <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
         </trim>
         WHERE id = #{id}
     </update>

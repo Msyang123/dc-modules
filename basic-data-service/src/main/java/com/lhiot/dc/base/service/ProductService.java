@@ -56,4 +56,8 @@ public class ProductService {
         attachmentMapper.batchDeleteByProductIds(productIdList);
         return productMapper.batchDeleteByIds(productIdList);
     }
+
+    public boolean updateById(ProductAttachment attachment){
+       return attachmentMapper.updateById(attachment) > 0;
+    }
 }
