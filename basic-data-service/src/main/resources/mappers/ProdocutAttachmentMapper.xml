@@ -17,4 +17,27 @@
             #{item}
         </foreach>
     </delete>
+
+    <update id="updateById" parameterType="com.lhiot.dc.base.model.ProductAttachment">
+        UPDATE product_attachment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="url != null and url != ''">url  = #{url},</if>
+            <if test="sorting != null">sorting = #{sorting},</if>
+            <if test="attachmentType != null">attachment_type  = #{attachmentType},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByProductId" parameterType="Long" resultType="com.lhiot.dc.base.model.ProductAttachment">
+        SELECT url,product_id,sorting,attachment_type FROM product_attachment WHERE product_id = #{0}
+    </select>
+
+    <select id="findAttachmentByProductIdList" parameterType="list" resultType="com.lhiot.dc.base.model.ProductAttachment">
+        SELECT url,product_id,sorting,attachment_type
+        FROM product_attachment
+        WHERE product_id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

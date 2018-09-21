@@ -1,7 +1,7 @@
 package com.lhiot.dc.base.mapper;
 
 import com.lhiot.dc.base.model.ProductAttachment;
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +17,10 @@ public interface ProductAttachmentMapper {
     int deleteByProductId(Long productId);
 
     int batchDeleteByProductIds(List<String> productIdList);
+
+    int updateById(ProductAttachment attachment);
+
+    List<ProductAttachment> findByProductId(Long productId);
+    List<ProductAttachment> findAttachmentByProductIdList(List<String> productIdList);
+
 }

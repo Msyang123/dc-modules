@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class ProductAttachment {
 
+    private Long id;
     private String url;
     private Long productId;
     private Integer sorting;

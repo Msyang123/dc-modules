@@ -1,7 +1,6 @@
 package com.lhiot.dc.base.mapper;
 
-import com.lhiot.dc.base.model.Product;
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
