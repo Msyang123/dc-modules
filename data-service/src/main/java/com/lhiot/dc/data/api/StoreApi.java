@@ -80,8 +80,8 @@ public class StoreApi {
             @ApiImplicitParam(paramType = "path", name = "code", value = "门店编码", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", required = false, dataType = "ApplicationTypeEnum")
     })
-    public ResponseEntity<Store> findAllStores(@PathVariable("code") String code,@RequestParam("applicationType") ApplicationTypeEnum applicationType){
-        log.debug("后台管理-获取所有门店信息");
+    public ResponseEntity<Store> findStoreByCode(@PathVariable("code") String code,@RequestParam("applicationType") ApplicationTypeEnum applicationType){
+        log.debug("根据门店编码查询门店信息");
         return ResponseEntity.ok(storeService.findByCode(code,applicationType));
     }
     
@@ -114,15 +114,15 @@ public class StoreApi {
     @GetMapping(value = "/nearstores")
     public ResponseEntity<Multiple> findNearbyStores(LocationParam param,ApplicationTypeEnum applicationType){
         log.debug("根据用户位置查询附近(200km内)门店\t param:{}",param);
-        List<Store> list = storeService.findUserNearbyStores(param.getLocationX(), param.getLocationY(), 200, 22,applicationType);
+        List<Store> list = storeService.findUserNearbyStores(param.getLat(), param.getLng(), 200, 22,applicationType);
         return ResponseEntity.ok(Multiple.of(list));
     }
 
     @ApiOperation(value = "根据ids获取门店信息，传入位置信息按位置信息排序(由近到远)",response=Store.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "storeIds", value = "门店Id集合", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "locationX", value = "坐标位置（纬度）", required = false, dataType = "Double"),
-            @ApiImplicitParam(paramType = "query", name = "locationY", value = "坐标位置（经度）", required = false, dataType = "Double"),
+            @ApiImplicitParam(paramType = "query", name = "lat", value = "坐标位置（纬度）", required = false, dataType = "Double"),
+            @ApiImplicitParam(paramType = "query", name = "lng", value = "坐标位置（经度）", required = false, dataType = "Double"),
 
     })
     @GetMapping("/names")

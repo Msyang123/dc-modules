@@ -6,8 +6,8 @@
     <resultMap id="BaseResultMap"
         type="com.lhiot.dc.data.domain.StorePosition" >
         <id column="id" property="id"/>
-        <result column="store_coordy" property="storeCoordy" />
-        <result column="store_coordx" property="storeCoordx" />
+        <result column="lng" property="lng" />
+        <result column="lat" property="lat" />
         <result column="application_type" property="applicationType" />
         <result column="store_id" property="storeId" />
     </resultMap>
@@ -16,8 +16,8 @@
     <sql id="Base_Column_List" >
         <trim suffixOverrides="," >
             id,
-            store_coordy,
-            store_coordx,
+            lng,
+            lat,
             application_type,
             store_id,
         </trim>
@@ -30,11 +30,11 @@
             <if test="id != null ">
                 id,
             </if>
-            <if test="storeCoordy != null ">
-                store_coordy,
+            <if test="lng != null ">
+                lng,
             </if>
-            <if test="storeCoordx != null ">
-                store_coordx,
+            <if test="lat != null ">
+                lat,
             </if>
             <if test="applicationType != null ">
                 application_type,
@@ -47,11 +47,11 @@
             <if test="id != null ">
                 #{id},
             </if>
-            <if test="storeCoordy != null ">
-                #{storeCoordy},
+            <if test="lng != null ">
+                #{lng},
             </if>
-            <if test="storeCoordx != null ">
-                #{storeCoordx},
+            <if test="lat != null ">
+                #{lat},
             </if>
             <if test="applicationType != null ">
                 #{applicationType},
@@ -69,11 +69,11 @@
             <if test="id != null ">
                 id = #{id},
             </if>
-            <if test="storeCoordy != null ">
-                store_coordy = #{storeCoordy},
+            <if test="lng != null ">
+                lng = #{lng},
             </if>
-            <if test="storeCoordx != null ">
-                store_coordx = #{storeCoordx},
+            <if test="lat != null ">
+                lat = #{lat},
             </if>
             <if test="applicationType != null ">
                 application_type = #{applicationType},
@@ -128,11 +128,11 @@
             <if test="id != null ">
                 and id = #{id}
             </if>
-            <if test="storeCoordy != null ">
-                and store_coordy = #{storeCoordy}
+            <if test="lng != null ">
+                and lng = #{lng}
             </if>
-            <if test="storeCoordx != null ">
-                and store_coordx = #{storeCoordx}
+            <if test="lat != null ">
+                and lat = #{lat}
             </if>
             <if test="applicationType != null ">
                 and application_type = #{applicationType}

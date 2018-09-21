@@ -18,26 +18,26 @@ public interface LocationDistance {
         return d * Math.PI / 180.0;
     }
 
-    default double betweenDistance(double locationX, double locationY) {
+    default double betweenDistance(double lat, double lng) {
         LocationParam locationParam = new LocationParam();
-        locationParam.setLocationX(locationX);
-        locationParam.setLocationY(locationY);
+        locationParam.setLat(lat);
+        locationParam.setLng(lng);
         return betweenDistance(locationParam);
     }
 
 
     default double betweenDistance(LocationDistance locationDistance) {
-        double radLat1 = rad(getLocationX());
-        double radLat2 = rad(locationDistance.getLocationX());
+        double radLat1 = rad(getLat());
+        double radLat2 = rad(locationDistance.getLat());
         double difference = radLat1 - radLat2;
-        double mdifference = rad(getLocationY()) - rad(locationDistance.getLocationY());
+        double mdifference = rad(getLng()) - rad(locationDistance.getLng());
         double distance = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(difference / 2), 2)
                 + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(mdifference / 2), 2)));
         distance = distance * EARTH_RADIUS;
         return distance;
     }
 
-    Double getLocationX();
+    Double getLat();
 
-    Double getLocationY();
+    Double getLng();
 }
