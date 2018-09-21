@@ -25,10 +25,10 @@ public class LocationParam  implements LocationDistance {
 
     @ApiModelProperty(value = "坐标位置（纬度）", dataType = "Double", required = true)
     @NotNull
-    private Double locationX;
+    private Double lat;
 
     @ApiModelProperty(value = "坐标位置（经度）", dataType = "Double", required = true)
     @NotNull
-    private Double locationY;
+    private Double lng;
 
 }

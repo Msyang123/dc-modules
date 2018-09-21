@@ -141,7 +141,7 @@ public class StoreService {
 
         //经纬度信息不为空  排序
         if (Objects.nonNull(param) &&
-                Objects.nonNull(param.getLocationX()) && Objects.nonNull(param.getLocationY())) {
+                Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
             return this.storesSortByDistance(param,storeList);
         }
         return storeList;
@@ -218,7 +218,7 @@ public class StoreService {
     */
     private List<Store> storesSortByDistance(LocationParam positionParam, List<Store> listStore) {
         return listStore.stream().map(store -> {
-            double distance = DistUtil.getDistance(store.getStorePosition().getStoreCoordx(), store.getStorePosition().getStoreCoordy(), positionParam.getLocationX(), positionParam.getLocationY());
+            double distance = DistUtil.getDistance(store.getStorePosition().getLat(), store.getStorePosition().getLng(), positionParam.getLat(), positionParam.getLng());
             store.setDistance(String.format("%.2f", distance));
             return store;
         }).sorted((o1, o2) -> {
@@ -243,7 +243,7 @@ public class StoreService {
 
         List<Store> nearbyStores = new ArrayList<>();
         allStore.forEach(store -> {
-            double distance = DistUtil.getDistance(store.getStorePosition().getStoreCoordx(), store.getStorePosition().getStoreCoordy(), lat, lng);
+            double distance = DistUtil.getDistance(store.getStorePosition().getLat(), store.getStorePosition().getLng(), lat, lng);
             store.setDistance(String.format("%.2f", distance));
 
             if (distance <= km) {
