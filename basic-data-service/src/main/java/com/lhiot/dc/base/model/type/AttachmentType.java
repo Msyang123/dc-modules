@@ -1,4 +1,4 @@
-package com.lhiot.dc.base.model;
+package com.lhiot.dc.base.model.type;
 
 import lombok.Getter;
 

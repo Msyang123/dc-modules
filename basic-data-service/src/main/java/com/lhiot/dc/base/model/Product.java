@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.model;
 
+import com.lhiot.dc.base.model.type.ProductStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.PaymentConfigMapper">
+    <select id="findByName" parameterType="String" resultType="com.lhiot.dc.base.model.PaymentConfig">
+        SELECT id,payment_name,partner_id,partner_key,private_key,pkcs12_url,ali_seller_id,pay_platform_type AS payPlatformType,remark
+        FROM payment_config
+        WHERE payment_name = #{0}
+    </select>
+</mapper>

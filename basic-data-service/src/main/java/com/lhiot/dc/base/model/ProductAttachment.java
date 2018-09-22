@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.model;
 
+import com.lhiot.dc.base.model.type.AttachmentType;
 import lombok.Data;
 
 /**
