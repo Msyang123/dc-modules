@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.StoreMapper">
+    <select id="findById" parameterType="Long" resultType="com.lhiot.dc.base.model.Store">
+        SELECT a.id,a.store_code AS code,a.store_name AS name,a.address,a.phone,a.image,a.area,a.status,a.flagship,a.store_type AS storeType
+        ,a.video_url,a.begin_at,a.end_at,a.tape_url
+        FROM store a
+        WHERE id = #{0}
+    </select>
+
+    <select id="findByCode" parameterType="String" resultType="com.lhiot.dc.base.model.Store">
+        SELECT id,store_code AS code,store_name AS name,address,phone,image,area,status,flagship,store_type AS storeType
+        ,video_url,begin_at,end_at,tape_url
+        FROM store
+        WHERE store_code = #{0}
+    </select>
+</mapper>
