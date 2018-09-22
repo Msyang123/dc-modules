@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  **/
 @RestController
 @Slf4j
-@RequestMapping("/product/shelf")
+@RequestMapping("/products/shelf")
 public class ProductShelfApi {
 
     private ProductShelfService shelfService;
