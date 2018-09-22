@@ -27,7 +27,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/stores")
-@SuppressWarnings("rawtypes")
 public class StoreApi {
 
     private final StoreService storeService;
