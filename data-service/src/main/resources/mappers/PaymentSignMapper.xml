@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.data.mapper.PaymentSignMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.data.domain.PaymentSign" >
+        <id column="id" property="id"/>
+        <result column="payment_name" property="paymentName" />
+        <result column="partner_id" property="partnerId" />
+        <result column="partner_key" property="partnerKey" />
+        <result column="private_key" property="privateKey" />
+        <result column="pkcs12_url" property="pkcs12Url" />
+        <result column="ali_seller_id" property="aliSellerId" />
+        <result column="pay_platform_type" property="payPlatformType" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            payment_name,
+            partner_id,
+            partner_key,
+            private_key,
+            pkcs12_url,
+            ali_seller_id,
+            pay_platform_type,
+            remark,
+        </trim>
+    </sql>
+
+    <!--新增支付签名信息-->
+    <insert id="create" parameterType="com.lhiot.dc.data.domain.PaymentSign" useGeneratedKeys="true" keyProperty="id">
+        insert into payment_sign
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="paymentName != null ">
+                payment_name,
+            </if>
+            <if test="partnerId != null ">
+                partner_id,
+            </if>
+            <if test="partnerKey != null ">
+                partner_key,
+            </if>
+            <if test="privateKey != null ">
+                private_key,
+            </if>
+            <if test="pkcs12Url != null ">
+                pkcs12_url,
+            </if>
+            <if test="aliSellerId != null ">
+                ali_seller_id,
+            </if>
+            <if test="payPlatformType != null ">
+                pay_platform_type,
+            </if>
+            <if test="remark != null ">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="paymentName != null ">
+                #{paymentName},
+            </if>
+            <if test="partnerId != null ">
+                #{partnerId},
+            </if>
+            <if test="partnerKey != null ">
+                #{partnerKey},
+            </if>
+            <if test="privateKey != null ">
+                #{privateKey},
+            </if>
+            <if test="pkcs12Url != null ">
+                #{pkcs12Url},
+            </if>
+            <if test="aliSellerId != null ">
+                #{aliSellerId},
+            </if>
+            <if test="payPlatformType != null ">
+                #{payPlatformType},
+            </if>
+            <if test="remark != null ">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改支付签名信息-->
+    <update id="updateById" parameterType="com.lhiot.dc.data.domain.PaymentSign">
+        update payment_sign
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="paymentName != null ">
+                payment_name = #{paymentName},
+            </if>
+            <if test="partnerId != null ">
+                partner_id = #{partnerId},
+            </if>
+            <if test="partnerKey != null ">
+                partner_key = #{partnerKey},
+            </if>
+            <if test="privateKey != null ">
+                private_key = #{privateKey},
+            </if>
+            <if test="pkcs12Url != null ">
+                pkcs12_url = #{pkcs12Url},
+            </if>
+            <if test="aliSellerId != null ">
+                ali_seller_id = #{aliSellerId},
+            </if>
+            <if test="payPlatformType != null ">
+                pay_platform_type = #{payPlatformType},
+            </if>
+            <if test="remark != null ">
+                remark = #{remark},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除支付签名信息-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from payment_sign where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找支付签名信息 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from payment_sign where id = #{id}
+	</select>
+
+    <select id="selectByName" resultMap="BaseResultMap"
+            parameterType="String"> select <include refid="Base_Column_List" />
+        from payment_sign where payment_name = #{paymentName}
+    </select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="paymentName != null ">
+                and payment_name = #{paymentName}
+            </if>
+            <if test="partnerId != null ">
+                and partner_id = #{partnerId}
+            </if>
+            <if test="partnerKey != null ">
+                and partner_key = #{partnerKey}
+            </if>
+            <if test="privateKey != null ">
+                and private_key = #{privateKey}
+            </if>
+            <if test="pkcs12Url != null ">
+                and pkcs12_url = #{pkcs12Url}
+            </if>
+            <if test="aliSellerId != null ">
+                and ali_seller_id = #{aliSellerId}
+            </if>
+            <if test="payPlatformType != null ">
+                and pay_platform_type = #{payPlatformType}
+            </if>
+            <if test="remark != null ">
+                and remark = #{remark}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询支付签名信息列表-->
+     <select id="pagePaymentSigns" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.data.domain.PaymentSign">
+	        select <include refid="Base_Column_List" />
+	        from payment_sign
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询支付签名信息总记录-->
+    <select id="pagePaymentSignCounts" resultType="long"
+        parameterType="com.lhiot.dc.data.domain.PaymentSign">
+            select count(1)
+            from payment_sign
+            <include refid="Base_Where_Condition" />
+    </select>
+
+</mapper>
