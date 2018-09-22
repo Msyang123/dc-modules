@@ -5,8 +5,6 @@ import com.lhiot.dc.base.model.type.StoreType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
 * Description:门店实体类
@@ -14,9 +12,7 @@ import lombok.ToString;
 * @date 2018/06/04
 */
 @Data
-@ToString(callSuper = true)
 @ApiModel
-@NoArgsConstructor
 public class Store{
 
     /**

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.base.mapper.StorePositionMapper">
     <!-- 根据门店编码查询位置-->
-    <select id="findByStoreIdAndApplicationType" resultMap="com.lhiot.dc.base.model.StorePosition" parameterType="map">
+    <select id="findByStoreIdAndApplicationType" parameterType="map" resultType = "com.lhiot.dc.base.model.StorePosition">
         select id,lng,lat,application_type,store_id
         from store_position
         where application_type = #{applicationType} and store_id = #{storeId}

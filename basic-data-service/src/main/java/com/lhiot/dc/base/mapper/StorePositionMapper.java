@@ -1,6 +1,5 @@
 package com.lhiot.dc.base.mapper;
 
-import com.lhiot.dc.base.model.Store;
 import com.lhiot.dc.base.model.StorePosition;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

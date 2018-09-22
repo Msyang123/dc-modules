@@ -5,8 +5,6 @@ import com.lhiot.dc.base.model.type.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -16,9 +14,7 @@ import java.util.List;
 * @date 2018/09/11
 */
 @Data
-@ToString(callSuper = true)
 @ApiModel
-@NoArgsConstructor
 public class StorePosition{
 
     /**
