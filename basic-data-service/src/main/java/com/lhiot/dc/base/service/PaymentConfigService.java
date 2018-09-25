@@ -7,6 +7,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @Author zhangfeng created in 2018/9/22 10:13
  **/
@@ -23,6 +25,10 @@ public class PaymentConfigService {
 
     @Nullable
     public PaymentConfig findByName(String name){
-       return paymentConfigMapper.findByName(name);
+       return paymentConfigMapper.selectByName(name);
+    }
+
+    public List<PaymentConfig> findAll(){
+        return paymentConfigMapper.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.api;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/product/specification")
+@Api(description = "规格接口")
 public class ProductSpecificationApi {
 
     @ApiOperation("根据规格Id查询商品信息")

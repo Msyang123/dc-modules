@@ -1,17 +1,276 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.base.mapper.StoreMapper">
-    <select id="findById" parameterType="Long" resultType="com.lhiot.dc.base.model.Store">
-        SELECT a.id,a.store_code AS code,a.store_name AS name,a.address,a.phone,a.image,a.area,a.status,a.flagship,a.store_type AS storeType
-        ,a.video_url,a.begin_at,a.end_at,a.tape_url
-        FROM store a
-        WHERE id = #{0}
-    </select>
 
-    <select id="findByCode" parameterType="String" resultType="com.lhiot.dc.base.model.Store">
-        SELECT id,store_code AS code,store_name AS name,address,phone,image,area,status,flagship,store_type AS storeType
-        ,video_url,begin_at,end_at,tape_url
-        FROM store
-        WHERE store_code = #{0}
-    </select>
+<!-- 数据库字段对象关系映射 -->
+<resultMap id="BaseResultMap"
+           type="com.lhiot.dc.base.model.Store" >
+    <result column="id" property="id" />
+    <result column="store_code" property="code" />
+    <result column="store_name" property="name" />
+    <result column="address" property="address" />
+    <result column="phone" property="phone" />
+    <result column="image" property="image" />
+    <result column="area" property="area" />
+    <result column="status" property="status" />
+    <result column="flagship" property="flagship" />
+    <result column="store_type" property="storeType" />
+    <result column="video_url" property="videoUrl" />
+    <result column="begin_at" property="beginAt" />
+    <result column="end_at" property="endAt" />
+    <result column="tape_url" property="tapeUrl" />
+</resultMap>
+
+<!-- base查询字段  -->
+<sql id="Base_Column_List" >
+    <trim suffixOverrides="," >
+        id,
+        store_code,
+        store_name,
+        address,
+        phone,
+        image,
+        area,
+        status,
+        flagship,
+        store_type,
+        video_url,
+        begin_at,
+        end_at,
+        tape_url,
+    </trim>
+</sql>
+
+<!--新增门店-->
+<insert id="create" parameterType="com.lhiot.dc.base.model.Store" useGeneratedKeys="true" keyProperty="id">
+    insert into store
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="code != null ">
+            store_code,
+        </if>
+        <if test="name != null ">
+            store_name,
+        </if>
+        <if test="address != null ">
+            address,
+        </if>
+        <if test="phone != null ">
+            phone,
+        </if>
+        <if test="image != null ">
+            image,
+        </if>
+        <if test="area != null ">
+            area,
+        </if>
+        <if test="status != null ">
+            status,
+        </if>
+        <if test="flagship != null ">
+            flagship,
+        </if>
+        <if test="storeType != null ">
+            store_type,
+        </if>
+        <if test="videoUrl != null ">
+            video_url,
+        </if>
+        <if test="beginAt != null ">
+            begin_at,
+        </if>
+        <if test="endAt != null ">
+            end_at,
+        </if>
+        <if test="tapeUrl != null ">
+            tape_url,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="code != null ">
+            #{code},
+        </if>
+        <if test="name != null ">
+            #{name},
+        </if>
+        <if test="address != null ">
+            #{address},
+        </if>
+        <if test="phone != null ">
+            #{phone},
+        </if>
+        <if test="image != null ">
+            #{image},
+        </if>
+        <if test="area != null ">
+            #{area},
+        </if>
+        <if test="status != null ">
+            #{status},
+        </if>
+        <if test="flagship != null ">
+            #{flagship},
+        </if>
+        <if test="storeType != null ">
+            #{storeType},
+        </if>
+        <if test="videoUrl != null ">
+            #{videoUrl},
+        </if>
+        <if test="beginAt != null ">
+            #{beginAt},
+        </if>
+        <if test="endAt != null ">
+            #{endAt},
+        </if>
+        <if test="tapeUrl != null ">
+            #{tapeUrl},
+        </if>
+    </trim>
+</insert>
+
+<!--根据id修改门店-->
+<update id="updateById" parameterType="com.lhiot.dc.base.model.Store">
+    update store
+    <set>
+        <if test="code != null ">
+            store_code = #{code},
+        </if>
+        <if test="name != null ">
+            store_name = #{name},
+        </if>
+        <if test="address != null ">
+            address = #{address},
+        </if>
+        <if test="phone != null ">
+            phone = #{phone},
+        </if>
+        <if test="image != null ">
+            image = #{image},
+        </if>
+        <if test="area != null ">
+            area = #{area},
+        </if>
+        <if test="status != null ">
+            status = #{status},
+        </if>
+        <if test="flagship != null ">
+            flagship = #{flagship},
+        </if>
+        <if test="storeType != null ">
+            store_type = #{storeType},
+        </if>
+        <if test="videoUrl != null ">
+            video_url = #{videoUrl},
+        </if>
+        <if test="beginAt != null ">
+            begin_at = #{beginAt},
+        </if>
+        <if test="endAt != null ">
+            end_at = #{endAt},
+        </if>
+        <if test="tapeUrl != null ">
+            tape_url = #{tapeUrl},
+        </if>
+    </set>
+    where id=#{id}
+</update>
+
+<!--根据ids删除门店-->
+<delete id="deleteByIds" parameterType="java.util.List">
+    delete from store where id in
+    <foreach collection="list" item="item" open="("
+             separator="," close=")">
+        #{item}
+    </foreach>
+</delete>
+
+
+<!-- 根据id查找门店 -->
+<select id="findById" resultMap="BaseResultMap"
+        parameterType="long"> select <include refid="Base_Column_List" />
+    from store where id = #{id}
+</select>
+
+
+<!-- base where条件  -->
+<sql id="Base_Where_Condition" >
+    <where>
+        <if test="id != null ">
+            and id = #{id}
+        </if>
+        <if test="code != null ">
+            and store_code like concat('%',#{code},'%')
+        </if>
+        <if test="name != null ">
+            and store_name like concat('%',#{name},'%')
+        </if>
+        <if test="address != null ">
+            and address like concat('%',#{address},'%')
+        </if>
+        <if test="phone != null ">
+            and phone like concat('%',#{phone},'%')
+        </if>
+        <if test="image != null ">
+            and image = #{image}
+        </if>
+        <if test="area != null ">
+            and area = #{area}
+        </if>
+        <if test="status != null ">
+            and status = #{status}
+        </if>
+        <if test="flagship != null ">
+            and flagship = #{flagship}
+        </if>
+        <if test="storeType != null ">
+            and store_type = #{storeType}
+        </if>
+        <if test="videoUrl != null ">
+            and video_url = #{videoUrl}
+        </if>
+        <if test="beginAt != null ">
+            and begin_at = #{beginAt}
+        </if>
+        <if test="endAt != null ">
+            and end_at = #{endAt}
+        </if>
+        <if test="tapeUrl != null ">
+            and tape_url = #{tapeUrl}
+        </if>
+    </where>
+</sql>
+
+<!--查询门店-->
+<select id="pageStores" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.base.model.Store">
+    select <include refid="Base_Column_List" />
+    from store
+    <include refid="Base_Where_Condition" />
+    <include refid="common.pager" />
+</select>
+
+<!--查询门店总记录-->
+<select id="pageStoreCounts" resultType="long"
+        parameterType="com.lhiot.dc.base.model.Store">
+    select count(1)
+    from store
+    <include refid="Base_Where_Condition" />
+</select>
+
+<!--根据ids获取门店信息(id和名称)-->
+<select id="findStoreList" resultMap="BaseResultMap"
+        parameterType="List">
+    select
+    <include refid="Base_Column_List" />
+    from store where id in
+    <foreach collection="list" item="item" open="("
+             separator="," close=")">
+        #{item}
+    </foreach>
+</select>
+
+<!-- lynn 根据门店编码查询门店 -->
+<select id="findByCode" parameterType="String" resultMap="BaseResultMap">
+    select * from store where store_code = #{0}
+</select>
 </mapper>

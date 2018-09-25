@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.SystemSettingMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.base.model.SystemSetting" >
+        <id column="id" property="id"/>
+        <result column="index_name" property="indexName" />
+        <result column="index_value" property="indexValue" />
+        <result column="description" property="description" />
+        <result column="category_id" property="categoryId" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            index_name,
+            index_value,
+            description,
+            category_id,
+        </trim>
+    </sql>
+
+    <!--新增系统设置参数-->
+    <insert id="create" parameterType="com.lhiot.dc.base.model.SystemSetting" useGeneratedKeys="true" keyProperty="id">
+        insert into system_setting
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="indexName != null ">
+                index_name,
+            </if>
+            <if test="indexValue != null ">
+                index_value,
+            </if>
+            <if test="description != null ">
+                description,
+            </if>
+            <if test="categoryId != null ">
+                category_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="indexName != null ">
+                #{indexName},
+            </if>
+            <if test="indexValue != null ">
+                #{indexValue},
+            </if>
+            <if test="description != null ">
+                #{description},
+            </if>
+            <if test="categoryId != null ">
+                #{categoryId},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改系统设置参数-->
+    <update id="updateById" parameterType="com.lhiot.dc.base.model.SystemSetting">
+        update system_setting
+        <set>
+            <if test="id != null ">
+                id = #{id},
+            </if>
+            <if test="indexName != null ">
+                index_name = #{indexName},
+            </if>
+            <if test="indexValue != null ">
+                index_value = #{indexValue},
+            </if>
+            <if test="description != null ">
+                description = #{description},
+            </if>
+            <if test="categoryId != null ">
+                category_id = #{categoryId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除系统设置参数-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from system_setting where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找系统设置参数 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from system_setting where id = #{id}
+	</select>
+
+    <!-- 根据系统设置key查找系统设置参数 -->
+    <select id="findByName" resultMap="BaseResultMap"
+            parameterType="String"> select <include refid="Base_Column_List" />
+        from system_setting where index_name = #{0}
+    </select>
+
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="indexName != null ">
+                and index_name = #{indexName}
+            </if>
+            <if test="indexValue != null ">
+                and index_value = #{indexValue}
+            </if>
+            <if test="description != null ">
+                and description = #{description}
+            </if>
+            <if test="categoryId != null ">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询系统设置参数列表-->
+     <select id="pageSystemSettings" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.base.model.SystemSetting">
+	        select <include refid="Base_Column_List" />
+	        from system_setting
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询系统设置参数总记录-->
+    <select id="pageSystemSettingCounts" resultType="long"
+        parameterType="com.lhiot.dc.base.model.SystemSetting">
+            select count(1)
+            from system_setting
+            <include refid="Base_Where_Condition" />
+    </select>
+
+</mapper>

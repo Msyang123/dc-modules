@@ -5,6 +5,7 @@ import com.lhiot.dc.base.model.Product;
 import com.lhiot.dc.base.model.ProductAttachment;
 import com.lhiot.dc.base.service.ProductService;
 import com.lhiot.dc.base.service.ProductSpecificationService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/product")
+@Api(description = "商品接口")
 public class ProductApi {
 
     private ProductService productService;

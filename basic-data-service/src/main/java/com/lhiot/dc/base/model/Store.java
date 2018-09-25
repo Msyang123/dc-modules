@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.model;
 
+import com.lhiot.dc.base.common.PagerRequestObject;
 import com.lhiot.dc.base.model.type.StoreStatus;
 import com.lhiot.dc.base.model.type.StoreType;
 import io.swagger.annotations.ApiModel;
@@ -13,7 +14,7 @@ import lombok.Data;
 */
 @Data
 @ApiModel
-public class Store{
+public class Store extends PagerRequestObject {
 
     /**
     *门店id
@@ -101,5 +102,7 @@ public class Store{
 
     @ApiModelProperty(notes="门店位置信息",dataType="StorePosition")
     private StorePosition storePosition;
+
+    private String distance;
 
 }
