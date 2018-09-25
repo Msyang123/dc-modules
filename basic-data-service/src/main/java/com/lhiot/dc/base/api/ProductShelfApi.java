@@ -5,6 +5,7 @@ import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.base.model.ProductAttachment;
 import com.lhiot.dc.base.model.ProductShelfResult;
 import com.lhiot.dc.base.service.ProductShelfService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/products/shelf")
+@Api(description = "商品上架接口")
 public class ProductShelfApi {
 
     private ProductShelfService shelfService;

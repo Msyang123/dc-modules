@@ -1,7 +1,10 @@
 package com.lhiot.dc.base.api;
 
+import com.leon.microx.support.result.Multiple;
+import com.leon.microx.util.Maps;
 import com.lhiot.dc.base.model.PaymentConfig;
 import com.lhiot.dc.base.service.PaymentConfigService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,6 +23,7 @@ import java.util.Objects;
 @RestController
 @Slf4j
 @RequestMapping("/payment/config")
+@Api(description = "支付签名配置接口")
 public class PaymentConfigApi {
 
     private PaymentConfigService paymentConfigService;
@@ -36,5 +41,14 @@ public class PaymentConfigApi {
            return ResponseEntity.badRequest().body("没有该名称的配置信息！");
        }
        return ResponseEntity.ok().body(paymentConfig);
+    }
+    @ApiOperation("查询所有支付配置信息")
+    @GetMapping("/all")
+    public ResponseEntity all(){
+        List<PaymentConfig> paymentConfigList =  paymentConfigService.findAll();
+        if (Objects.isNull(paymentConfigList)||paymentConfigList.size()==0){
+            return ResponseEntity.badRequest().body("没有找到配置信息！");
+        }
+        return ResponseEntity.ok().body(Multiple.of(paymentConfigList));
     }
 }
