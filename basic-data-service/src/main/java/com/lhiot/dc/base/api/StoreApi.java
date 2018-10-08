@@ -38,7 +38,7 @@ public class StoreApi {
             @ApiImplicitParam(paramType = "query", name = "applicationType", value = "应用类型", required = false, dataType = "ApplicationType")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Store> findStore(@PathVariable("id") Long id, @RequestParam("applicationType") ApplicationType applicationType) {
+    public ResponseEntity<Store> findStore(@PathVariable("id") Long id, @RequestParam(value = "applicationType",required = false) ApplicationType applicationType) {
         return ResponseEntity.ok(storeService.findById(id,applicationType));
     }
 
