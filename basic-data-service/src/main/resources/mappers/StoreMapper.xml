@@ -176,12 +176,8 @@
 </update>
 
 <!--根据ids删除门店-->
-<delete id="deleteByIds" parameterType="java.util.List">
-    delete from store where id in
-    <foreach collection="list" item="item" open="("
-             separator="," close=")">
-        #{item}
-    </foreach>
+<delete id="deleteById" parameterType="long">
+    delete from store where id =#{0}
 </delete>
 
 

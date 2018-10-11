@@ -29,10 +29,10 @@ import java.net.URLDecoder;
 @Api(description = "二维码生成接口")
 @Slf4j
 @RestController
-@RequestMapping("/qrcode")
+@RequestMapping("/qr-code")
 public class QrCodeApi {
 
-
+    //XXX 需迁移到文件服务器
     @Autowired
     public QrCodeApi() {
     }
@@ -73,7 +73,6 @@ public class QrCodeApi {
         image.flush();
         ImageIO.write(image, "jpg", response.getOutputStream());
     }
-
     @GetMapping("/senior/create")
     @ApiOperation(value = "二维码生成-好看的二维码")
     @ApiImplicitParams({

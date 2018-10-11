@@ -64,13 +64,13 @@ public class StoreService {
     /**
      * Description:根据ids删除门店
      *
-     * @param ids
+     * @param id
      * @return
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public int deleteByIds(String ids){
-        return this.storeMapper.deleteByIds(Arrays.asList(ids.split(",")));
+    public int deleteById(Long id){
+        return this.storeMapper.deleteById(id);
     }
 
     /**

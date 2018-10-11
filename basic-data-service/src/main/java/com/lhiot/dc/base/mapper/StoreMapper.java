@@ -34,14 +34,14 @@ public interface StoreMapper {
     int updateById(Store store);
 
     /**
-     * Description:根据ids删除门店
+     * Description:根据id删除门店
      *
-     * @param ids
+     * @param id
      * @return
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    int deleteByIds(List<String> ids);
+    int deleteById(Long id);
 
     /**
      * Description:根据id查找门店
