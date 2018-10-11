@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @Author zhangfeng created in 2018/9/20 15:08
+ * @author zhangfeng created in 2018/9/20 15:08
  **/
 @RestController
 @Slf4j
@@ -23,7 +23,7 @@ public class ProductSpecificationApi {
     @ApiImplicitParam(paramType = "path",name = "id",value = "规格Id",dataType = "Long",required = true)
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-
+        //TODO 未实现代码
         return null;
     }
 }

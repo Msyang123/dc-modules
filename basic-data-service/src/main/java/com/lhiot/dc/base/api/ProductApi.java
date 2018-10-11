@@ -1,6 +1,7 @@
 package com.lhiot.dc.base.api;
 
 import com.leon.microx.support.swagger.ApiHideBodyProperty;
+import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.base.model.Product;
 import com.lhiot.dc.base.model.ProductAttachment;
 import com.lhiot.dc.base.service.ProductService;
@@ -17,11 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @Author zhangfeng created in 2018/9/20 11:07
+ * @author zhangfeng created in 2018/9/20 11:07
  **/
 @RestController
 @Slf4j
-@RequestMapping("/product")
+@RequestMapping("/products")
 @Api(description = "商品接口")
 public class ProductApi {
 
@@ -56,33 +57,37 @@ public class ProductApi {
             return ResponseEntity.badRequest().body("该商品存在规格信息不可删除！");
         }
         productService.deleteById(productId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation("根据Id集合批量删除商品")
     @ApiImplicitParam(paramType = "query", name = "ids", value = "商品Id", dataType = "String", required = true)
-    @DeleteMapping
-    public ResponseEntity batchDelete(@RequestParam("ids") String productIds) {
-        List<String> productIdList = Arrays.asList(productIds.split(","));
+    @DeleteMapping("/batch")
+    public ResponseEntity batchDelete(@RequestParam("ids") String ids) {
+        List<String> productIdList = Arrays.asList(StringUtils.tokenizeToStringArray(ids, ","));
         List<String> searchProductIdList = specificationService.findProductIdListByProductId(productIdList);
         if (!CollectionUtils.isEmpty(searchProductIdList)) {
             return ResponseEntity.badRequest().body("以下商品存在规格不可删除：" + productIdList.toString());
         }
         productService.batchDeleteById(productIdList);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation("添加商品附件信息")
-    @PostMapping("/attachment")
-    @ApiHideBodyProperty("id")
-    public ResponseEntity createAttachment(@RequestBody ProductAttachment productAttachment) {
+    @PostMapping("/{productId}/files")
+    @ApiHideBodyProperty({"id","productId"})
+    //FIXME 需要重新命名
+    public ResponseEntity createAttachment(@PathVariable("productId") Long productId,@RequestBody ProductAttachment productAttachment) {
+        productAttachment.setProductId(productId);
         return productService.addProductAttachment(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("添加商品附加信息失败");
     }
 
     @ApiOperation("修改商品附件信息")
-    @PutMapping("/attachment")
-    @ApiHideBodyProperty("productId")
-    public ResponseEntity updateAttachment(@RequestBody ProductAttachment productAttachment) {
+    @PutMapping("/{productId}/files/{id}")
+    @ApiHideBodyProperty({"id", "productId"})
+    //FIXME 需要重新命名
+    public ResponseEntity updateAttachment(@PathVariable("productId") Long productId,@PathVariable("id") Long id, @RequestBody ProductAttachment productAttachment) {
+        productAttachment.setId(id);
         return productService.updateById(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改商品附加信息失败");
     }
 

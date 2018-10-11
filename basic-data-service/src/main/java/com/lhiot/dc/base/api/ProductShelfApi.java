@@ -20,11 +20,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @Author zhangfeng created in 2018/9/21 9:26
+ * @author zhangfeng created in 2018/9/21 9:26
  **/
 @RestController
 @Slf4j
-@RequestMapping("/products/shelf")
+@RequestMapping("/product-shelf")
 @Api(description = "商品上架接口")
 public class ProductShelfApi {
 
@@ -37,6 +37,7 @@ public class ProductShelfApi {
     @ApiOperation("根据商品上架Id查询详细信息")
     @ApiImplicitParam(paramType = "path", name = "id", value = "商品上架Id", dataType = "Long", required = true)
     @GetMapping("/{id}")
+    //TODO api没有标识返回对象类型
     public ResponseEntity findById(@PathVariable("id") Long shelfId) {
         ProductShelfResult result = shelfService.findById(shelfId);
         if (Objects.isNull(result)) {
@@ -53,6 +54,7 @@ public class ProductShelfApi {
     @ApiOperation("根据商品上架Id集合查询详细信息")
     @ApiImplicitParam(paramType = "query", name = "shelfIds", value = "商品上架Id集合字符串", dataType = "String", required = true)
     @GetMapping("/list")
+    //TODO api没有标识返回对象类型
     public ResponseEntity findListByIds(@RequestParam("shelfIds") String shelfIds) {
 
         List<ProductShelfResult> result = shelfService.findListByIds(Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds,",")));
