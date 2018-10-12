@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.base.mapper.CategoryMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="BaseResultMap"
+        type="com.lhiot.dc.base.model.Category" >
+        <id column="id" property="id"/>
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="pid" property="pid" />
+        <result column="`desc`" property="desc" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="Base_Column_List" >
+        <trim suffixOverrides="," >
+            id,
+            name,
+            code,
+            pid,
+            `desc`,
+        </trim>
+    </sql>
+
+    <!--新增字典-->
+    <insert id="create" parameterType="com.lhiot.dc.base.model.Category" useGeneratedKeys="true" keyProperty="id">
+        insert into category
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                id,
+            </if>
+            <if test="name != null ">
+                name,
+            </if>
+            <if test="code != null ">
+                code,
+            </if>
+            <if test="pid != null ">
+                pid,
+            </if>
+            <if test="desc != null ">
+                `desc`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null ">
+                #{id},
+            </if>
+            <if test="name != null ">
+                #{name},
+            </if>
+            <if test="code != null ">
+                #{code},
+            </if>
+            <if test="pid != null ">
+                #{pid},
+            </if>
+            <if test="desc != null ">
+                #{desc},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改字典-->
+    <update id="updateById" parameterType="com.lhiot.dc.base.model.Category">
+        update category
+        <set>
+            <if test="name != null ">
+                name = #{name},
+            </if>
+            <if test="code != null ">
+                code = #{code},
+            </if>
+            <if test="pid != null ">
+                pid = #{pid},
+            </if>
+            <if test="desc != null ">
+                desc = #{desc},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除字典-->
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from category where id in
+        <foreach collection="list" item="item" open="("
+            separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据id查找字典 -->
+	<select id="selectById" resultMap="BaseResultMap"
+		parameterType="long"> select <include refid="Base_Column_List" />
+		from category where id = #{id}
+	</select>
+
+
+    <!-- 根据id查找字典 -->
+    <select id="selectByCode" resultMap="BaseResultMap"
+            parameterType="long"> select <include refid="Base_Column_List" />
+        from category where code = #{code}
+    </select>
+
+    <!-- base where条件  -->
+    <sql id="Base_Where_Condition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="name != null ">
+                and name = #{name}
+            </if>
+            <if test="code != null ">
+                and code = #{code}
+            </if>
+            <if test="pid != null ">
+                and pid = #{pid}
+            </if>
+            <if test="desc != null ">
+                and `desc` = #{desc}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--查询字典列表-->
+     <select id="pageCategorys" resultMap="BaseResultMap"
+        parameterType="com.lhiot.dc.base.model.Category">
+	        select <include refid="Base_Column_List" />
+	        from category
+	        <include refid="Base_Where_Condition" />
+	        <include refid="common.pager" />
+    </select>
+
+    <!--查询字典总记录-->
+    <select id="pageCategoryCounts" resultType="int"
+        parameterType="com.lhiot.dc.base.model.Category">
+            select count(1)
+            from category
+            <include refid="Base_Where_Condition" />
+    </select>
+
+</mapper>
