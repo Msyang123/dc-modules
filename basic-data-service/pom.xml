@@ -57,23 +57,6 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.swetake</groupId>
-            <artifactId>QRCode</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.swetake</groupId>
-            <artifactId>Qrcodeen</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>3.1.0</version>
-        </dependency>
     </dependencies>
 
     <build>
