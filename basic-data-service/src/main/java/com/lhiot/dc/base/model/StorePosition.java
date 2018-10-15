@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.dc.base.model.type.ApplicationType;
 import io.swagger.annotations.ApiModel;
@@ -53,5 +54,16 @@ public class StorePosition{
     private Long storeId;
 
     private List<Long> storeIds;
+
+    @JsonIgnore
+    @ApiModelProperty(value = "当前页,默认值1")
+    private Long page = 1L;
+
+    /**
+     * 传入-1可不分页
+     */
+    @JsonIgnore
+    @ApiModelProperty(value = "每页显示条数,默认值10")
+    private Long rows = 10L;
 
 }
