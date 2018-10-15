@@ -1,10 +1,10 @@
 package com.lhiot.dc.base.api;
 
 import com.leon.microx.support.result.Multiple;
+import com.leon.microx.support.result.Pages;
 import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.leon.microx.support.swagger.ApiParamType;
 import com.lhiot.dc.base.common.LocationParam;
-import com.lhiot.dc.base.common.PagerResultObject;
 import com.lhiot.dc.base.common.util.CommonUtils;
 import com.lhiot.dc.base.model.Store;
 import com.lhiot.dc.base.model.type.ApplicationType;
@@ -90,7 +90,7 @@ public class StoreApi {
 
     @PostMapping("/pages")
     @ApiOperation(value = "查询门店分页列表")
-    public ResponseEntity<PagerResultObject<Store>> pageQuery(Store store){
+    public ResponseEntity<Pages<Store>> pageQuery(Store store){
         log.debug("查询门店分页列表\t param:{}",store);
 
         return ResponseEntity.ok(storeService.pageList(store));

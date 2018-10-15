@@ -246,7 +246,7 @@
 </select>
 
 <!--查询门店总记录-->
-<select id="pageStoreCounts" resultType="long"
+<select id="pageStoreCounts" resultType="int"
         parameterType="com.lhiot.dc.base.model.Store">
     select count(1)
     from store

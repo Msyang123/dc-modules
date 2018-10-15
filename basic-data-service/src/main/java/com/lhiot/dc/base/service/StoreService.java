@@ -1,8 +1,8 @@
 package com.lhiot.dc.base.service;
 
+import com.leon.microx.support.result.Pages;
 import com.leon.microx.util.Maps;
 import com.lhiot.dc.base.common.LocationParam;
-import com.lhiot.dc.base.common.PagerResultObject;
 import com.lhiot.dc.base.common.util.DistUtil;
 import com.lhiot.dc.base.mapper.StoreMapper;
 import com.lhiot.dc.base.mapper.StorePositionMapper;
@@ -95,17 +95,6 @@ public class StoreService {
         return store;
     }
 
-    /**
-     * Description: 查询门店总记录数
-     *
-     * @param store
-     * @return
-     * @author Limiaojun
-     * @date 2018/06/02 09:04:50
-     */
-    public long count(Store store){
-        return this.storeMapper.pageStoreCounts(store);
-    }
 
     /**
      * Description: 查询门店分页列表
@@ -115,12 +104,8 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public PagerResultObject<Store> pageList(Store store) {
-        long total = 0;
-        if (store.getRows() != null && store.getRows() > 0) {
-            total = this.count(store);
-        }
-        return PagerResultObject.of(store, total,
+    public Pages<Store> pageList(Store store) {
+        return Pages.of(this.storeMapper.pageStoreCounts(store),
                 this.storeMapper.pageStores(store));
     }
 
