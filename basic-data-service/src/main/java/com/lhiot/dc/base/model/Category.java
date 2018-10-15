@@ -1,5 +1,6 @@
 package com.lhiot.dc.base.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,5 +62,16 @@ public class Category{
     @JsonProperty("categoryItemList")
     @ApiModelProperty(value = "字典项", dataType = "List")
     private List<CategoryItem> categoryItemList;
+
+    @JsonIgnore
+    @ApiModelProperty(value = "当前页,默认值1")
+    private Long page = 1L;
+
+    /**
+     * 传入-1可不分页
+     */
+    @JsonIgnore
+    @ApiModelProperty(value = "每页显示条数,默认值10")
+    private Long rows = 10L;
 
 }
