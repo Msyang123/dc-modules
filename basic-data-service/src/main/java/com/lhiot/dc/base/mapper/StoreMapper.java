@@ -71,7 +71,7 @@ public interface StoreMapper {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    long pageStoreCounts(Store store);
+    int pageStoreCounts(Store store);
 
     /**
      * Description:根据门店ID集合查询门店信息
