@@ -4,6 +4,7 @@ import com.lhiot.dc.base.model.CategoryItem;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * Description:字典数据Mapper类
@@ -91,4 +92,6 @@ public interface CategoryItemMapper {
     * @date 2018/10/12 09:41:14
     */
     int pageCategoryItemCounts(CategoryItem categoryItem);
+
+    CategoryItem findByCode(Map<String,Object> map);
 }
