@@ -12,6 +12,7 @@
 
     <modules>
         <module>basic-data-service</module>
+        <module>dictionary-client</module>
     </modules>
 
     <groupId>com.lhiot.dc</groupId>
