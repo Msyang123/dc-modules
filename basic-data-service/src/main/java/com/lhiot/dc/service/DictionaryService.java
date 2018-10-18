@@ -5,16 +5,17 @@ import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
-import com.lhiot.dc.domain.SearchParameter;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
+import com.lhiot.dc.domain.SearchParameter;
 import com.lhiot.dc.mapper.DictionaryEntryMapper;
 import com.lhiot.dc.mapper.DictionaryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Leon (234239150@qq.com) created in 16:58 18.10.15
@@ -33,10 +34,10 @@ public class DictionaryService {
     }
 
     public Pages pages(SearchParameter search) {
-        return Pages.of(
-                mapper.count(search),
-                mapper.list(search)
-        );
+        List<Dictionary> dictionaries = search.isIncludeChildren()
+                ? mapper.tree(search.getDictionaryCode())
+                : mapper.list(search);
+        return Pages.of(mapper.count(search), dictionaries);
     }
 
     public Dictionary findByCode(String code) {
