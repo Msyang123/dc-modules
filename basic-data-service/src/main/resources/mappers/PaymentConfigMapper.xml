@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.dc.base.mapper.PaymentConfigMapper">
+<mapper namespace="com.lhiot.dc.mapper.PaymentConfigMapper">
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-               type="com.lhiot.dc.base.model.PaymentConfig">
+               type="com.lhiot.dc.domain.PaymentConfig">
         <id column="id" property="id"/>
         <result column="payment_name" property="paymentName"/>
         <result column="partner_id" property="partnerId"/>
@@ -32,7 +32,7 @@
     </sql>
 
     <!--新增支付签名信息-->
-    <insert id="create" parameterType="com.lhiot.dc.base.model.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
+    <insert id="create" parameterType="com.lhiot.dc.domain.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
         insert into payment_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="paymentName != null ">
@@ -89,7 +89,7 @@
     </insert>
 
     <!--根据id修改支付签名信息-->
-    <update id="updateById" parameterType="com.lhiot.dc.base.model.PaymentConfig">
+    <update id="updateById" parameterType="com.lhiot.dc.domain.PaymentConfig">
         update payment_config
         <set>
             <if test="paymentName != null ">
@@ -180,7 +180,7 @@
 
     <!--查询支付签名信息列表-->
     <select id="pagePaymentConfigs" resultMap="BaseResultMap"
-            parameterType="com.lhiot.dc.base.model.PaymentConfig">
+            parameterType="com.lhiot.dc.domain.PaymentConfig">
         select
         <include refid="Base_Column_List"/>
         from payment_Config
@@ -190,7 +190,7 @@
 
     <!--查询支付签名信息总记录-->
     <select id="pagePaymentConfigCounts" resultType="long"
-            parameterType="com.lhiot.dc.base.model.PaymentConfig">
+            parameterType="com.lhiot.dc.domain.PaymentConfig">
         select count(1)
         from payment_Config
         <include refid="Base_Where_Condition"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.dc.base.mapper.StorePositionMapper">
+<mapper namespace="com.lhiot.dc.mapper.StorePositionMapper">
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="BaseResultMap"
-        type="com.lhiot.dc.base.model.StorePosition" >
+        type="com.lhiot.dc.domain.StorePosition" >
         <id column="id" property="id"/>
         <result column="lng" property="lng" />
         <result column="lat" property="lat" />
@@ -24,7 +24,7 @@
     </sql>
 
     <!--新增门店位置-->
-    <insert id="create" parameterType="com.lhiot.dc.base.model.StorePosition" useGeneratedKeys="true" keyProperty="id">
+    <insert id="create" parameterType="com.lhiot.dc.domain.StorePosition" useGeneratedKeys="true" keyProperty="id">
         insert into store_position
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null ">
@@ -63,7 +63,7 @@
     </insert>
 
     <!--根据id修改门店位置-->
-    <update id="updateById" parameterType="com.lhiot.dc.base.model.StorePosition">
+    <update id="updateById" parameterType="com.lhiot.dc.domain.StorePosition">
         update store_position
         <set>
             <if test="id != null ">
@@ -103,7 +103,7 @@
 
     <!-- 根据门店编码查询位置-->
     <select id="selectByStoreIds" resultMap="BaseResultMap"
-            parameterType="com.lhiot.dc.base.model.StorePosition">
+            parameterType="com.lhiot.dc.domain.StorePosition">
         select <include refid="Base_Column_List" />
         from store_position
         where application_type = #{applicationType} and store_id in
@@ -115,7 +115,7 @@
 
     <!-- 根据门店编码查询位置-->
     <select id="selectByStoreId" resultMap="BaseResultMap"
-            parameterType="com.lhiot.dc.base.model.StorePosition">
+            parameterType="com.lhiot.dc.domain.StorePosition">
         select <include refid="Base_Column_List" />
         from store_position
         where application_type = #{applicationType} and store_id = #{storeId}
@@ -146,7 +146,7 @@
 
     <!--查询门店位置列表-->
      <select id="pageStorePositions" resultMap="BaseResultMap"
-        parameterType="com.lhiot.dc.base.model.StorePosition">
+        parameterType="com.lhiot.dc.domain.StorePosition">
 	        select <include refid="Base_Column_List" />
 	        from store_position
 	        <include refid="Base_Where_Condition" />
@@ -155,7 +155,7 @@
 
     <!--查询门店位置总记录-->
     <select id="pageStorePositionCounts" resultType="long"
-        parameterType="com.lhiot.dc.base.model.StorePosition">
+        parameterType="com.lhiot.dc.domain.StorePosition">
             select count(1)
             from store_position
             <include refid="Base_Where_Condition" />

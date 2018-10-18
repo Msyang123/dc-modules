@@ -15,7 +15,7 @@
 
 
     <properties>
-        <start-class>com.lhiot.dc.data.BasicDataServiceApplication</start-class>
+        <start-class>com.lhiot.dc.BasicDataServiceApplication</start-class>
     </properties>
 
     <dependencies>
