@@ -172,4 +172,11 @@
             <include refid="Base_Where_Condition" />
     </select>
 
+    <select id="findByCode" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+          from category_item
+        where code = #{code} and cg_code = #{cg_code}
+    </select>
+
 </mapper>
