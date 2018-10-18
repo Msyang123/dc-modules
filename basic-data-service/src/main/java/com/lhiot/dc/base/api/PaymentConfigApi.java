@@ -1,6 +1,6 @@
 package com.lhiot.dc.base.api;
 
-import com.leon.microx.support.result.Multiple;
+import com.leon.microx.web.result.Multiple;
 import com.lhiot.dc.base.model.PaymentConfig;
 import com.lhiot.dc.base.service.PaymentConfigService;
 import io.swagger.annotations.Api;

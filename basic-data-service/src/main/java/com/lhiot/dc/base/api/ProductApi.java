@@ -1,7 +1,7 @@
 package com.lhiot.dc.base.api;
 
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.lhiot.dc.base.model.Product;
 import com.lhiot.dc.base.model.ProductAttachment;
 import com.lhiot.dc.base.service.ProductService;
@@ -75,9 +75,9 @@ public class ProductApi {
 
     @ApiOperation("添加商品附件信息")
     @PostMapping("/{productId}/files")
-    @ApiHideBodyProperty({"id","productId"})
+    @ApiHideBodyProperty({"id", "productId"})
     //FIXME 需要重新命名
-    public ResponseEntity createAttachment(@PathVariable("productId") Long productId,@RequestBody ProductAttachment productAttachment) {
+    public ResponseEntity createAttachment(@PathVariable("productId") Long productId, @RequestBody ProductAttachment productAttachment) {
         productAttachment.setProductId(productId);
         return productService.addProductAttachment(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("添加商品附加信息失败");
     }
@@ -86,7 +86,7 @@ public class ProductApi {
     @PutMapping("/{productId}/files/{id}")
     @ApiHideBodyProperty({"id", "productId"})
     //FIXME 需要重新命名
-    public ResponseEntity updateAttachment(@PathVariable("productId") Long productId,@PathVariable("id") Long id, @RequestBody ProductAttachment productAttachment) {
+    public ResponseEntity updateAttachment(@PathVariable("productId") Long productId, @PathVariable("id") Long id, @RequestBody ProductAttachment productAttachment) {
         productAttachment.setId(id);
         return productService.updateById(productAttachment) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改商品附加信息失败");
     }

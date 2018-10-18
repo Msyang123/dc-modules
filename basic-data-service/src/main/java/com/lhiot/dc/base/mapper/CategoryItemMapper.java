@@ -2,6 +2,7 @@ package com.lhiot.dc.base.mapper;
 
 import com.lhiot.dc.base.model.CategoryItem;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
 * @date 2018/10/12
 */
 @Mapper
+@Repository
 public interface CategoryItemMapper {
 
     /**

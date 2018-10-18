@@ -1,9 +1,9 @@
 package com.lhiot.dc.base.api;
 
-import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.result.Pages;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
-import com.leon.microx.support.swagger.ApiParamType;
+import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.base.common.LocationParam;
 import com.lhiot.dc.base.common.util.CommonUtils;
 import com.lhiot.dc.base.model.Store;
@@ -68,12 +68,12 @@ public class StoreApi {
     @PutMapping("/{id}")
     @ApiOperation(value = "根据id更新门店")
     @ApiImplicitParams({
-        @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "要更新的门店id", required = true, dataType = "Long") ,
-        @ApiImplicitParam(paramType = ApiParamType.BODY, name = "store", value = "要更新的门店", required = true, dataType = "Store")
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "要更新的门店id", required = true, dataType = "Long"),
+            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "store", value = "要更新的门店", required = true, dataType = "Store")
     })
     @ApiHideBodyProperty("id")
     public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody Store store) {
-        log.debug("根据id更新门店\t param:{}",store);
+        log.debug("根据id更新门店\t param:{}", store);
         store.setId(id);
         return ResponseEntity.ok(storeService.updateById(store));
     }
@@ -82,7 +82,7 @@ public class StoreApi {
     @ApiOperation(value = "根据id删除门店")
     @ApiImplicitParam(paramType = "path", name = "id", value = "要删除门店的id", required = true, dataType = "Long")
     public ResponseEntity<Integer> deleteByIds(@PathVariable("id") Long id) {
-        log.debug("根据ids删除门店\t param:{}",id);
+        log.debug("根据ids删除门店\t param:{}", id);
 
         return ResponseEntity.ok(storeService.deleteById(id));
     }
@@ -90,25 +90,25 @@ public class StoreApi {
 
     @PostMapping("/pages")
     @ApiOperation(value = "查询门店分页列表")
-    public ResponseEntity<Pages<Store>> pageQuery(Store store){
-        log.debug("查询门店分页列表\t param:{}",store);
+    public ResponseEntity<Pages<Store>> pageQuery(Store store) {
+        log.debug("查询门店分页列表\t param:{}", store);
 
         return ResponseEntity.ok(storeService.pageList(store));
     }
 
     @GetMapping("position")
     @ApiOperation(value = "根据位置查询门店所有列表")
-    public ResponseEntity<Multiple> findPosition(LocationParam param, ApplicationType applicationType){
-        log.debug("根据位置查询门店列表\t param:{}",param);
+    public ResponseEntity<Multiple> findPosition(LocationParam param, ApplicationType applicationType) {
+        log.debug("根据位置查询门店列表\t param:{}", param);
 
-        return ResponseEntity.ok(Multiple.of(storeService.findStoresSortByDistance(param,applicationType)));
+        return ResponseEntity.ok(Multiple.of(storeService.findStoresSortByDistance(param, applicationType)));
     }
 
     @GetMapping("position/lately")
     @ApiOperation(value = "根据位置返回最近的门店")
-    public ResponseEntity<Store> findPositionLately(LocationParam param, ApplicationType applicationType){
-        log.debug("根据位置返回最近的门店\t param:{}",param);
-        List<Store> resultList = storeService.findStoresSortByDistance(param,applicationType);
+    public ResponseEntity<Store> findPositionLately(LocationParam param, ApplicationType applicationType) {
+        log.debug("根据位置返回最近的门店\t param:{}", param);
+        List<Store> resultList = storeService.findStoresSortByDistance(param, applicationType);
 
         return ResponseEntity.ok((Store) CommonUtils.getCollectionsFirst(resultList));
     }
@@ -116,13 +116,13 @@ public class StoreApi {
     //FIXME 将下面两个方法合并成search
     @ApiOperation(value = "根据用户位置查询附近(200km内)门店", notes = "定标位置查询附近(200km内)门店列表")
     @GetMapping(value = "/near")
-    public ResponseEntity<Multiple> findNearbyStores(LocationParam param,ApplicationType applicationType){
-        log.debug("根据用户位置查询附近(200km内)门店\t param:{}",param);
-        List<Store> list = storeService.findUserNearbyStores(param.getLat(), param.getLng(), 200, 22,applicationType);
+    public ResponseEntity<Multiple> findNearbyStores(LocationParam param, ApplicationType applicationType) {
+        log.debug("根据用户位置查询附近(200km内)门店\t param:{}", param);
+        List<Store> list = storeService.findUserNearbyStores(param.getLat(), param.getLng(), 200, 22, applicationType);
         return ResponseEntity.ok(Multiple.of(list));
     }
 
-    @ApiOperation(value = "根据ids获取门店信息，传入位置信息按位置信息排序(由近到远)",response=Store.class)
+    @ApiOperation(value = "根据ids获取门店信息，传入位置信息按位置信息排序(由近到远)", response = Store.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "storeIds", value = "门店Id集合", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "lat", value = "坐标位置（纬度）", required = false, dataType = "Double"),
@@ -130,13 +130,13 @@ public class StoreApi {
 
     })
     @GetMapping("/names")
-    public ResponseEntity<Multiple> findStoreNames(@RequestParam String storeIds,ApplicationType applicationType, LocationParam param){
-        return ResponseEntity.ok(Multiple.of(storeService.findStoreList(storeIds,param)));
+    public ResponseEntity<Multiple> findStoreNames(@RequestParam String storeIds, ApplicationType applicationType, LocationParam param) {
+        return ResponseEntity.ok(Multiple.of(storeService.findStoreList(storeIds, param)));
     }
 
     @GetMapping("/all")
     @ApiOperation(value = "后台管理-获取所有门店信息")
-    public ResponseEntity<Multiple> findAllStores(){
+    public ResponseEntity<Multiple> findAllStores() {
         log.debug("后台管理-获取所有门店信息");
         //不查询门店位置信息
         return ResponseEntity.ok(Multiple.of(storeService.findAllStores(null)));

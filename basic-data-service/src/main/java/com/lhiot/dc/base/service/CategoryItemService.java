@@ -1,6 +1,6 @@
 package com.lhiot.dc.base.service;
 
-import com.leon.microx.support.result.Pages;
+import com.leon.microx.web.result.Pages;
 import com.lhiot.dc.base.mapper.CategoryItemMapper;
 import com.lhiot.dc.base.model.CategoryItem;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.lhiot.dc.base.service;
 
-import com.leon.microx.support.result.Pages;
 import com.leon.microx.util.Maps;
+import com.leon.microx.web.result.Pages;
 import com.lhiot.dc.base.common.LocationParam;
 import com.lhiot.dc.base.common.util.DistUtil;
 import com.lhiot.dc.base.mapper.StoreMapper;
@@ -45,7 +45,7 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public int create(Store store){
+    public int create(Store store) {
         return this.storeMapper.create(store);
     }
 
@@ -57,7 +57,7 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public int updateById(Store store){
+    public int updateById(Store store) {
         return this.storeMapper.updateById(store);
     }
 
@@ -69,7 +69,7 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public int deleteById(Long id){
+    public int deleteById(Long id) {
         return this.storeMapper.deleteById(id);
     }
 
@@ -81,12 +81,12 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/06/02 09:04:50
      */
-    public Store selectById(Long id,ApplicationType applicationType){
+    public Store selectById(Long id, ApplicationType applicationType) {
         Store store = this.storeMapper.findById(id);
 
-        if(Objects.isNull(store))
+        if (Objects.isNull(store))
             return null;
-        if(Objects.nonNull(applicationType)) {
+        if (Objects.nonNull(applicationType)) {
             StorePosition searchStorePosition = new StorePosition();
             searchStorePosition.setStoreId(store.getId());
             searchStorePosition.setApplicationType(applicationType);
@@ -111,22 +111,23 @@ public class StoreService {
 
     /**
      * 根据门店ID集合查询门店信息
+     *
      * @param storeIds 门店ids
-     * @param param 经纬度信息
+     * @param param    经纬度信息
      * @return
      */
-    public List<Store> findStoreList(String storeIds, LocationParam param){
-        String [] ids = storeIds.split(",");
+    public List<Store> findStoreList(String storeIds, LocationParam param) {
+        String[] ids = storeIds.split(",");
         List<String> storeIdList = Arrays.asList(ids);
         List<Store> storeList = this.storeMapper.findStoreList(storeIdList);
-        if(CollectionUtils.isEmpty(storeList)){
+        if (CollectionUtils.isEmpty(storeList)) {
             return new ArrayList<>();
         }
 
         //经纬度信息不为空  排序
         if (Objects.nonNull(param) &&
                 Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
-            return this.storesSortByDistance(param,storeList);
+            return this.storesSortByDistance(param, storeList);
         }
         return storeList;
     }
@@ -142,7 +143,7 @@ public class StoreService {
     public List<Store> findAllStores(ApplicationType applicationType) {
         Store store = new Store();
         store.setStatus(StoreStatus.ENABLED);
-        return this.list(store,applicationType);
+        return this.list(store, applicationType);
     }
 
     /**
@@ -152,27 +153,27 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018-05-30 11:35
      */
-    public List<Store> list(Store store,ApplicationType applicationType) {
-        if(!Objects.isNull(store)) {
+    public List<Store> list(Store store, ApplicationType applicationType) {
+        if (!Objects.isNull(store)) {
             store.setRows(null);
         }
         List<Store> storeList = this.storeMapper.pageStores(store);
 
-        if(Objects.nonNull(storeList)&&Objects.nonNull(applicationType)) {
+        if (Objects.nonNull(storeList) && Objects.nonNull(applicationType)) {
             List<Long> storeIds = storeList.parallelStream()
                     .map(Store::getId)
                     .collect(Collectors.toList());
 
-            StorePosition storePosition=new StorePosition();
+            StorePosition storePosition = new StorePosition();
             storePosition.setApplicationType(applicationType);
             storePosition.setStoreIds(storeIds);
             //批量查询门店位置
             List<StorePosition> storePositionList = this.storePositionMapper.selectByStoreIds(storePosition);
 
             //给每个门店赋值门店位置
-            storeList.forEach(storeItem->
-                    storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(),storePositionItem.getStoreId()))
-                            .forEach(storePositionItem ->storeItem.setStorePosition(storePositionItem))
+            storeList.forEach(storeItem ->
+                    storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(), storePositionItem.getStoreId()))
+                            .forEach(storePositionItem -> storeItem.setStorePosition(storePositionItem))
             );
         }
         return storeList;
@@ -186,7 +187,7 @@ public class StoreService {
      * @author Limiaojun
      * @date 2018/05/30 10:30:51
      */
-    public List<Store> findStoresSortByDistance(LocationParam positionParam,ApplicationType applicationType) {
+    public List<Store> findStoresSortByDistance(LocationParam positionParam, ApplicationType applicationType) {
         List<Store> listStore = this.findAllStores(applicationType);
 
         return storesSortByDistance(positionParam, listStore);
@@ -194,8 +195,9 @@ public class StoreService {
 
     /**
      * 按距离排序
-     * @param positionParam  经纬度信息
-     * @param listStore  门店集合
+     *
+     * @param positionParam 经纬度信息
+     * @param listStore     门店集合
      * @return: java.util.List<com.lhiot.dc.data.domain.Store>
      * @Author: Limiaojun
      * @Date: 2018/8/30 11:50
@@ -221,7 +223,7 @@ public class StoreService {
      * @param hourLimit 时间约束（大于这个时间将视频改成录播）
      * @return 门店集合
      */
-    public List<Store> findUserNearbyStores(double lat, double lng, int km, int hourLimit,ApplicationType applicationType){
+    public List<Store> findUserNearbyStores(double lat, double lng, int km, int hourLimit, ApplicationType applicationType) {
 
         List<Store> allStore = this.findAllStores(applicationType);
 
