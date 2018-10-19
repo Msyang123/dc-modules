@@ -20,7 +20,7 @@ public class DictionaryClient {
 
     private RemoteInvoker.Requester httpClient;
 
-    private Pair<Long, TimeUnit> cacheTtl;
+    private Pair<Long, TimeUnit> cacheTtl = Pair.of(10_000L, TimeUnit.MILLISECONDS);
 
     private final SimpleCache<Object, Object> localCache = new SimpleCache<>();
 
