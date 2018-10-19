@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
         <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.dc.base.mapper.StoreMapper">
+<mapper namespace="com.lhiot.dc.mapper.StoreMapper">
 
 <!-- 数据库字段对象关系映射 -->
 <resultMap id="BaseResultMap"
-           type="com.lhiot.dc.base.model.Store" >
+           type="com.lhiot.dc.domain.Store" >
     <result column="id" property="id" />
     <result column="store_code" property="code" />
     <result column="store_name" property="name" />
@@ -42,7 +42,7 @@
 </sql>
 
 <!--新增门店-->
-<insert id="create" parameterType="com.lhiot.dc.base.model.Store" useGeneratedKeys="true" keyProperty="id">
+<insert id="create" parameterType="com.lhiot.dc.domain.Store" useGeneratedKeys="true" keyProperty="id">
     insert into store
     <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="code != null ">
@@ -129,7 +129,7 @@
 </insert>
 
 <!--根据id修改门店-->
-<update id="updateById" parameterType="com.lhiot.dc.base.model.Store">
+<update id="updateById" parameterType="com.lhiot.dc.domain.Store">
     update store
     <set>
         <if test="code != null ">
@@ -238,7 +238,7 @@
 
 <!--查询门店-->
 <select id="pageStores" resultMap="BaseResultMap"
-        parameterType="com.lhiot.dc.base.model.Store">
+        parameterType="com.lhiot.dc.domain.Store">
     select <include refid="Base_Column_List" />
     from store
     <include refid="Base_Where_Condition" />
@@ -247,7 +247,7 @@
 
 <!--查询门店总记录-->
 <select id="pageStoreCounts" resultType="int"
-        parameterType="com.lhiot.dc.base.model.Store">
+        parameterType="com.lhiot.dc.domain.Store">
     select count(1)
     from store
     <include refid="Base_Where_Condition" />

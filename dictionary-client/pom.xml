@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dc-modules</artifactId>
+        <groupId>com.lhiot.dc</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.lhiot.dc.dictionary</groupId>
+    <artifactId>dictionary-client</artifactId>
+    <name>${project.artifactId}</name>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <!-- microx-utils -->
+        <dependency>
+            <groupId>com.leon.microx.util</groupId>
+            <artifactId>microx-utils</artifactId>
+        </dependency>
+        <!-- microx-restful (web / swagger / openfeign) -->
+        <dependency>
+            <groupId>com.leon.microx</groupId>
+            <artifactId>microx-starter-restful</artifactId>
+        </dependency>
+    </dependencies>
+</project>

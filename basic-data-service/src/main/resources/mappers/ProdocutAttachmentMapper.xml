@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhiot.dc.base.mapper.ProductAttachmentMapper">
-    <insert id="insert" parameterType="com.lhiot.dc.base.model.ProductAttachment">
+<mapper namespace="com.lhiot.dc.mapper.ProductAttachmentMapper">
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductAttachment">
         INSERT INTO product_attachment (url,product_id,sorting,attachment_type)
         VALUE (#{url},#{productId},#{sorting},#{attachmentType})
     </insert>
@@ -18,7 +18,7 @@
         </foreach>
     </delete>
 
-    <update id="updateById" parameterType="com.lhiot.dc.base.model.ProductAttachment">
+    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductAttachment">
         UPDATE product_attachment
         <trim prefix="set" suffixOverrides=",">
             <if test="url != null and url != ''">url  = #{url},</if>
@@ -28,11 +28,11 @@
         WHERE id = #{id}
     </update>
 
-    <select id="findByProductId" parameterType="Long" resultType="com.lhiot.dc.base.model.ProductAttachment">
+    <select id="findByProductId" parameterType="Long" resultType="com.lhiot.dc.domain.ProductAttachment">
         SELECT url,product_id,sorting,attachment_type FROM product_attachment WHERE product_id = #{0}
     </select>
 
-    <select id="findAttachmentByProductIdList" parameterType="list" resultType="com.lhiot.dc.base.model.ProductAttachment">
+    <select id="findAttachmentByProductIdList" parameterType="list" resultType="com.lhiot.dc.domain.ProductAttachment">
         SELECT url,product_id,sorting,attachment_type
         FROM product_attachment
         WHERE product_id IN
