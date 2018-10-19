@@ -19,4 +19,5 @@ public class Dictionary {
 
     private List<Dictionary> children;
 
+    private List<DictionaryEntry> entries;
 }
