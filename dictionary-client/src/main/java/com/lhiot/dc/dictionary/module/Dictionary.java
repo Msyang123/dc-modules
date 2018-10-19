@@ -20,7 +20,6 @@ public class Dictionary {
 
     @Data
     public static class Entry {
-        private String dictCode;
         private String name;
         private String code;
         private Integer sort;
