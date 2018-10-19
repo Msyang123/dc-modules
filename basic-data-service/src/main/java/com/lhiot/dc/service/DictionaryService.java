@@ -1,10 +1,10 @@
 package com.lhiot.dc.service;
 
-import com.leon.microx.web.result.Pages;
-import com.leon.microx.web.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;
@@ -40,8 +40,13 @@ public class DictionaryService {
         return Pages.of(mapper.count(search), dictionaries);
     }
 
-    public Dictionary findByCode(String code) {
-        return mapper.selectByCode(code);
+    @Nullable
+    public Dictionary findByCode(String code, boolean includeEntries) {
+        Dictionary dictionary = mapper.selectByCode(code);
+        if (includeEntries && Objects.nonNull(dictionary)) {
+            dictionary.setEntries(entryMapper.findByDictCode(dictionary.getCode()));
+        }
+        return dictionary;
     }
 
     public Tips add(Dictionary dictionary) {
@@ -88,7 +93,7 @@ public class DictionaryService {
     }
 
     public Tips addEntry(String dictCode, DictionaryEntry entry) {
-        Dictionary dictionary = this.findByCode(dictCode);
+        Dictionary dictionary = this.findByCode(dictCode, false);
         if (Objects.isNull(dictionary)) {
             return Tips.warn("未找到字典，请先添加此字典");
         }
@@ -99,13 +104,5 @@ public class DictionaryService {
         entry.setDictCode(dictionary.getCode());
         entryMapper.insert(entry);
         return Tips.empty();
-    }
-
-    public DictionaryEntry findEntry(String dictCode, String code) {
-        return entryMapper.selectByDictCodeAndEntryCode(dictCode, code);
-    }
-
-    public List<DictionaryEntry> findEntries(String dictCode) {
-        return entryMapper.findByDictCode(dictCode);
     }
 }
