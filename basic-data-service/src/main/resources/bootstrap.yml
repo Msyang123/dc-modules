@@ -22,3 +22,12 @@ eureka:
     registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone: ${EUREKA_REPLICAS_LIST:http://172.16.10.203:1111/eureka}
+
+microx-common:
+  microx-web:
+    remote-invoker:
+      servers:
+        dictionary-service:
+          base-url: http://DICTIONARY-SERVICE-V1-1-1 # http://172.16.10.203:8888
+          http-headers:
+            version: v1-1-1

@@ -1,8 +1,8 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.result.Tips;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
-import com.leon.microx.support.swagger.ApiParamType;
+import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;
@@ -53,6 +53,7 @@ public class DictionaryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String")
     public ResponseEntity remove(@PathVariable("code") String code) {
         service.remove(code);
+
         return ResponseEntity.noContent().build();
     }
 
