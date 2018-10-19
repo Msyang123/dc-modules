@@ -1,7 +1,7 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Multiple;
+import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.domain.ProductAttachment;
 import com.lhiot.dc.domain.ProductShelfResult;
 import com.lhiot.dc.service.ProductShelfService;
@@ -57,7 +57,7 @@ public class ProductShelfApi {
     //TODO api没有标识返回对象类型
     public ResponseEntity findListByIds(@RequestParam("shelfIds") String shelfIds) {
 
-        List<ProductShelfResult> result = shelfService.findListByIds(Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds, ",")));
+        List<ProductShelfResult> result = shelfService.findListByIds(Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds,",")));
         if (CollectionUtils.isEmpty(result)) {
             return ResponseEntity.ok().body(Multiple.of(new ArrayList<>()));
         }

@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "lhiot.dictionary.server.base-url",
+      "type": "java.lang.String",
+      "description": "字典服务Base URL地址, 例如：http://BASIC-DATA-SERVICE-V1-0 或者 http://172.16.10.203:8080."
+    }
+  ]
+}
+

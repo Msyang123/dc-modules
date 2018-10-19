@@ -1,5 +1,6 @@
 package com.lhiot.dc.api;
 
+import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
@@ -7,10 +8,7 @@ import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;
 import com.lhiot.dc.service.DictionaryService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +51,7 @@ public class DictionaryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String")
     public ResponseEntity remove(@PathVariable("code") String code) {
         service.remove(code);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -69,15 +68,26 @@ public class DictionaryApi {
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity dictionary(@PathVariable("code") String code) {
-        return ResponseEntity.ok().body(service.findByCode(code));
+    @ApiOperation(value = "查询一个字典数据", response = Dictionary.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "includeEntries", value = "是否加载字典子项", dataType = "includeEntries")
+    })
+    public ResponseEntity dictionary(@PathVariable("code") String code, @RequestParam(value = "includeEntries", required = false) boolean includeEntries) {
+        return ResponseEntity.ok().body(service.findByCode(code, includeEntries));
     }
 
     @GetMapping("/pages")
     @ApiHideBodyProperty("entryCode")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "search", value = "字典分页搜索参数", required = true, dataType = "SearchParameter")
+    @ApiResponses({
+            @ApiResponse(code = 0, message = "字典数据", response = Dictionary.class, responseContainer = "Set"),
+            @ApiResponse(code = 200, message = "字典分页", response = Pages.class)
+    })
     public ResponseEntity dictionaries(@RequestBody SearchParameter search) {
         return ResponseEntity.ok().body(service.pages(search));
     }
+
     //=====================================================================================================================================
     @ApiOperation("给字典添加一个子项")
     @PostMapping("/{dictCode}/entries")
@@ -114,22 +124,5 @@ public class DictionaryApi {
     public ResponseEntity updateEntry(@PathVariable("dictCode") String dictCode, @PathVariable("code") String code, @RequestBody DictionaryEntry entry) {
         service.updateEntry(dictCode, code, entry);
         return ResponseEntity.ok().build();
-    }
-
-    @ApiOperation("查询一个字典所有子项")
-    @GetMapping("/{dictCode}/entries")
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "dictCode", value = "字典code", required = true, dataType = "String")
-    public ResponseEntity entry(@PathVariable("dictCode") String dictCode){
-        return ResponseEntity.ok(service.findEntries(dictCode));
-    }
-
-    @ApiOperation("查询一个字典子项信息")
-    @GetMapping("/{dictCode}/entries/{code}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "dictCode", value = "字典code", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典子项code", dataType = "String")
-    })
-    public ResponseEntity entry(@PathVariable("dictCode") String dictCode, @PathVariable("code") String code){
-        return ResponseEntity.ok(service.findEntry(dictCode, code));
     }
 }
