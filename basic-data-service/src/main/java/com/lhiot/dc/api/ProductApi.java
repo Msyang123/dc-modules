@@ -1,6 +1,6 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.domain.Product;
 import com.lhiot.dc.domain.ProductAttachment;

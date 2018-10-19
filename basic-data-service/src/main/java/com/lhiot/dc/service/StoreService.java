@@ -1,6 +1,6 @@
 package com.lhiot.dc.service;
 
-import com.leon.microx.support.result.Pages;
+import com.leon.microx.web.result.Pages;
 import com.leon.microx.util.Maps;
 import com.lhiot.dc.common.LocationParam;
 import com.lhiot.dc.common.util.DistUtil;
