@@ -1,8 +1,8 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.result.Tips;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
-import com.leon.microx.support.swagger.ApiParamType;
+import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;

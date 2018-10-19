@@ -1,16 +1,11 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
 import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.domain.Product;
 import com.lhiot.dc.domain.ProductAttachment;
 import com.lhiot.dc.service.ProductService;
 import com.lhiot.dc.service.ProductSpecificationService;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
-import com.lhiot.dc.base.model.Product;
-import com.lhiot.dc.base.model.ProductAttachment;
-import com.lhiot.dc.base.service.ProductService;
-import com.lhiot.dc.base.service.ProductSpecificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

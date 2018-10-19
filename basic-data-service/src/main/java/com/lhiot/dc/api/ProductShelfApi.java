@@ -1,7 +1,7 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.result.Multiple;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Multiple;
 import com.lhiot.dc.domain.ProductAttachment;
 import com.lhiot.dc.domain.ProductShelfResult;
 import com.lhiot.dc.service.ProductShelfService;

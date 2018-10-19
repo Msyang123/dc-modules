@@ -1,10 +1,10 @@
 package com.lhiot.dc.service;
 
-import com.leon.microx.support.result.Pages;
-import com.leon.microx.support.result.Tips;
 import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;
