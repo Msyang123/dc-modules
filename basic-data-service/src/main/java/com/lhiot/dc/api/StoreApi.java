@@ -1,9 +1,9 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.support.result.Multiple;
-import com.leon.microx.support.result.Pages;
-import com.leon.microx.support.swagger.ApiHideBodyProperty;
-import com.leon.microx.support.swagger.ApiParamType;
+import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.common.LocationParam;
 import com.lhiot.dc.common.util.CommonUtils;
 import com.lhiot.dc.domain.Store;
