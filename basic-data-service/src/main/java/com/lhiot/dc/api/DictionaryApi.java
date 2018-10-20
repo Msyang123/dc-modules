@@ -35,8 +35,7 @@ public class DictionaryApi {
 
     @PostMapping("/")
     @ApiOperation("添加一个字典")
-    @ApiHideBodyProperty("id")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "dictionary", value = "要添加的字典", required = true, dataType = "Dictionary")
+    @ApiHideBodyProperty({"id", "children", "entries"})
     public ResponseEntity add(@RequestBody Dictionary dictionary) {
         Tips tips = service.add(dictionary);
         if (tips.err()) {
@@ -61,7 +60,7 @@ public class DictionaryApi {
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "dictionary", value = "修改的字典数据", required = true, dataType = "Dictionary")
     })
-    @ApiHideBodyProperty({"id", "code"})
+    @ApiHideBodyProperty({"id", "code", "children", "entries"})
     public ResponseEntity update(@PathVariable("code") String code, @RequestBody Dictionary dictionary) {
         service.update(code, dictionary);
         return ResponseEntity.ok().build();
@@ -71,7 +70,7 @@ public class DictionaryApi {
     @ApiOperation(value = "查询一个字典数据", response = Dictionary.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "includeEntries", value = "是否加载字典子项", dataType = "includeEntries")
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeEntries", value = "是否加载字典子项", dataType = "includeEntries")
     })
     public ResponseEntity dictionary(@PathVariable("code") String code, @RequestParam(value = "includeEntries", required = false) boolean includeEntries) {
         return ResponseEntity.ok().body(service.findByCode(code, includeEntries));
@@ -98,6 +97,9 @@ public class DictionaryApi {
     })
     public ResponseEntity addEntry(@PathVariable("dictCode") String dictCode, @RequestBody DictionaryEntry entry) {
         Tips tips = service.addEntry(dictCode, entry);
+        if (tips.err()){
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
         return ResponseEntity.created(URI.create("/dictionaries/{dictId}/entries/" + entry.getCode())).body(tips);
     }
 
