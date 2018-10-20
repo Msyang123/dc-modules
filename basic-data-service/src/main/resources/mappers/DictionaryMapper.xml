@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.DictionaryMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="BaseResultMap"
-        type="com.lhiot.dc.domain.Dictionary" >
+    <resultMap id="Dictionary" type="com.lhiot.dc.domain.Dictionary" >
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId" />
         <result column="name" property="name" />
@@ -12,7 +11,7 @@
     </resultMap>
 
     <!-- base查询字段  -->
-    <sql id="Base_Column_List" >
+    <sql id="columns" >
         <trim suffixOverrides="," >
             id,
             parent_id,
@@ -20,6 +19,15 @@
             code,
             description,
         </trim>
+    </sql>
+
+    <!-- base where条件  -->
+    <sql id="whereDictionaryCode" >
+        <where>
+            <if test="dictionaryCode != null ">
+                and code = #{dictionaryCode}
+            </if>
+        </where>
     </sql>
 
     <!--新增字典-->
@@ -80,46 +88,25 @@
         delete from dictionary where id = #{0}
     </delete>
 
-
     <!-- 根据dictCode查找字典 -->
-	<select id="selectByCode" resultMap="BaseResultMap"
-		parameterType="java.lang.String"> select <include refid="Base_Column_List" />
-		from dictionary where code = #{0}
+	<select id="selectByCode" resultMap="Dictionary" parameterType="java.lang.String">
+        select <include refid="columns" /> from dictionary where code = #{0}
 	</select>
 
-
-    <!-- base where条件  -->
-    <sql id="Base_Where_Condition" >
-        <where>
-
-            <if test="dictionaryCode != null ">
-                and code = #{dictionaryCode}
-            </if>
-        </where>
-    </sql>
-
     <!--查询字典列表-->
-     <select id="list" resultMap="BaseResultMap"
-        parameterType="com.lhiot.dc.domain.SearchParameter">
-	        select <include refid="Base_Column_List" />
-	        from dictionary
-            <include refid="Base_Where_Condition" />
+     <select id="list" resultMap="Dictionary" parameterType="com.lhiot.dc.domain.SearchParameter">
+	        select <include refid="columns" /> from dictionary
+            <include refid="whereDictionaryCode" />
 	        <include refid="common.pager" />
     </select>
 
-    <select id="tree" resultMap="BaseResultMap"
-            parameterType="java.lang.String">
-        select <include refid="Base_Column_List" />
-        from dictionary
-        where code = #{0}
+    <select id="tree" resultMap="Dictionary" parameterType="java.lang.String">
+        select <include refid="columns" /> from dictionary where code = #{0}
     </select>
 
     <!--查询字典总记录-->
-    <select id="count" resultType="int"
-        parameterType="com.lhiot.dc.domain.SearchParameter">
-            select count(1)
-            from dictionary
-            <include refid="Base_Where_Condition" />
+    <select id="count" resultType="int" parameterType="com.lhiot.dc.domain.SearchParameter">
+            select count(1) from dictionary <include refid="whereDictionaryCode" />
     </select>
 
 </mapper>
