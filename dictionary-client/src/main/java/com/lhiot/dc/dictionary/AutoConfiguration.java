@@ -19,17 +19,24 @@ import org.springframework.web.client.RestTemplate;
 @ConfigurationProperties(prefix = "lhiot.dictionary.server")
 public class AutoConfiguration {
 
+    private static final String CONFIG_KEY = "dictionary-service";
     private String baseUrl;
 
-    @Bean("dictionary-client")
-    public RemoteInvoker httpClient(ObjectProvider<RestTemplate> restTemplate) {
+    public AutoConfiguration(ObjectProvider<RestTemplate> provider) {
+        this.restTemplate = provider.getIfAvailable(RestTemplate::new);
+    }
+
+    private final RestTemplate restTemplate;
+
+    @Bean("dictionaryClientRemoteInvoker")
+    public RemoteInvoker httpClient() {
         RemoteProperties properties = new RemoteProperties();
-        properties.setServers(Maps.of("dictionary-service", new RemoteProperties.RemoteServer(this.baseUrl)));
-        return RemoteInvoker.of(restTemplate.getIfAvailable(RestTemplate::new), properties);
+        properties.setServers(Maps.of(CONFIG_KEY, new RemoteProperties.RemoteServer(this.baseUrl)));
+        return RemoteInvoker.of(this.restTemplate, properties);
     }
 
     @Bean
-    public DictionaryClient dictionaryClient(@Qualifier("dictionary-client") RemoteInvoker httpClient) {
-        return new DictionaryClient(this.baseUrl, httpClient);
+    public DictionaryClient dictionaryClient(@Qualifier("dictionaryClientRemoteInvoker") RemoteInvoker remoteInvoker) {
+        return new DictionaryClient(CONFIG_KEY, remoteInvoker);
     }
 }
