@@ -1,6 +1,7 @@
 package com.lhiot.dc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.dc.domain.type.AvailableStatus;
 import com.lhiot.dc.domain.type.ProductStatus;
 import io.swagger.annotations.ApiModel;
@@ -10,7 +11,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * @Author zhangfeng created in 2018/9/20 11:48
+ * @author zhangfeng created in 2018/9/20 11:48
  **/
 @Data
 @ApiModel
@@ -26,8 +27,6 @@ public class ProductResult {
     private BigDecimal weight;
     @ApiModelProperty(notes = "安全库存",dataType = "Long")
     private Long limitInventory;
-    @ApiModelProperty(notes = "原价",dataType = "Long")
-    private Long price;
     @ApiModelProperty(notes = "是否是库存规格：YES-是，NO-否",dataType = "InventorySpecification")
     private InventorySpecification inventorySpecification;
     @ApiModelProperty(notes = "规格是否可用：YES-是，NO-否",dataType = "AvailableStatus")
@@ -46,6 +45,15 @@ public class ProductResult {
     private String description;
     @ApiModelProperty(notes = "商品状态",dataType = "ProductStatus")
     private ProductStatus status;
+    private String image;
+    @ApiModelProperty(value = "商品小图标", dataType = "String")
+    private String smallImage;
+    @ApiModelProperty(value = "大图标", dataType = "String")
+    private String largeImage;
+
+    private String baseUnit;
+    @ApiModelProperty(value = "基础规格条码", dataType = "String")
+    private String baseBarcode;
 
     @JsonIgnore
     @ApiModelProperty(value = "当前页,默认值1")

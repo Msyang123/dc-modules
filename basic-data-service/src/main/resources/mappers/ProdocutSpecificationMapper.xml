@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductSpecificationMapper">
     <select id="findById" parameterType="Long" resultType="com.lhiot.dc.domain.ProductResult">
-        SELECT a.id AS specificationId,a.product_id AS productId,barcode,packaging_unit AS packagingUnit,weight,a.limit_inentory AS limitInentory
-        ,a.price,a.inventory_specification AS inventorySpecification ,a.available_status AS availableStatus,b.product_code AS productCode
+        SELECT a.id AS specificationId,a.product_id AS productId,barcode,packaging_unit AS packagingUnit,weight,a.limit_inventory AS limitInventory
+        ,a.inventory_specification AS inventorySpecification ,a.available_status AS availableStatus,b.product_code AS productCode
         ,b.product_name AS name,b.category_id AS categoryId,b.source_code AS sourceCode,b.status,b.description
         FROM product_specification a
         LEFT JOIN product b ON a.product_id = b.id
@@ -19,6 +19,14 @@
         LEFT JOIN product b ON a.product_id = b.id
         WHERE
         <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findBaseSpecificationByProductIds" parameterType="list" resultType="map">
+        select product_id as productId,barcode as baseBarcode,packaging_unit as baseUnit from product_specification
+        where inventory_specification = 'YES' and product_id in
+        <foreach collection="list" item="item" separator="," close=")" open="(">
             #{item}
         </foreach>
     </select>
