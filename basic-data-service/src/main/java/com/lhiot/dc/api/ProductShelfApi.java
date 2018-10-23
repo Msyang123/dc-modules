@@ -37,7 +37,6 @@ public class ProductShelfApi {
     @ApiOperation(value = "根据商品上架Id查询详细信息",response = ProductShelfResult.class)
     @ApiImplicitParam(paramType = "path", name = "id", value = "商品上架Id", dataType = "Long", required = true)
     @GetMapping("/{id}")
-    //TODO api没有标识返回对象类型
     public ResponseEntity findById(@PathVariable("id") Long shelfId) {
         ProductShelfResult result = shelfService.findById(shelfId);
         if (Objects.isNull(result)) {
