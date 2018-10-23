@@ -34,7 +34,7 @@ public class ProductShelfApi {
         this.shelfService = shelfService;
     }
 
-    @ApiOperation("根据商品上架Id查询详细信息")
+    @ApiOperation(value = "根据商品上架Id查询详细信息",response = ProductShelfResult.class)
     @ApiImplicitParam(paramType = "path", name = "id", value = "商品上架Id", dataType = "Long", required = true)
     @GetMapping("/{id}")
     //TODO api没有标识返回对象类型
@@ -51,10 +51,9 @@ public class ProductShelfApi {
         return ResponseEntity.ok().body(result);
     }
 
-    @ApiOperation("根据商品上架Id集合查询详细信息")
+    @ApiOperation(value = "根据商品上架Id集合查询详细信息",response = ProductShelfResult.class,responseContainer = "Set")
     @ApiImplicitParam(paramType = "query", name = "shelfIds", value = "商品上架Id集合字符串", dataType = "String", required = true)
     @GetMapping("/list")
-    //TODO api没有标识返回对象类型
     public ResponseEntity findListByIds(@RequestParam("shelfIds") String shelfIds) {
 
         List<ProductShelfResult> result = shelfService.findListByIds(Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds,",")));
