@@ -16,6 +16,7 @@ import java.util.Map;
 public interface ProductSpecificationMapper {
 
     ProductResult findById(Long id);
+    List<ProductResult> findByIds(List<String> idList);
 
     int countByProductId(Long productId);
 

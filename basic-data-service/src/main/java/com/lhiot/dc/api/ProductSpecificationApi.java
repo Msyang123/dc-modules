@@ -1,5 +1,6 @@
 package com.lhiot.dc.api;
 
+import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Multiple;
 import com.leon.microx.web.result.Pages;
 import com.lhiot.dc.domain.ProductResult;
@@ -10,12 +11,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +46,23 @@ public class ProductSpecificationApi {
         }
         List<ProductResult> productList = new ArrayList<>();
         productList.add(productResult);
-        return ResponseEntity.ok(Multiple.of(specificationService.assemblyProductList(productList)));
+        List<ProductResult> results = specificationService.assemblyProductList(productList);
+        return ResponseEntity.ok(results.get(0));
+    }
+
+    @ApiOperation(value = "根据规格Id集合查询商品信息",response = ProductResult.class,responseContainer = "Set")
+    @ApiImplicitParam(paramType = "query", name = "ids", value = "规格Id集合", dataType = "String", required = true)
+    @GetMapping("/list")
+    public ResponseEntity findByIds(@RequestParam("ids") String ids) {
+        List<String> idList = Arrays.asList(StringUtils.tokenizeToStringArray(ids,","));
+        List<ProductResult> productResultList = productSpecificationMapper.findByIds(idList);
+        if (!Objects.equals(idList.size(),productResultList.size())){
+            return ResponseEntity.badRequest().body("传入信息有误！");
+        }
+        if (CollectionUtils.isEmpty(productResultList)) {
+            return ResponseEntity.badRequest().body("商品不存在！");
+        }
+        return ResponseEntity.ok(Multiple.of(specificationService.assemblyProductList(productResultList)));
     }
 
 

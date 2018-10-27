@@ -10,6 +10,18 @@
         WHERE a.id = #{0}
     </select>
 
+    <select id="findByIds" parameterType="list" resultType="com.lhiot.dc.domain.ProductResult">
+        SELECT a.id AS specificationId,a.product_id AS productId,barcode,packaging_unit AS packagingUnit,weight,a.limit_inventory AS limitInventory
+        ,a.inventory_specification AS inventorySpecification ,a.available_status AS availableStatus,b.product_code AS productCode
+        ,b.product_name AS name,b.category_id AS categoryId,b.source_code AS sourceCode,b.status,b.description
+        FROM product_specification a
+        LEFT JOIN product b ON a.product_id = b.id
+        WHERE a.id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="countByProductId" parameterType="Long" resultType="int">
         SELECT COUNT(id) FROM product_specification WHERE product_id = #{0}
     </select>
