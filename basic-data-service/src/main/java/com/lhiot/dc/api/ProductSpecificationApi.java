@@ -2,12 +2,14 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Multiple;
-import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductResult;
+import com.lhiot.dc.domain.ProductSpecification;
 import com.lhiot.dc.mapper.ProductSpecificationMapper;
 import com.lhiot.dc.service.ProductSpecificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ import java.util.Objects;
 @RestController
 @Slf4j
 @RequestMapping("/product/specification")
-@Api(description = "规格接口")
+@Api("规格接口")
 public class ProductSpecificationApi {
 
     private ProductSpecificationMapper productSpecificationMapper;
@@ -65,5 +67,28 @@ public class ProductSpecificationApi {
         return ResponseEntity.ok(Multiple.of(specificationService.assemblyProductList(productResultList)));
     }
 
+    @ApiOperation("添加规格")
+    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "productSpecification",value = "规格信息",required = true,dataType = "ProductSpecification")
+    @PostMapping("")
+    public ResponseEntity createSpecification(@RequestBody ProductSpecification productSpecification){
+        if (productSpecificationMapper.insert(productSpecification) < 0){
+            return ResponseEntity.badRequest().body("添加规格失败！");
+        }
+        return ResponseEntity.ok().build();
+    }
 
+
+    @ApiOperation("修改规格信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.BODY,name = "productSpecification",value = "规格信息",required = true,dataType = "ProductSpecification"),
+            @ApiImplicitParam(paramType = ApiParamType.PATH,name = "id",value = "规格Id",required = true,dataType = "Long")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity updateSpecification(@PathVariable("id") Long id,@RequestBody ProductSpecification productSpecification){
+        productSpecification.setId(id);
+        if (productSpecificationMapper.updateSpecification(productSpecification) < 0){
+            return ResponseEntity.badRequest().body("修改规格失败！");
+        }
+        return ResponseEntity.ok().build();
+    }
 }

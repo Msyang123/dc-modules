@@ -1,13 +1,13 @@
 package com.lhiot.dc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lhiot.dc.domain.type.ProductStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -22,8 +22,8 @@ public class Product {
     private Long categoryId;
     private String sourceCode;
     private String description;
-    private ProductStatus status;
     private Date createAt = Date.from(Instant.now());
+    private List<ProductAttachment> attachments;
 
     @JsonIgnore
     @ApiModelProperty(value = "当前页,默认值1")
