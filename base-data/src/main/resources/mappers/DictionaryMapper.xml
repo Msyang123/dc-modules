@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.DictionaryMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.Dictionary">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <resultMap id="associationResultMap" type="com.lhiot.dc.domain.Dictionary">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+        <collection property="entries" column="code" ofType="com.lhiot.dc.domain.DictionaryEntry"
+                    select="com.lhiot.dc.mapper.DictionaryEntryMapper.findByDictCode">
+            <id column="id" property="id"/>
+            <result column="dict_code" property="dictCode"/>
+            <result column="name" property="name"/>
+            <result column="code" property="code"/>
+            <result column="sort" property="sort"/>
+            <result column="attach" property="attach"/>
+        </collection>
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            parent_id,
+            name,
+            code,
+            description,
+        </trim>
+    </sql>
+
+    <!--新增字典-->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.Dictionary" useGeneratedKeys="true" keyProperty="id">
+        insert into dictionary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+            <if test="name != null ">
+                name,
+            </if>
+            <if test="code != null ">
+                code,
+            </if>
+            <if test="description != null ">
+                description,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+            <if test="name != null ">
+                #{name},
+            </if>
+            <if test="code != null ">
+                #{code},
+            </if>
+            <if test="description != null ">
+                #{description},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改字典-->
+    <update id="update" parameterType="com.lhiot.dc.domain.Dictionary">
+        update dictionary
+        <set>
+            <if test="parentId != null ">
+                parent_id = #{parentId},
+            </if>
+            <if test="name != null ">
+                name = #{name},
+            </if>
+            <if test="code != null ">
+                code = #{code},
+            </if>
+            <if test="description != null ">
+                description = #{description},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据ids删除字典-->
+    <delete id="delete" parameterType="Long">
+        delete from dictionary where id = #{0}
+    </delete>
+
+
+    <!-- 根据dictCode查找字典 -->
+    <select id="selectByCode" resultMap="baseResultMap" parameterType="java.lang.String">select
+        <include refid="columns"/> from dictionary where code = #{0}
+    </select>
+
+    <!--查询字典列表-->
+    <select id="list" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.SearchParameter">
+        select
+        <include refid="columns"/>
+        from dictionary
+        where code = #{dictionaryCode}
+    </select>
+
+    <select id="tree" resultMap="associationResultMap" parameterType="java.lang.String">
+        select
+         id,parent_id,name,code,description
+        from dictionary
+        where code = #{0}
+    </select>
+
+    <!--查询字典总记录-->
+    <select id="count" resultType="int" parameterType="com.lhiot.dc.domain.SearchParameter">
+        select count(1)
+        from dictionary
+        where code = #{dictionaryCode}
+    </select>
+
+</mapper>
