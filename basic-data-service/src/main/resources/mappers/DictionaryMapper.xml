@@ -103,7 +103,7 @@
         parameterType="com.lhiot.dc.domain.SearchParameter">
 	        select <include refid="Base_Column_List" />
 	        from dictionary
-            <include refid="Base_Where_Condition" />
+            where code = #{dictionaryCode}
 	        <include refid="common.pager" />
     </select>
 
@@ -119,7 +119,7 @@
         parameterType="com.lhiot.dc.domain.SearchParameter">
             select count(1)
             from dictionary
-            <include refid="Base_Where_Condition" />
+            where code = #{dictionaryCode}
     </select>
 
 </mapper>

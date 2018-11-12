@@ -110,7 +110,7 @@ public class StoreService {
         if (CollectionUtils.isEmpty(storeList)) {
             return new ArrayList<>();
         }
-
+        this.toStoreList(storeList,param.getApplicationType());
         //经纬度信息不为空  排序
         if (Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
             return this.storesSortByDistance(param.getLat(), param.getLng(), storeList);
@@ -138,23 +138,26 @@ public class StoreService {
         List<Store> storeList = this.storeMapper.pageStores(store);
 
         if (Objects.nonNull(storeList) && Objects.nonNull(applicationType)) {
-            List<Long> storeIds = storeList.parallelStream()
-                    .map(Store::getId)
-                    .collect(Collectors.toList());
-
-            StorePosition storePosition = new StorePosition();
-            storePosition.setApplicationType(applicationType);
-            storePosition.setStoreIds(storeIds);
             //批量查询门店位置
-            List<StorePosition> storePositionList = this.storePositionMapper.selectByStoreIds(storePosition);
-
             //给每个门店赋值门店位置
-            storeList.forEach(storeItem ->
-                    storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(), storePositionItem.getStoreId()))
-                            .forEach(storeItem::setStorePosition)
-            );
+            this.toStoreList(storeList,applicationType);
         }
         return storeList;
+    }
+
+    private void toStoreList(List<Store> storeList,ApplicationType applicationType) {
+        List<Long> storeIds = storeList.parallelStream().map(Store::getId).collect(Collectors.toList());
+
+        StorePosition storePosition = new StorePosition();
+        storePosition.setApplicationType(applicationType);
+        storePosition.setStoreIds(storeIds);
+        List<StorePosition> storePositionList = this.storePositionMapper.selectByStoreIds(storePosition);
+
+        //给每个门店赋值门店位置
+        storeList.forEach(storeItem ->
+                storePositionList.stream().filter(storePositionItem -> Objects.equals(storeItem.getId(), storePositionItem.getStoreId()))
+                        .forEach(storeItem::setStorePosition)
+        );
     }
 
     /**

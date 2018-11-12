@@ -12,4 +12,6 @@ public class StoreSearchParam {
     private Double lat;
     private Double lng;
     private ApplicationType applicationType;
+    private Integer rows;
+
 }

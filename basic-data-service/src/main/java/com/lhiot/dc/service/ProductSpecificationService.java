@@ -2,7 +2,6 @@ package com.lhiot.dc.service;
 
 import com.lhiot.dc.domain.ProductAttachment;
 import com.lhiot.dc.domain.ProductResult;
-import com.lhiot.dc.domain.type.AttachmentType;
 import com.lhiot.dc.mapper.ProductAttachmentMapper;
 import com.lhiot.dc.mapper.ProductSpecificationMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -43,11 +42,11 @@ public class ProductSpecificationService {
      */
     public List<String> findProductIdListByProductId(List<String> productIdList) {
         List<String> resultList = new ArrayList<>();
-        List<Map<String,Object>> productList = specificationMapper.findProductIdList(productIdList);
+        List<Map<String, Object>> productList = specificationMapper.findProductIdList(productIdList);
         for (String productId : productIdList) {
-            for (Map<String,Object> map : productList) {
+            for (Map<String, Object> map : productList) {
                 if (Objects.equals(productId, map.get("product_id"))) {
-                    resultList.add(map.get("name")+"");
+                    resultList.add(map.get("name") + "");
                     break;
                 }
             }
@@ -57,22 +56,23 @@ public class ProductSpecificationService {
 
     /**
      * 拼装基础规格信息和商品附件信息
+     *
      * @param productResultList 商品信息
      * @return List<ProductResult>
      */
-    public List<ProductResult> assemblyProductList(List<ProductResult> productResultList){
+    public List<ProductResult> assemblyProductList(List<ProductResult> productResultList) {
         List<String> productIdList = productResultList.parallelStream().map(ProductResult::getProductId).map(String::valueOf).collect(Collectors.toList());
         List<ProductAttachment> attachmentList = productAttachmentMapper.findAttachmentByProductIdList(productIdList);
-        List<Map<String,Object>> list = specificationMapper.findBaseSpecificationByProductIds(productIdList);
+        List<Map<String, Object>> list = specificationMapper.findBaseSpecificationByProductIds(productIdList);
         productResultList.forEach(productResult -> {
-            list.stream().filter(map -> Objects.equals(map.get("productId"),productResult.getProductId()))
+            list.stream().filter(map -> Objects.equals(map.get("productId"), productResult.getProductId()))
                     .forEach(map -> {
                         productResult.setBaseBarcode((String) map.get("baseBarcode"));
                         productResult.setBaseUnit((String) map.get("baseUnit"));
                     });
-            attachmentList.stream().filter(attachment -> Objects.equals(attachment.getProductId(),productResult.getProductId()))
-                    .forEach(attachment ->{
-                        switch (attachment.getAttachmentType()){
+            attachmentList.stream().filter(attachment -> Objects.equals(attachment.getProductId(), productResult.getProductId()))
+                    .forEach(attachment -> {
+                        switch (attachment.getAttachmentType()) {
                             case LARGE_IMAGE:
                                 productResult.setLargeImage(attachment.getUrl());
                                 break;

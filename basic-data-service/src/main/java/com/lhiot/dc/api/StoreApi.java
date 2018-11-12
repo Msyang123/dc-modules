@@ -9,6 +9,7 @@ import com.lhiot.dc.common.util.CommonUtils;
 import com.lhiot.dc.domain.Store;
 import com.lhiot.dc.domain.StoreSearchParam;
 import com.lhiot.dc.domain.type.ApplicationType;
+import com.lhiot.dc.mapper.StoreMapper;
 import com.lhiot.dc.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,7 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -35,9 +35,11 @@ import java.util.Objects;
 public class StoreApi {
 
     private StoreService storeService;
+    private StoreMapper storeMapper;
 
-    public StoreApi(StoreService storeService) {
+    public StoreApi(StoreService storeService, StoreMapper storeMapper) {
         this.storeService = storeService;
+        this.storeMapper = storeMapper;
     }
 
     @ApiOperation(value = "根据id查询门店", notes = "根据id查询门店")
@@ -65,10 +67,9 @@ public class StoreApi {
     @PostMapping({"", "/"})
     @ApiOperation(value = "添加门店")
     @ApiImplicitParam(paramType = "body", name = "store", value = "要添加的门店", required = true, dataType = "Store")
-    public ResponseEntity<Integer> create(@RequestBody Store store) {
+    public ResponseEntity create(@RequestBody Store store) {
         log.debug("添加门店\t param:{}", store);
-
-        return ResponseEntity.ok(storeService.create(store));
+        return ResponseEntity.ok(storeMapper.create(store));
     }
 
     @PutMapping("/{id}")
@@ -81,7 +82,7 @@ public class StoreApi {
     public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody Store store) {
         log.debug("根据id更新门店\t param:{}", store);
         store.setId(id);
-        return ResponseEntity.ok(storeService.updateById(store));
+        return ResponseEntity.ok(storeMapper.updateById(store));
     }
 
     @DeleteMapping("/{id}")
@@ -90,7 +91,7 @@ public class StoreApi {
     public ResponseEntity<Integer> deleteByIds(@PathVariable("id") Long id) {
         log.debug("根据ids删除门店\t param:{}", id);
 
-        return ResponseEntity.ok(storeService.deleteById(id));
+        return ResponseEntity.ok(storeMapper.deleteById(id));
     }
 
 
@@ -98,7 +99,6 @@ public class StoreApi {
     @ApiOperation(value = "查询门店分页列表")
     public ResponseEntity<Pages<Store>> pageQuery(Store store) {
         log.debug("查询门店分页列表\t param:{}", store);
-
         return ResponseEntity.ok(storeService.pageList(store));
     }
 
@@ -120,18 +120,18 @@ public class StoreApi {
     }
 
     @ApiOperation("根据条件查询门店")
-    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "searchParam",value = "查询条件",dataType = "StoreSearchParam",required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "searchParam", value = "查询条件", dataType = "StoreSearchParam", required = true)
     @PostMapping("/search")
-    public ResponseEntity searchStores(@RequestBody @NotNull StoreSearchParam searchParam){
+    public ResponseEntity searchStores(@RequestBody @NotNull StoreSearchParam searchParam) {
         List<Store> resultList;
-        if (Objects.isNull(searchParam.getStoreIds())){
+        if (Objects.isNull(searchParam.getStoreIds())) {
             log.debug("根据位置查询附近(200km内)门店\t param:{}", searchParam);
-            resultList =  storeService.findUserNearbyStores(searchParam, 200, 22);
-        }else {
+            resultList = storeService.findUserNearbyStores(searchParam, 200, 22);
+        } else {
             //根据门店Id集合查询门店，并由近到远排序
             resultList = storeService.findStoreList(searchParam);
         }
-        return ResponseEntity.ok(Multiple.of(CollectionUtils.isEmpty(resultList)?new ArrayList<>():resultList));
+        return ResponseEntity.ok(Multiple.of(CollectionUtils.isEmpty(resultList) ? new ArrayList<>() : resultList));
     }
 
     @GetMapping("/all")

@@ -19,7 +19,7 @@ public class ProductShelfResult {
 
     private Long shelfId;
     private String shelfName;
-    private BigDecimal specificationQty;
+    private BigDecimal shelfQty;
     private ShelfStatus shelfStatus;
     private String shelfImage;
     private Integer originalPrice;

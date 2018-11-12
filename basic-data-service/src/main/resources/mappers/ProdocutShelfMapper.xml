@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductShelfMapper">
     <select id="findById" parameterType="Long" resultType="com.lhiot.dc.domain.ProductShelfResult">
-        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.specification_qty AS specificationQty,a.price,a.description
+        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.shelf_qty AS shelfQty,a.price,a.description
         ,a.shelf_status AS shelfStatus,a.image AS shelfImage,a.original_price AS originalPrice,b.barcode,b.packaging_unit AS packagingUnit,b.weight
         ,b.limit_inventory AS limitInventory,b.inventory_specification AS inventorySpecification,b.available_status,c.product_name AS productName
         ,b.product_id AS productId,a.product_image AS productImage,a.shelf_type AS shelfType
@@ -13,7 +13,7 @@
     </select>
 
     <select id="findListByIds" parameterType="list" resultType="com.lhiot.dc.domain.ProductShelfResult">
-        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.specification_qty AS specificationQty,a.price,a.description
+        SELECT a.id AS shelfId,a.name AS shelfName,a.specification_id AS specificationdI,a.shelf_qty AS shelfQty,a.price,a.description
         ,a.shelf_status AS shelfStatus,a.image AS shelfImage,a.original_price AS originalPrice,b.barcode,b.packaging_unit AS packagingUnit,b.weight
         ,b.limit_inventory AS limitInventory,b.inventory_specification AS inventorySpecification,b.available_status,c.product_name AS productName
         ,b.product_id AS productId,a.product_image AS productImage,a.shelf_type AS shelfType
@@ -36,19 +36,19 @@
     <update id="update" parameterType="com.lhiot.dc.domain.ProductShelf">
         update product_shelf
         <trim prefix="set" suffixOverrides=",">
-            <if test="name != null and name != ''">name = #{name}</if>
-            <if test="specificationId != null and specificationId != ''">specification_id = #{specificationId}</if>
-            <if test="shelfQty != null and shelfQty != ''">shelf_qty = #{shelfQty}</if>
-            <if test="price != null and price != ''">price = #{price}</if>
-            <if test="originalPrice != null and originalPrice != ''">original_price = #{originalPrice}</if>
-            <if test="image != null and image != ''">image = #{image}</if>
-            <if test="productImage != null and productImage != ''">product_image = #{productImage}</if>
-            <if test="shelfStatus != null and shelfStatus != ''">shelf_status = #{shelfStatus}</if>
-            <if test="shelfType != null and shelfType != ''">shelf_type = #{shelfType}</if>
-            <if test="description != null and description != ''">description = #{description}</if>
-            <if test="sorting != null and sorting != ''">sorting = #{sorting}</if>
-            <if test="applicationType != null and applicationType != ''">application_type = #{applicationType}</if>
-            <if test="createAt != null">create_at = #{createAt}</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="specificationId != null and specificationId != ''">specification_id = #{specificationId},</if>
+            <if test="shelfQty != null and shelfQty != ''">shelf_qty = #{shelfQty},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="originalPrice != null and originalPrice != ''">original_price = #{originalPrice},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="productImage != null and productImage != ''">product_image = #{productImage},</if>
+            <if test="shelfStatus != null and shelfStatus != ''">shelf_status = #{shelfStatus},</if>
+            <if test="shelfType != null and shelfType != ''">shelf_type = #{shelfType},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
+            <if test="applicationType != null and applicationType != ''">application_type = #{applicationType},</if>
+            <if test="createAt != null">create_at = #{createAt},</if>
         </trim>
         where id = #{id}
     </update>

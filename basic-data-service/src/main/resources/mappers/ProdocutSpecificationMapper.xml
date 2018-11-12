@@ -4,7 +4,7 @@
 
     <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSpecification" useGeneratedKeys="true" keyColumn="id">
         insert into product_specification (product_id,barcode,packaging_unit,weight,limit_inventory,inventory_specification,available_status,create_at,specification_qty)
-        value (#{product_id},#{barcode},#{packaging_unit},#{weight},#{limitInventory},#{inventorySpecification},#{availableStatus},#{createAt},#{specificationQty})
+        value (#{productId},#{barcode},#{packagingUnit},#{weight},#{limitInventory},#{inventorySpecification},#{availableStatus},#{createAt},#{specificationQty})
     </insert>
 
     <select id="findById" parameterType="Long" resultType="com.lhiot.dc.domain.ProductResult">
@@ -52,14 +52,14 @@
     <update id="updateSpecification" parameterType="com.lhiot.dc.domain.ProductSpecification">
         update product_specification
         <trim prefix="set" suffixOverrides=",">
-            <if test="productId != null and productId != ''">product_id = #{productId}</if>
-            <if test="barcode != null and barcode != ''">barcode = #{barcode}</if>
-            <if test="packagingUnit != null and packagingUnit != ''">packaging_unit = #{packagingUnit}</if>
-            <if test="weight != null and weight != ''">weight = #{weight}</if>
-            <if test="specificationQty != null and specificationQty != ''">specification_qty = #{specificationQty}</if>
-            <if test="limitInventory != null and limitInventory != ''">limit_inventory = #{limitInventory}</if>
-            <if test="inventorySpecification != null">inventory_specification = #{inventorySpecification}</if>
-            <if test="availableStatus != null">available_status = #{availableStatus}</if>
+            <if test="productId != null and productId != ''">product_id = #{productId},</if>
+            <if test="barcode != null and barcode != ''">barcode = #{barcode},</if>
+            <if test="packagingUnit != null and packagingUnit != ''">packaging_unit = #{packagingUnit},</if>
+            <if test="weight != null and weight != ''">weight = #{weight},</if>
+            <if test="specificationQty != null and specificationQty != ''">specification_qty = #{specificationQty},</if>
+            <if test="limitInventory != null and limitInventory != ''">limit_inventory = #{limitInventory},</if>
+            <if test="inventorySpecification != null">inventory_specification = #{inventorySpecification},</if>
+            <if test="availableStatus != null">available_status = #{availableStatus},</if>
         </trim>
         where id = #{id}
     </update>
