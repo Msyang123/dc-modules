@@ -1,9 +1,7 @@
 package com.lhiot.dc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lhiot.dc.domain.type.AvailableStatus;
-import com.lhiot.dc.domain.type.ProductStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -43,8 +41,6 @@ public class ProductResult {
     private String sourceCode;
     @ApiModelProperty(notes = "商品描述",dataType = "String")
     private String description;
-    @ApiModelProperty(notes = "商品状态",dataType = "ProductStatus")
-    private ProductStatus status;
     private String image;
     @ApiModelProperty(value = "商品小图标", dataType = "String")
     private String smallImage;

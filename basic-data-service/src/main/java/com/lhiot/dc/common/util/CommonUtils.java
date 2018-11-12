@@ -8,7 +8,7 @@ import java.util.List;
  * Description: 公共工具类
  *
  * @author Limiaojun
- * @date: 2018-05-31 17:52:20
+ *  2018-05-31 17:52:20
  * @version 1.0
  * @since JDK 1.8
  */

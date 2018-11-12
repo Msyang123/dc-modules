@@ -50,7 +50,6 @@ public class DictionaryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String")
     public ResponseEntity remove(@PathVariable("code") String code) {
         service.remove(code);
-
         return ResponseEntity.noContent().build();
     }
 
@@ -76,7 +75,8 @@ public class DictionaryApi {
         return ResponseEntity.ok().body(service.findByCode(code, includeEntries));
     }
 
-    @GetMapping("/pages")
+    @ApiOperation("分页查询")
+    @PostMapping("/pages")
     @ApiHideBodyProperty("entryCode")
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "search", value = "字典分页搜索参数", required = true, dataType = "SearchParameter")
     @ApiResponses({
@@ -120,9 +120,9 @@ public class DictionaryApi {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "dictCode", value = "字典code", required = true, dataType = "String"),
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典子项code", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "dictionary", value = "修改的字典数据", required = true, dataType = "Dictionary")
+            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "entry", value = "修改的字典数据", required = true, dataType = "DictionaryEntry")
     })
-    @ApiHideBodyProperty({"id", "code"})
+    @ApiHideBodyProperty({"id", "code","dictCode"})
     public ResponseEntity updateEntry(@PathVariable("dictCode") String dictCode, @PathVariable("code") String code, @RequestBody DictionaryEntry entry) {
         service.updateEntry(dictCode, code, entry);
         return ResponseEntity.ok().build();

@@ -11,8 +11,8 @@
     </parent>
 
     <modules>
-        <module>basic-data-service</module>
         <module>dictionary-client</module>
+        <module>base-data</module>
     </modules>
 
     <groupId>com.lhiot.dc</groupId>

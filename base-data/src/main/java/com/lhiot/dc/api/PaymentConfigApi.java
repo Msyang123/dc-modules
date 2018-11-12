@@ -1,6 +1,9 @@
 package com.lhiot.dc.api;
 
 import com.leon.microx.web.result.Multiple;
+import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.PaymentConfig;
 import com.lhiot.dc.service.PaymentConfigService;
 import io.swagger.annotations.Api;
@@ -9,9 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,18 @@ public class PaymentConfigApi {
 
     public PaymentConfigApi(PaymentConfigService paymentConfigService) {
         this.paymentConfigService = paymentConfigService;
+    }
+
+    @ApiOperation("添加支付配置信息")
+    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "config",value = "支付配置信息",dataType = "PaymentConfig",required = true)
+    @PostMapping("/payment-config")
+    @ApiHideBodyProperty("id")
+    public ResponseEntity create(@RequestBody PaymentConfig config){
+        Tips tips=paymentConfigService.addConfig(config);
+        if (tips.err()){
+            return ResponseEntity.badRequest().body("此名称的配置已存在！");
+        }
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation("根据支付商户名称简称查询支付配置信息")

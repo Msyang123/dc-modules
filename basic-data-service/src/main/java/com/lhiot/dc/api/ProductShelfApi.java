@@ -2,11 +2,16 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.web.result.Multiple;
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
+import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductAttachment;
+import com.lhiot.dc.domain.ProductShelf;
 import com.lhiot.dc.domain.ProductShelfResult;
+import com.lhiot.dc.mapper.ProductShelfMapper;
 import com.lhiot.dc.service.ProductShelfService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +30,15 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/product-shelf")
-@Api(description = "商品上架接口")
+@Api("商品上架接口")
 public class ProductShelfApi {
 
     private ProductShelfService shelfService;
+    private ProductShelfMapper shelfMapper;
 
-    public ProductShelfApi(ProductShelfService shelfService) {
+    public ProductShelfApi(ProductShelfService shelfService, ProductShelfMapper shelfMapper) {
         this.shelfService = shelfService;
+        this.shelfMapper = shelfMapper;
     }
 
     @ApiOperation(value = "根据商品上架Id查询详细信息",response = ProductShelfResult.class)
@@ -63,5 +70,31 @@ public class ProductShelfApi {
         List<ProductAttachment> attachmentList = shelfService.findAttachmentByProductIdList(productIdList);
         result = shelfService.assemblyData(attachmentList, result);
         return ResponseEntity.ok().body(Multiple.of(result));
+    }
+
+    @ApiOperation("上架商品")
+    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "productShelf",value = "商品上架信息",dataType = "ProductShelf",required = true)
+    @ApiHideBodyProperty("id")
+    @PostMapping("")
+    public ResponseEntity createShelfProduct(@RequestBody ProductShelf productShelf){
+        if (shelfMapper.insert(productShelf) < 0){
+            return ResponseEntity.badRequest().body("上架商品失败！");
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation("修改上架商品")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.BODY,name = "productShelf",value = "商品上架信息",dataType = "ProductShelf",required = true),
+            @ApiImplicitParam(paramType = ApiParamType.PATH,name = "id",value = "上架Id",dataType = "Long",required = true)
+    })
+    @ApiHideBodyProperty("id")
+    @PutMapping("/{id}")
+    public ResponseEntity updateShelfProduct(@PathVariable("id") Long id,@RequestBody ProductShelf productShelf){
+        productShelf.setId(id);
+        if (shelfMapper.update(productShelf) < 0){
+            return ResponseEntity.badRequest().body("上架商品失败！");
+        }
+        return ResponseEntity.ok().build();
     }
 }

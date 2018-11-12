@@ -37,20 +37,4 @@ public class DistUtil {
         return distance;
     }
 
-//	public static void main(String[] args) {
-//		System.out.println(getDistance(28.236447, 112.914096, 28.123026, 113.021028));
-//	}
-
-
-//	public static void main(String[] args) {
-//		List list = new ArrayList<>();
-//		list.add(51);
-//		list.add(52);
-//		list.add(18);
-//		list.add(36);
-//		Collections.sort(list);
-//		for(int i =0;i<list.size();i++){
-//			System.out.println(list.get(i));
-//		}
-//	}
 }

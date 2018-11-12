@@ -2,6 +2,7 @@ package com.lhiot.dc.domain;
 
 import com.lhiot.dc.domain.type.AvailableStatus;
 import com.lhiot.dc.domain.type.ShelfStatus;
+import com.lhiot.dc.domain.type.ShelfType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,11 +19,12 @@ public class ProductShelfResult {
 
     private Long shelfId;
     private String shelfName;
-    private BigDecimal specificationQty;
+    private BigDecimal shelfQty;
     private ShelfStatus shelfStatus;
     private String shelfImage;
     private Integer originalPrice;
     private String description;
+    private ShelfType shelfType;
     @ApiModelProperty(notes = "规格Id",dataType = "Long")
     private Long specificationId;
     @ApiModelProperty(notes = "规格条码",dataType = "String")
