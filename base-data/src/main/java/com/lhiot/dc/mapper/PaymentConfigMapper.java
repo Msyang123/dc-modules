@@ -24,17 +24,7 @@ public interface PaymentConfigMapper {
      * @author yijun
      * 2018/09/20 09:01:25
      */
-    int updateById(PaymentConfig paymentConfig);
-
-    /**
-     * Description:根据ids删除支付签名信息
-     *
-     * @param ids
-     * @return
-     * @author yijun
-     * @date 2018/09/20 09:01:25
-     */
-    int deleteByIds(List<String> ids);
+    int update(PaymentConfig paymentConfig);
 
     /**
      * Description:根据id查找支付签名信息
@@ -58,19 +48,5 @@ public interface PaymentConfigMapper {
      */
     List<PaymentConfig> findAll();
 
-    /**
-     * Description:查询支付签名信息列表
-     *
-     * @author yijun
-     */
-    List<PaymentConfig> pagePaymentConfigs(PaymentConfig paymentConfig);
-
-
-    /**
-     * Description: 查询支付签名信息总记录数
-     *
-     * @author yijun
-     */
-    long pagePaymentConfigCounts(PaymentConfig paymentConfig);
 }
 

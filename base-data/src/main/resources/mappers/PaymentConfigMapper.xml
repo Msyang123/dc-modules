@@ -89,7 +89,7 @@
     </insert>
 
     <!--根据id修改支付签名信息-->
-    <update id="updateById" parameterType="com.lhiot.dc.domain.PaymentConfig">
+    <update id="update" parameterType="com.lhiot.dc.domain.PaymentConfig">
         update payment_config
         <set>
             <if test="paymentName != null ">
@@ -119,15 +119,6 @@
         </set>
         where id=#{id}
     </update>
-
-    <!--根据ids删除支付签名信息-->
-    <delete id="deleteByIds" parameterType="java.util.List">
-        delete from payment_config where id in
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </delete>
-
 
     <!-- 根据id查找支付签名信息 -->
     <select id="selectById" resultMap="baseResultMap" parameterType="long">

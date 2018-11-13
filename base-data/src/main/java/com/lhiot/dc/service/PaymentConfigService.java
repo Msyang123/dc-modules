@@ -42,4 +42,5 @@ public class PaymentConfigService {
       paymentConfigMapper.create(config);
       return Tips.empty();
     }
+
 }
