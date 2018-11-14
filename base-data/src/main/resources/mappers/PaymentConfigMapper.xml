@@ -6,7 +6,7 @@
     <resultMap id="baseResultMap"
                type="com.lhiot.dc.domain.PaymentConfig">
         <id column="id" property="id"/>
-        <result column="payment_name" property="paymentName"/>
+        <result column="alias" property="alias"/>
         <result column="partner_id" property="partnerId"/>
         <result column="partner_key" property="partnerKey"/>
         <result column="private_key" property="privateKey"/>
@@ -20,7 +20,7 @@
     <sql id="columns">
         <trim suffixOverrides=",">
             id,
-            payment_name,
+            alias,
             partner_id,
             partner_key,
             private_key,
@@ -35,8 +35,8 @@
     <insert id="create" parameterType="com.lhiot.dc.domain.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
         insert into payment_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="paymentName != null ">
-                payment_name,
+            <if test="alias != null ">
+                alias,
             </if>
             <if test="partnerId != null ">
                 partner_id,
@@ -61,8 +61,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="paymentName != null ">
-                #{paymentName},
+            <if test="alias != null ">
+                #{alias},
             </if>
             <if test="partnerId != null ">
                 #{partnerId},
@@ -93,7 +93,7 @@
         update payment_config
         <set>
             <if test="paymentName != null ">
-                payment_name = #{paymentName},
+                alias = #{alias},
             </if>
             <if test="partnerId != null ">
                 partner_id = #{partnerId},
@@ -127,15 +127,16 @@
         from payment_config where id = #{id}
     </select>
 
-    <select id="selectByName" resultMap="baseResultMap" parameterType="String">select
+    <select id="selectByName" resultMap="baseResultMap" parameterType="String">
+        select
         <include refid="columns"/>
-        from payment_config where payment_name = #{paymentName}
+        from payment_config where alias = #{alias}
     </select>
 
 
-    <select id="findAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="baseResultMap">
         select
         <include refid="columns"/>
-        from payment_Config
+        from payment_config
     </select>
 </mapper>

@@ -18,7 +18,7 @@ public interface DictionaryEntryMapper {
 
     void insert(DictionaryEntry entry);
 
-    List<DictionaryEntry> findByDictCode(String dictCode);
+    List<DictionaryEntry> selectByDictCode(String dictCode);
 
     DictionaryEntry selectByDictCodeAndEntryCode(String dictCode, String code);
 

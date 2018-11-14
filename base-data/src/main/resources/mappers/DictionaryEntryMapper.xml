@@ -89,7 +89,7 @@
         delete from dictionary_entry where dict_code = #{dictCode} and code = #{code}
     </delete>
 
-    <select id="findByDictCode" resultMap="baseResultMap" parameterType="java.lang.String">
+    <select id="selectByDictCode" resultMap="baseResultMap" parameterType="java.lang.String">
         select <include refid="columns" />
         from dictionary_entry where dict_code = #{0}
     </select>

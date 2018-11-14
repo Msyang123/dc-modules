@@ -46,7 +46,7 @@ public interface PaymentConfigMapper {
     /**
      * 查询所有的签名支付信息
      */
-    List<PaymentConfig> findAll();
+    List<PaymentConfig> selectAll();
 
 }
 

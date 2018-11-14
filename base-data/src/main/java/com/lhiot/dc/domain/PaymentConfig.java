@@ -19,7 +19,7 @@ public class PaymentConfig {
      *支付商户名称简称
      */
     @ApiModelProperty(notes = "支付商户名称简称", dataType = "String")
-    private String paymentName;
+    private String alias;
 
     /**
      *微信支付APPID/支付宝APPID

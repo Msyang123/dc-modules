@@ -44,7 +44,7 @@ public class DictionaryService {
     public Dictionary findByCode(String code, boolean includeEntries) {
         Dictionary dictionary = mapper.selectByCode(code);
         if (includeEntries && Objects.nonNull(dictionary)) {
-            dictionary.setEntries(entryMapper.findByDictCode(dictionary.getCode()));
+            dictionary.setEntries(entryMapper.selectByDictCode(dictionary.getCode()));
         }
         return dictionary;
     }
