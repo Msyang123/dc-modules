@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.Product">
+        <id column="id" property="id"/>
+        <result column="product_code" property="code"/>
+        <result column="product_name" property="name"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="source_code" property="sourceCode"/>
+        <result column="description" property="description"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            product_code,
+            product_name,
+            category_id,
+            source_code,
+            description,
+            create_at,
+        </trim>
+    </sql>
+
+    <!-- 新增商品 -->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.Product" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
+        insert into product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null ">
+                product_code,
+            </if>
+            <if test="name != null ">
+                product_name,
+            </if>
+            <if test="categoryId != null ">
+                category_id,
+            </if>
+            <if test="sourceCode != null ">
+                source_code,
+            </if>
+            <if test="description != null ">
+                description,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null ">
+                #{code},
+            </if>
+            <if test="name != null ">
+                #{name},
+            </if>
+            <if test="categoryId != null ">
+                #{categoryId},
+            </if>
+            <if test="sourceCode != null ">
+                #{sourceCode},
+            </if>
+            <if test="description != null ">
+                #{description},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改商品 -->
+    <update id="updateById" parameterType="com.lhiot.dc.domain.Product">
+        update product
+        <trim prefix="set" suffixOverrides=",">
+            <if test="code != null and code != ''">product_code = #{code},</if>
+            <if test="name != null and name != ''">product_name = #{name},</if>
+            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId},</if>
+            <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 查找单个商品 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+		select
+        <include refid="columns"/>
+		from product where id=#{0}
+	</select>
+
+    <!-- 删除单个商品 -->
+    <delete id="deleteById" parameterType="Long">
+        delete from product where id = #{0}
+    </delete>
+
+    <!-- 批量删除商品集合 -->
+    <delete id="batchDeleteByIds" parameterType="list">
+        delete from product
+        where id in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>
