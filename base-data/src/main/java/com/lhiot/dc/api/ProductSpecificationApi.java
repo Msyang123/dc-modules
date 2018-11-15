@@ -77,8 +77,7 @@ public class ProductSpecificationApi {
         if (productShelfList != null && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("该商品规格存在上架信息不可删除！");
         }
-        productSpecificationService.delete(specificationId);
-        return ResponseEntity.noContent().build();
+        return productSpecificationService.delete(specificationId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
     }
 
 
@@ -90,8 +89,8 @@ public class ProductSpecificationApi {
         if (productShelfList != null && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("该商品下的商品规格存在上架信息不可删除！");
         }
-        productSpecificationService.deleteByProductId(productId);
-        return ResponseEntity.noContent().build();
+        ;
+        return productSpecificationService.deleteByProductId(productId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
     }
 
 
