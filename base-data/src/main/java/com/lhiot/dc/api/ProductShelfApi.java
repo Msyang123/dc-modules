@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * @author xiaojian created in 2018/11/14 12:12
@@ -54,6 +55,14 @@ public class ProductShelfApi {
     @GetMapping("/product-shelf/{id}")
     public ResponseEntity single(@PathVariable("id") Long shelfId) {
         return ResponseEntity.ok().body(shelfService.findById(shelfId));
+    }
+
+
+    @ApiOperation("根据Id删除商品上架")
+    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true)
+    @DeleteMapping("/product-shelf/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long shelfId) {
+        return shelfService.delete(shelfId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
     }
 
 

@@ -159,6 +159,12 @@
     </select>
 
 
+    <!-- 删除单个商品上架 -->
+    <delete id="deleteById" parameterType="Long">
+        delete from product_shelf where id = #{0}
+    </delete>
+
+
     <!--根据商品规格Id查询商品上架集合-->
     <select id="findListBySpecificationId" resultMap="baseResultMap" parameterType="Long">
         select

@@ -33,7 +33,6 @@ public interface ProductShelfMapper {
     int updateById(ProductShelf productShelf);
 
 
-
     /**
      * 根据ID查找单个商品上架
      *
@@ -41,6 +40,15 @@ public interface ProductShelfMapper {
      * @return 商品上架对象
      */
     ProductShelf findById(Long shelfId);
+
+
+    /**
+     * 删除商品上架
+     *
+     * @param shelfId
+     * @return 执行结果
+     */
+    int deleteById(Long shelfId);
 
 
     /**
@@ -59,8 +67,6 @@ public interface ProductShelfMapper {
      * @return 商品上架集合
      */
     List<ProductShelf> findListByProductId(Long productId);
-
-
 
 
 }

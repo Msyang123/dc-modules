@@ -56,6 +56,15 @@ public class ProductShelfService {
     }
 
 
+    /**
+     * 删除商品上架
+     *
+     * @param shelfId
+     * @return 执行结果 true 或者 false
+     */
+    public boolean delete(Long shelfId) {
+        return shelfMapper.deleteById(shelfId) > 0;
+    }
 
 
     /**
@@ -80,10 +89,6 @@ public class ProductShelfService {
         List<ProductShelf> productShelfList = shelfMapper.findListByProductId(productId);
         return productShelfList;
     }
-
-
-
-
 
 
 }
