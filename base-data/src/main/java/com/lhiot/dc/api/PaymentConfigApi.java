@@ -51,7 +51,7 @@ public class PaymentConfigApi {
     @PutMapping("payment-config/{id}")
     public ResponseEntity updateConfig(@PathVariable("id") Long id, @RequestBody PaymentConfig config) {
         config.setId(id);
-        if (paymentConfigMapper.update(config) > 0) {
+        if (paymentConfigMapper.update(config) < 0) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
@@ -80,7 +80,7 @@ public class PaymentConfigApi {
     }
 
     @ApiOperation(value = "查询所有支付配置信息", response = PaymentConfig.class, responseContainer = "Set")
-    @GetMapping("/all")
+    @GetMapping("/payment-config/all")
     public ResponseEntity all() {
         List<PaymentConfig> paymentConfigList = paymentConfigMapper.selectAll();
         if (CollectionUtils.isEmpty(paymentConfigList)) {

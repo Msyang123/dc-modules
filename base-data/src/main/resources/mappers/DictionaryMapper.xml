@@ -17,7 +17,7 @@
         <result column="code" property="code"/>
         <result column="description" property="description"/>
         <collection property="entries" column="code" ofType="com.lhiot.dc.domain.DictionaryEntry"
-                    select="com.lhiot.dc.mapper.DictionaryEntryMapper.findByDictCode">
+                    select="com.lhiot.dc.mapper.DictionaryEntryMapper.selectByDictCode">
             <id column="id" property="id"/>
             <result column="dict_code" property="dictCode"/>
             <result column="name" property="name"/>
@@ -71,7 +71,7 @@
         </trim>
     </insert>
 
-    <!--根据id修改字典-->
+    <!--根据code修改字典-->
     <update id="update" parameterType="com.lhiot.dc.domain.Dictionary">
         update dictionary
         <set>
@@ -81,14 +81,11 @@
             <if test="name != null ">
                 name = #{name},
             </if>
-            <if test="code != null ">
-                code = #{code},
-            </if>
             <if test="description != null ">
                 description = #{description},
             </if>
         </set>
-        where id=#{id}
+        where code=#{code}
     </update>
 
     <!--根据ids删除字典-->

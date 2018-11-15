@@ -48,57 +48,10 @@
 
     <!--新增门店-->
     <insert id="insert" parameterType="com.lhiot.dc.domain.Store" useGeneratedKeys="true" keyProperty="id">
-        insert into store (<include refid="columns"/>)
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="code != null ">
-                #{code},
-            </if>
-            <if test="name != null ">
-                #{name},
-            </if>
-            <if test="address != null ">
-                #{address},
-            </if>
-            <if test="phone != null ">
-                #{phone},
-            </if>
-            <if test="image != null ">
-                #{image},
-            </if>
-            <if test="area != null ">
-                #{area},
-            </if>
-            <if test="status != null ">
-                #{status},
-            </if>
-            <if test="flagShip != null ">
-                #{flagShip},
-            </if>
-            <if test="storeType != null ">
-                #{storeType},
-            </if>
-            <if test="videoUrl != null ">
-                #{videoUrl},
-            </if>
-            <if test="beginAt != null ">
-                #{beginAt},
-            </if>
-            <if test="endAt != null ">
-                #{endAt},
-            </if>
-            <if test="tapeUrl != null ">
-                #{tapeUrl},
-            </if>
-            <if test="lat != null">
-                #{latitude},
-            </if>
-            <if test="lng != null">
-                #{longitude},
-            </if>
-            <if test="applications != null">
-                #{applications},
-            </if>
-        </trim>
+        insert into store (store_code,store_name,address,phone,image,area,status,flag_ship,store_type,video_url,
+        begin_at,end_at,tape_url,application_type,latitude,longitude)
+        value (#{code},#{name},#{address}, #{phone},#{image},#{area},#{status},#{flagShip},#{storeType},#{videoUrl}
+                ,#{beginAt},#{endAt},#{tapeUrl},#{applications},#{latitude},#{longitude})
     </insert>
 
     <!--根据id修改门店-->
@@ -144,14 +97,14 @@
             <if test="tapeUrl != null ">
                 tape_url = #{tapeUrl},
             </if>
-            <if test="lat != null">
+            <if test="latitude != null">
                 latitude = #{latitude},
             </if>
-            <if test="lng != null">
+            <if test="longitude != null">
                 longitude = #{longitude},
             </if>
             <if test="applications != null">
-                applications = #{applications},
+                application_type = #{applications},
             </if>
         </set>
         where id=#{id}

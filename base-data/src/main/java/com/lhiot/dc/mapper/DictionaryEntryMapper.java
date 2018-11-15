@@ -20,9 +20,18 @@ public interface DictionaryEntryMapper {
 
     List<DictionaryEntry> selectByDictCode(String dictCode);
 
-    DictionaryEntry selectByDictCodeAndEntryCode(String dictCode, String code);
+    /**
+     *
+     * @param map dictCode字典表Code，code字典项Code
+     * @return DictionaryEntry
+     */
+    DictionaryEntry selectByDictCodeAndEntryCode(Map<String,Object> map );
 
-    void deleteByDictCodeAndEntryCode(String dictCode, String code);
+    /**
+     *
+     * @param map dictCode字典表Code,code字典项Code
+     */
+    void deleteByDictCodeAndEntryCode(Map<String,Object> map);
 
     void updateByDictCodeAndEntryCode(Map<String, Object> map);
 }

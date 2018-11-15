@@ -23,11 +23,9 @@ import java.util.stream.Stream;
 @ApiModel
 public class Store{
 
-    @JsonProperty("storeId")
     @ApiModelProperty(notes = "门店id", dataType = "Long")
     private Long id;
 
-    @JsonProperty("storeCode")
     @ApiModelProperty(notes = "门店编码", dataType = "String")
     private String code;
 

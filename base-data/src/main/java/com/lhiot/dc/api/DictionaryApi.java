@@ -7,6 +7,7 @@ import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Dictionary;
 import com.lhiot.dc.domain.DictionaryEntry;
 import com.lhiot.dc.domain.SearchParameter;
+import com.lhiot.dc.mapper.DictionaryMapper;
 import com.lhiot.dc.service.DictionaryService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,12 @@ import java.net.URI;
 public class DictionaryApi {
 
     private final DictionaryService service;
+    private final DictionaryMapper dictionaryMapper;
 
     @Autowired
-    public DictionaryApi(DictionaryService service) {
+    public DictionaryApi(DictionaryService service, DictionaryMapper dictionaryMapper) {
         this.service = service;
+        this.dictionaryMapper = dictionaryMapper;
     }
 
     @PostMapping("/")
@@ -58,7 +61,8 @@ public class DictionaryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String")
     @ApiHideBodyProperty({"id", "code", "children", "entries"})
     public ResponseEntity update(@PathVariable("code") String code, @RequestBody Dictionary dictionary) {
-        service.update(code, dictionary);
+        dictionary.setCode(code);
+        dictionaryMapper.update(dictionary);
         return ResponseEntity.ok().build();
     }
 
@@ -93,7 +97,7 @@ public class DictionaryApi {
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
         }
-        return ResponseEntity.created(URI.create("/dictionaries/{dictId}/entries/" + entry.getCode())).body(tips);
+        return ResponseEntity.created(URI.create("/dictionaries/"+dictCode)).body(tips);
     }
 
     @Transactional

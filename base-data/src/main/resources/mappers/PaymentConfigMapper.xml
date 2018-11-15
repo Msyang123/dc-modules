@@ -92,7 +92,7 @@
     <update id="update" parameterType="com.lhiot.dc.domain.PaymentConfig">
         update payment_config
         <set>
-            <if test="paymentName != null ">
+            <if test="alias != null ">
                 alias = #{alias},
             </if>
             <if test="partnerId != null ">
