@@ -1,6 +1,7 @@
 package com.lhiot.dc.domain;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -11,13 +12,20 @@ import java.util.List;
 @Data
 @ApiModel
 public class Dictionary {
+    @ApiModelProperty(notes = "主键Id",dataType = "Long")
     private Long id;
+    @ApiModelProperty(notes = "父级Id",dataType = "Long")
     private Long parentId;
+    @ApiModelProperty(notes = "字典名称",dataType = "String")
     private String name;
+    @ApiModelProperty(notes = "字典编码",dataType = "String")
     private String code;
+    @ApiModelProperty(notes = "字典描述",dataType = "String")
     private String description;
 
+    @ApiModelProperty(notes = "子级字典",dataType = "Dictionary")
     private List<Dictionary> children;
 
+    @ApiModelProperty(notes = "字典中的字典项",dataType = "DictionaryEntry")
     private List<DictionaryEntry> entries;
 }
