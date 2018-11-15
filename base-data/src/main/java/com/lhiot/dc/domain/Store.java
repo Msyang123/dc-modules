@@ -1,9 +1,6 @@
 package com.lhiot.dc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.leon.microx.util.Position;
-import com.leon.microx.util.StringUtils;
 import com.lhiot.dc.domain.type.ApplicationType;
 import com.lhiot.dc.domain.type.StoreStatus;
 import com.lhiot.dc.domain.type.StoreType;
@@ -12,16 +9,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
-* Description:门店实体类
-*/
+ * Description:门店实体类
+ */
 @Data
 @ApiModel
-public class Store{
+public class Store {
 
     @ApiModelProperty(notes = "门店id", dataType = "Long")
     private Long id;
@@ -51,40 +45,40 @@ public class Store{
     private Long flagShip;
 
     /**
-    *门店类型：00-普通门店  01-旗舰店
-    */
+     * 门店类型：00-普通门店  01-旗舰店
+     */
     @ApiModelProperty(notes = "门店类型：ORDINARY_STORE(\"普通门店\"),FLAGSHIP_STORE (\"旗舰店\");", dataType = "StoreTypeEnum")
     private StoreType storeType;
 
     /**
-    *门店视频
-    */
+     * 门店视频
+     */
     @ApiModelProperty(notes = "门店视频", dataType = "String")
     private String videoUrl;
 
     /**
-    *直播开始时间
-    */
+     * 直播开始时间
+     */
     @ApiModelProperty(notes = "直播开始时间", dataType = "String")
     private String beginAt;
 
     /**
-    *直播结束时间
-    */
+     * 直播结束时间
+     */
     @ApiModelProperty(notes = "直播结束时间", dataType = "String")
     private String endAt;
 
     /**
-    *录播地址
-    */
+     * 录播地址
+     */
     @ApiModelProperty(notes = "录播地址", dataType = "String")
     private String tapeUrl;
 
-    @ApiModelProperty(notes = "纬度",dataType = "BigDecimal")
+    @ApiModelProperty(notes = "纬度", dataType = "BigDecimal")
     private BigDecimal latitude;
 
 
-    @ApiModelProperty(notes = "经度",dataType = "BigDecimal")
+    @ApiModelProperty(notes = "经度", dataType = "BigDecimal")
     private BigDecimal longitude;
 
     @ApiModelProperty(notes = "启用该门店的应用数组")
