@@ -10,7 +10,7 @@
         <result column="price" property="price"/>
         <result column="description" property="description"/>
         <result column="shelf_status" property="shelfStatus"/>
-        <result column="application_type" property="applicationType"/>
+        <result column="application_type" property="applications"/>
         <result column="sorting" property="sorting"/>
         <result column="image" property="image"/>
         <result column="create_at" property="createAt"/>
@@ -64,7 +64,7 @@
             <if test="shelfStatus != null ">
                 shelf_status,
             </if>
-            <if test="applicationType != null ">
+            <if test="applications != null ">
                 application_type,
             </if>
             <if test="sorting != null ">
@@ -105,8 +105,8 @@
             <if test="shelfStatus != null ">
                 #{shelfStatus},
             </if>
-            <if test="applicationType != null ">
-                #{applicationType},
+            <if test="applications != null ">
+                #{applicationTypes},
             </if>
             <if test="sorting != null ">
                 #{sorting},
@@ -144,7 +144,7 @@
             <if test="shelfType != null and shelfType != ''">shelf_type = #{shelfType},</if>
             <if test="description != null and description != ''">description = #{description},</if>
             <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
-            <if test="applicationType != null and applicationType != ''">application_type = #{applicationType},</if>
+            <if test="applications != null and applications != ''">application_type = #{applicationTypes},</if>
             <if test="createAt != null">create_at = #{createAt},</if>
         </trim>
         where id = #{id}

@@ -44,7 +44,7 @@ public class DictionaryService {
     public Dictionary findByCode(String code, boolean includeEntries) {
         Dictionary dictionary = mapper.selectByCode(code);
         if (includeEntries && Objects.nonNull(dictionary)) {
-            dictionary.setEntries(entryMapper.findByDictCode(dictionary.getCode()));
+            dictionary.setEntries(entryMapper.selectByDictCode(dictionary.getCode()));
         }
         return dictionary;
     }
@@ -66,13 +66,6 @@ public class DictionaryService {
         }
     }
 
-    public void update(String code, Dictionary dictionary) {
-        Dictionary po = mapper.selectByCode(code);
-        if (Objects.nonNull(po)) {
-            BeanUtils.of(po).populate(dictionary);
-            mapper.update(dictionary);  // 按ID修改
-        }
-    }
     //==========================DictionaryEntry=====================================================================================================
 
     public void updateEntry(String dictCode, String code, DictionaryEntry entry) {
@@ -89,7 +82,7 @@ public class DictionaryService {
             entryMapper.deleteByDictCode(dictCode);
             return;
         }
-        entryMapper.deleteByDictCodeAndEntryCode(dictCode, code);
+        entryMapper.deleteByDictCodeAndEntryCode(Maps.of("dictCode",dictCode,"code",code));
     }
 
     public Tips addEntry(String dictCode, DictionaryEntry entry) {
@@ -97,7 +90,7 @@ public class DictionaryService {
         if (Objects.isNull(dictionary)) {
             return Tips.warn("未找到字典，请先添加此字典");
         }
-        DictionaryEntry po = entryMapper.selectByDictCodeAndEntryCode(dictCode, entry.getCode());
+        DictionaryEntry po = entryMapper.selectByDictCodeAndEntryCode(Maps.of("dictCode",dictCode,"code",entry.getCode()));
         if (Objects.nonNull(po)) {   // 幂等
             return Tips.warn("此字典下已有该code项！请不要使用重复的code码");
         }

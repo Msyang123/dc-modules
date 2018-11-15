@@ -1,5 +1,6 @@
 package com.lhiot.dc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lhiot.dc.domain.type.ApplicationType;
 import com.lhiot.dc.domain.type.ShelfStatus;
 import com.lhiot.dc.domain.type.ShelfType;
@@ -26,6 +27,15 @@ public class ProductShelf {
     private Date createAt;
     private String description;
     private Integer sorting;
-    private ApplicationType applicationType;
+    private ApplicationType[] applicationTypes;
+
+    @JsonIgnore
+    public String getApplications() {
+        return ApplicationType.convert(applicationTypes);
+    }
+
+    public void setApplications(String applicationTypes) {
+        this.applicationTypes = ApplicationType.convert(applicationTypes);
+    }
 
 }
