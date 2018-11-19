@@ -41,6 +41,18 @@
         </trim>
     </insert>
 
+    <!--批量新增关系-->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into product_section_relation (shelf_id,section_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.shelfId},
+            #{item.sectionId}
+            )
+        </foreach>
+    </insert>
+
 
     <!-- 删除单个关系 -->
     <delete id="deleteById" parameterType="Long">
@@ -50,13 +62,31 @@
 
     <!-- 根据商品上架ID集合删除相关关系 -->
     <delete id="deleteRelationByShelfIds" parameterType="String">
-        delete from product_section_relation where shelf_id in (#{0})
+        delete from product_section_relation where shelf_id in
+        <foreach item="item" index="index" collection="shelfIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </delete>
 
 
     <!-- 根据商品版块ID集合删除相关关系 -->
     <delete id="deleteRelationBySectionIds" parameterType="String">
-        delete from product_section_relation where section_id in (#{0})
+        delete from product_section_relation where section_id in
+        <foreach item="item" index="index" collection="sectionIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据商品版块ID集合删除相关关系 -->
+    <delete id="deleteRelationList">
+        delete from product_section_relation where section_id = #{sectionId}
+        <if test="shelfIds != null and shelfIds != ''">
+            and shelf_id in
+            <foreach item="item" index="index" collection="shelfIds.split(',')" open="(" separator="," close=")">
+                ${item}
+            </foreach>
+        </if>
     </delete>
 
 

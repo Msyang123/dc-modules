@@ -1,6 +1,7 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.domain.ProductSection;
 import com.lhiot.dc.domain.ProductSectionParam;
 import com.lhiot.dc.mapper.ProductSectionMapper;
@@ -34,12 +35,18 @@ public class ProductSectionService {
      * 新增商品版块
      *
      * @param ProductSection对象
-     * @return 新增商品版块Id
+     * @return Tips信息  成功在message中返回Id
      */
-    public Long addSection(ProductSection productSection) {
+    public Tips addSection(ProductSection productSection) {
+        // 幂等添加
+        ProductSection po = sectionMapper.findByParentIdAndSectionName(productSection.getParentId(),productSection.getSectionName());
+        if (Objects.nonNull(po)) {
+            return Tips.warn("商品版块重复，添加失败.");
+        }
+
         productSection.setCreateAt(Date.from(Instant.now()));
         sectionMapper.insert(productSection);
-        return productSection.getId();
+        return Tips.info(productSection.getId() + "");
     }
 
 

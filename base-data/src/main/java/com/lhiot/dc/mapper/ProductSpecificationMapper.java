@@ -3,6 +3,7 @@ package com.lhiot.dc.mapper;
 import com.lhiot.dc.domain.ProductSpecification;
 import com.lhiot.dc.domain.ProductSpecificationParam;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public interface ProductSpecificationMapper {
      * @param ids
      * @return 执行结果
      */
-    int deleteByIds(String ids);
+    int deleteByIds(@Param("ids") String ids);
 
 
     /**

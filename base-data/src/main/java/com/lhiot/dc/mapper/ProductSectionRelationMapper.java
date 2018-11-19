@@ -2,7 +2,10 @@ package com.lhiot.dc.mapper;
 
 import com.lhiot.dc.domain.ProductSectionRelation;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author xiaojian  created in  2018/11/16 9:09
@@ -21,6 +24,15 @@ public interface ProductSectionRelationMapper {
 
 
     /**
+     * 新增批量商品上架与版块关系
+     *
+     * @param List<ProductSectionRelation>对象
+     * @return 执行结果
+     */
+    int insertList(List<ProductSectionRelation> list);
+
+
+    /**
      * 删除商品上架与版块关系记录
      *
      * @param relationId
@@ -35,7 +47,7 @@ public interface ProductSectionRelationMapper {
      * @param shelfIds
      * @return 执行结果
      */
-    int deleteRelationByShelfIds(String shelfIds);
+    int deleteRelationByShelfIds(@Param("shelfIds") String shelfIds);
 
 
     /**
@@ -44,7 +56,17 @@ public interface ProductSectionRelationMapper {
      * @param sectionIds
      * @return 执行结果
      */
-    int deleteRelationBySectionIds(String sectionIds);
+    int deleteRelationBySectionIds(@Param("sectionIds") String sectionIds);
+
+
+    /**
+     * 批量删除商品上架与版块关系记录
+     *
+     * @param sectionId
+     * @param shelfIds
+     * @return 执行结果
+     */
+    int deleteRelationList(@Param("sectionId") Long sectionId,@Param("shelfIds") String shelfIds);
 
 
 }

@@ -1,6 +1,7 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.domain.Product;
 import com.lhiot.dc.domain.ProductAttachment;
 import com.lhiot.dc.domain.ProductParam;
@@ -33,9 +34,15 @@ public class ProductService {
      * 新增商品
      *
      * @param Product对象
-     * @return 新增商品Id
+     * @return Tips信息  成功在message中返回Id
      */
-    public Long addProduct(Product product) {
+    public Tips addProduct(Product product) {
+        // 幂等添加
+        Product po = productMapper.findByCode(product.getCode());
+        if (Objects.nonNull(po)) {
+            return Tips.warn("商品code重复，添加失败.");
+        }
+
         product.setCreateAt(Date.from(Instant.now()));
         int result = productMapper.insert(product);
         //保存商品附件
@@ -49,7 +56,7 @@ public class ProductService {
                     .collect(Collectors.toList());
             attachmentMapper.insertList(attachments);
         }
-        return product.getId();
+        return Tips.info(product.getId() + "");
     }
 
     /**

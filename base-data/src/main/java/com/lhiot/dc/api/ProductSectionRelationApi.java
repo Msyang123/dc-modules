@@ -1,15 +1,21 @@
 package com.lhiot.dc.api;
 
+import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductSectionRelation;
 import com.lhiot.dc.service.ProductSectionRelationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -26,7 +32,7 @@ public class ProductSectionRelationApi {
         this.relationService = relationService;
     }
 
-    @ApiOperation("添加商品上架与版块关系")
+    @ApiOperation("添加版块与商品上架关系")
     @PostMapping("/product-section-relations")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSectionRelation productSectionRelation) {
@@ -37,11 +43,42 @@ public class ProductSectionRelationApi {
     }
 
 
-    @ApiOperation("根据Id删除商品上架与版块关系")
+    @ApiOperation("根据Id删除版块与商品上架关系")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "关系Id", dataType = "Long", required = true)
     @DeleteMapping("/product-section-relations/{id}")
     public ResponseEntity delete(@PathVariable("id") Long relationId) {
         return relationService.deleteRelation(relationId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
+    }
+
+
+    @ApiOperation("批量添加版块与商品上架关系")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "sectionId", value = "商品版块Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "shelfIds", value = "多个商品上架Id以英文逗号分隔", dataType = "String", required = true)
+    })
+    @PostMapping("/product-section-relations/batch")
+    public ResponseEntity createBatch(@RequestParam("sectionId") String sectionId, @RequestParam("shelfIds") String shelfIds) {
+        List<ProductSectionRelation> psrList = new ArrayList<>();
+        Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds, ",")).stream().forEach(shelfId ->
+                {
+                    ProductSectionRelation productSectionRelation = new ProductSectionRelation();
+                    productSectionRelation.setSectionId(Long.valueOf(sectionId));
+                    productSectionRelation.setShelfId(Long.valueOf(shelfId));
+                    psrList.add(productSectionRelation);
+                }
+        );
+        return relationService.addRelationList(psrList) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("批量添加版块与商品上架关系！");
+    }
+
+
+    @ApiOperation("批量删除版块与商品上架关系")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "sectionId", value = "商品版块Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "shelfIds", value = "多个商品上架Id以英文逗号分隔,为空则删除此版块所有上架关系", dataType = "String")
+    })
+    @DeleteMapping("/product-section-relations/batch")
+    public ResponseEntity deleteBatch(@RequestParam("sectionId") String sectionId, @RequestParam("shelfIds") String shelfIds) {
+        return relationService.deleteRelationList(Long.valueOf(sectionId),shelfIds) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

@@ -2,6 +2,7 @@ package com.lhiot.dc.mapper;
 
 import com.lhiot.dc.domain.ProductAttachment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public interface ProductAttachmentMapper {
      * @param ids
      * @return 执行结果
      */
-    int batchDeleteByProductIds(String ids);
+    int batchDeleteByProductIds(@Param("productIds") String productIds);
 
     /**
      * 根据商品id，查找商品附件集合

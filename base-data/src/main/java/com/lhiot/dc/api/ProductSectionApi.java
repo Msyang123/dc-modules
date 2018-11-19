@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductSection;
@@ -35,7 +36,11 @@ public class ProductSectionApi {
     @PostMapping("/product-sections")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSection productSection) {
-        Long sectionId = sectionService.addSection(productSection);
+        Tips tips = sectionService.addSection(productSection);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long sectionId = Long.valueOf(tips.getMessage());
         return sectionId > 0 ?
                 ResponseEntity.created(URI.create("/product-sections/" + sectionId)).body(Maps.of("id", sectionId))
                 : ResponseEntity.badRequest().body("添加商品版块失败！");

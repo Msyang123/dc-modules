@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Product;
@@ -38,7 +39,11 @@ public class ProductApi {
     @PostMapping("/products")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Product product) {
-        Long productId = productService.addProduct(product);
+        Tips tips = productService.addProduct(product);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long productId = Long.valueOf(tips.getMessage());
         return productId > 0 ? ResponseEntity.created(URI.create("/products/" + productId)).body(Maps.of("id", productId)) : ResponseEntity.badRequest().body("添加商品失败！");
     }
 

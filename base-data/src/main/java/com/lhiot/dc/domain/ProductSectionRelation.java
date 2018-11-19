@@ -16,4 +16,5 @@ public class ProductSectionRelation {
     private Long shelfId;
     @ApiModelProperty(notes = "商品板块ID", dataType = "Long")
     private Long sectionId;
+
 }

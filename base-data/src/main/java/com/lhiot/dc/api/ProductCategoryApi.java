@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductCategory;
@@ -34,7 +35,11 @@ public class ProductCategoryApi {
     @PostMapping("/product-categories")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
-        Long id = categoryService.addProductCategory(productCategory);
+        Tips tips = categoryService.addProductCategory(productCategory);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long id = Long.valueOf(tips.getMessage());
         return id > 0 ? ResponseEntity.created(URI.create("/product-categories/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品分类失败！");
     }
 
