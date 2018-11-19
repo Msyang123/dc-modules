@@ -2,6 +2,7 @@ package com.lhiot.dc.mapper;
 
 
 import com.lhiot.dc.domain.ProductShelf;
+import com.lhiot.dc.domain.ProductShelfParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +34,6 @@ public interface ProductShelfMapper {
     int updateById(ProductShelf productShelf);
 
 
-
     /**
      * 根据ID查找单个商品上架
      *
@@ -44,23 +44,38 @@ public interface ProductShelfMapper {
 
 
     /**
-     * 根据传入商品规格ID，查询所属的商品上架集合
+     * 删除商品上架集合
      *
-     * @param specificationId 商品规格id
-     * @return 商品上架集合
+     * @param ids
+     * @return 执行结果
      */
-    List<ProductShelf> findListBySpecificationId(Long specificationId);
+    int deleteByIds(String ids);
 
 
     /**
-     * 根据传入商品ID，查询所属的商品上架集合
+     * 根据传入商品规格ID集合，查询所属的商品上架集合
      *
-     * @param productId 商品id
+     * @param specificationIds 商品规格id集合
      * @return 商品上架集合
      */
-    List<ProductShelf> findListByProductId(Long productId);
+    List<ProductShelf> findListBySpecificationIds(String specificationIds);
 
 
+    /**
+     * 查询商品上架信息列表
+     *
+     * @param param
+     * @return 商品上架信息列表
+     */
+    List<ProductShelf> findList(ProductShelfParam param);
+
+    /**
+     * 查询商品上架信息总数
+     *
+     * @param param
+     * @return 总数
+     */
+    int findCount(ProductShelfParam param);
 
 
 }

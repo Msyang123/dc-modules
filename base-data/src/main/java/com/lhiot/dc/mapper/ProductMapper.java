@@ -1,6 +1,7 @@
 package com.lhiot.dc.mapper;
 
 import com.lhiot.dc.domain.Product;
+import com.lhiot.dc.domain.ProductParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -38,18 +39,28 @@ public interface ProductMapper {
 
 
     /**
-     * 删除商品
-     *
-     * @param productId
-     * @return 执行结果
-     */
-    int deleteById(Long productId);
-
-    /**
      * 批量删除商品集合
      *
-     * @param productIdList
+     * @param ids
      * @return 执行结果
      */
-    int batchDeleteByIds(List<String> productIdList);
+    int deleteByIds(String ids);
+
+
+    /**
+     * 查询商品信息列表
+     *
+     * @param param
+     * @return 商品信息列表
+     */
+    List<Product> findList(ProductParam param);
+
+
+    /**
+     * 查询商品信息总数
+     *
+     * @param param
+     * @return 总数
+     */
+    int findCount(ProductParam param);
 }

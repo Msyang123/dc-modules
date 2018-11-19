@@ -1,38 +1,47 @@
 package com.lhiot.dc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lhiot.dc.domain.type.AvailableStatus;
 import com.lhiot.dc.domain.type.InventorySpecification;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author zhangfeng create in 9:11 2018/11/9
+ * @author xiaojian  created in  2018/11/19 8:40
  */
-@Data
 @ApiModel
-public class ProductSpecification {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
-    private Long id;
+@Data
+public class ProductSpecificationParam {
     @ApiModelProperty(notes = "商品ID", dataType = "Long")
     private Long productId;
     @ApiModelProperty(notes = "商品条码", dataType = "String")
     private String barcode;
     @ApiModelProperty(notes = "打包单位", dataType = "String")
     private String packagingUnit;
-    @ApiModelProperty(notes = "单份规格商品的重量", dataType = "BigDecimal")
-    private BigDecimal weight;
-    @ApiModelProperty(notes = "海鼎规格数量", dataType = "BigDecimal")
-    private BigDecimal specificationQty;
-    @ApiModelProperty(notes = "安全库存", dataType = "Integer")
-    private Integer limitInventory;
     @ApiModelProperty(notes = "是否为库存规格：YES-是，NO-否", dataType = "InventorySpecification")
     private InventorySpecification inventorySpecification;
     @ApiModelProperty(notes = "是否可用：YES-可用，NO-不可用", dataType = "AvailableStatus")
     private AvailableStatus availableStatus;
-    @ApiModelProperty(notes = "创建时间", dataType = "Date", readOnly = true)
-    private Date createAt;
+    @ApiModelProperty(notes = "起始创建时间", dataType = "Date")
+    private Date beginCreateAt;
+    @ApiModelProperty(notes = "截止创建时间", dataType = "Date")
+    private Date endCreateAt;
+    @ApiModelProperty(notes = "查询条数", dataType = "Integer")
+    private Integer rows;
+    @ApiModelProperty(notes = "当前页", dataType = "Integer")
+    private Integer pages;
+
+    @ApiModelProperty(hidden = true)
+    private Integer startRow;
+
+    @JsonIgnore
+    public Integer getStartRow() {
+        if (this.rows != null && this.rows > 0) {
+            return (this.pages != null && this.pages > 0 ? this.pages - 1 : 0) * this.rows;
+        }
+        return null;
+    }
 }

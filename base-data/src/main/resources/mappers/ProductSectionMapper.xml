@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductSectionMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductSection">
+        <id column="id" property="id"/>
+        <result column="position_id" property="positionId"/>
+        <result column="section_name" property="sectionName"/>
+        <result column="section_img" property="sectionImg"/>
+        <result column="sorting" property="sorting"/>
+        <result column="create_at" property="createAt"/>
+        <result column="parent_id" property="parentId"/>
+        <collection property="productShelfList" ofType="com.lhiot.dc.domain.ProductShelf">
+            <id column="ps_id" property="id"/>
+            <result column="ps_name" property="name"/>
+            <result column="specification_id" property="specificationId"/>
+            <result column="shelf_qty" property="shelfQty"/>
+            <result column="price" property="price"/>
+            <result column="description" property="description"/>
+            <result column="shelf_status" property="shelfStatus"/>
+            <result column="application_type" property="applications"/>
+            <result column="ps_sorting" property="sorting"/>
+            <result column="image" property="image"/>
+            <result column="ps_create_at" property="createAt"/>
+            <result column="original_price" property="originalPrice"/>
+            <result column="product_image" property="productImage"/>
+            <result column="shelf_type" property="shelfType"/>
+            <association property="specification" javaType="com.lhiot.dc.domain.ProductSpecification">
+                <id column="psf_id" property="id"/>
+                <result column="product_id" property="productId"/>
+                <result column="barcode" property="barcode"/>
+                <result column="packaging_unit" property="packagingUnit"/>
+                <result column="weight" property="weight"/>
+                <result column="limit_inventory" property="limitInventory"/>
+                <result column="inventory_specification" property="inventorySpecification"/>
+                <result column="available_status" property="availableStatus"/>
+                <result column="psf_create_at" property="createAt"/>
+                <result column="specification_qty" property="specificationQty"/>
+            </association>
+
+        </collection>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            p.id,
+            p.position_id,
+            p.section_name,
+            p.section_img,
+            p.sorting,
+            p.create_at,
+            p.parent_id,
+
+            ps.id ps_id,
+            ps.`name` ps_name,
+            ps.specification_id,
+            ps.shelf_qty,
+            ps.price,
+            ps.description,
+            ps.shelf_status,
+            ps.application_type,
+            ps.sorting ps_sorting,
+            ps.image,
+            ps.create_at ps_create_at,
+            ps.original_price,
+            ps.product_image,
+            ps.shelf_type,
+
+            psf.id psf_id,
+            psf.product_id,
+            psf.barcode,
+            psf.packaging_unit,
+            psf.weight,
+            psf.limit_inventory,
+            psf.inventory_specification,
+            psf.available_status,
+            psf.create_at psf_create_at,
+            psf.specification_qty,
+
+        </trim>
+    </sql>
+
+
+    <!--新增商品版块-->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSection" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into product_section
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                position_id,
+            </if>
+            <if test="sectionName != null ">
+                section_name,
+            </if>
+            <if test="sectionImg != null ">
+                section_img,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                #{positionId},
+            </if>
+            <if test="sectionName != null ">
+                #{sectionName},
+            </if>
+            <if test="sectionImg != null ">
+                #{sectionImg},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--修改商品版块-->
+    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductSection">
+        update product_section
+        <trim prefix="set" suffixOverrides=",">
+            <if test="positionId != null and positionId != ''">position_id = #{positionId},</if>
+            <if test="sectionName != null and sectionName != ''">section_name = #{sectionName},</if>
+            <if test="sectionImg != null and sectionImg != ''">section_img = #{sectionImg},</if>
+            <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
+            <if test="createAt != null and createAt != ''">create_at = #{createAt},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 查找单个商品版块 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_section p
+        left join product_section_relation psr on p.id=psr.section_id
+        left join product_shelf ps on ps.id=psr.shelf_id
+        left join product_specification psf on ps.specification_id=psf.id
+        where p.id=#{0}
+    </select>
+
+
+    <!-- 删除多个商品版块 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from product_section where id in (#{0})
+    </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="positionId != null and positionId != ''">and position_id = #{positionId}</if>
+            <if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+            <if test="sectionName != null and sectionName != ''">and section_name like concat('%',#{sectionName},'%')
+            </if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询商品版块集合-->
+    <select id="findList" parameterType="com.lhiot.dc.domain.ProductSectionParam" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_section p
+        left join product_section_relation psr on p.id=psr.section_id
+        left join product_shelf ps on ps.id=psr.shelf_id
+        left join product_specification psf on ps.specification_id=psf.id
+        inner join (
+        select id from product_section
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+        ) pw on p.id=pw.id
+        order by p.id desc
+    </select>
+
+
+    <!--查询商品版块集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductSectionParam" resultType="int">
+        select count(1)
+        from product_section
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>

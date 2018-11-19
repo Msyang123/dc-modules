@@ -10,24 +10,37 @@
         <result column="source_code" property="sourceCode"/>
         <result column="description" property="description"/>
         <result column="create_at" property="createAt"/>
+        <collection property="attachments" ofType="com.lhiot.dc.domain.ProductAttachment">
+            <id column="aid" property="id"/>
+            <result column="url" property="url"/>
+            <result column="product_id" property="productId"/>
+            <result column="sorting" property="sorting"/>
+            <result column="attachment_type" property="attachmentType"/>
+        </collection>
     </resultMap>
 
 
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
-            id,
-            product_code,
-            product_name,
-            category_id,
-            source_code,
-            description,
-            create_at,
+            p.id,
+            p.product_code,
+            p.product_name,
+            p.category_id,
+            p.source_code,
+            p.description,
+            p.create_at,
+            pa.id aid,
+            pa.url,
+            pa.product_id,
+            pa.sorting,
+            pa.attachment_type,
         </trim>
     </sql>
 
     <!-- 新增商品 -->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.Product" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
+    <insert id="insert" parameterType="com.lhiot.dc.domain.Product" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
         insert into product
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="code != null ">
@@ -86,23 +99,53 @@
 
     <!-- 查找单个商品 -->
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
-		select
+        select
         <include refid="columns"/>
-		from product where id=#{0}
-	</select>
-
-    <!-- 删除单个商品 -->
-    <delete id="deleteById" parameterType="Long">
-        delete from product where id = #{0}
-    </delete>
+        from product p
+        left join product_attachment pa on p.id=pa.product_id
+        where p.id=#{0}
+    </select>
 
     <!-- 批量删除商品集合 -->
-    <delete id="batchDeleteByIds" parameterType="list">
-        delete from product
-        where id in
-        <foreach collection="list" item="item" separator="," open="(" close=")">
-            #{item}
-        </foreach>
+    <delete id="deleteByIds" parameterType="String">
+        delete from product where id in (#{0})
     </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="code != null and code != ''">and product_code = #{code}</if>
+            <if test="name != null and name != ''">and product_name like concat('%',#{name},'%')</if>
+            <if test="categoryId != null">and category_id = #{categoryId}</if>
+            <if test="sourceCode != null and sourceCode != ''">and source_code = #{sourceCode}</if>
+        </trim>
+    </sql>
+
+    <!--查询商品集合-->
+    <select id="findList" parameterType="com.lhiot.dc.domain.ProductParam" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product p
+        left join product_attachment pa on p.id=pa.product_id
+        inner join (
+        select id from product
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+        ) pw on p.id=pw.id
+        order by p.id desc
+    </select>
+
+
+    <!--查询商品集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductParam" resultType="int">
+        select count(1)
+        from product
+        <include refid="filter"/>
+    </select>
+
 
 </mapper>

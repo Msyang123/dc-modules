@@ -22,12 +22,12 @@ public enum ApplicationType {
         this.description = description;
     }
 
-    public static ApplicationType[] convert(String string){
+    public static ApplicationType[] convert(String string) {
         String[] array = StringUtils.tokenizeToStringArray(string, ",");
         return Stream.of(array).filter(StringUtils::hasLength).map(ApplicationType::valueOf).toArray(ApplicationType[]::new);
     }
 
-    public static String convert(ApplicationType... types){
-        return Stream.of(types).map(ApplicationType::name).collect(Collectors.joining(","));
+    public static String convert(ApplicationType... types) {
+        return types != null ? Stream.of(types).map(ApplicationType::name).collect(Collectors.joining(",")) : null;
     }
 }

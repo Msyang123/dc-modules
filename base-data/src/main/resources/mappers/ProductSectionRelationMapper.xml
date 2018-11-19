@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductSectionRelationMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductSectionRelation">
+        <id column="id" property="id"/>
+        <result column="shelf_id" property="shelfId"/>
+        <result column="section_id" property="sectionId"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            shelf_id,
+            section_id,
+        </trim>
+    </sql>
+
+    <!--新增关系-->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSectionRelation" useGeneratedKeys="true"
+            keyColumn="id"
+            keyProperty="id">
+        insert into product_section_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shelfId != null ">
+                shelf_id,
+            </if>
+            <if test="sectionId != null ">
+                section_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shelfId != null ">
+                #{shelfId},
+            </if>
+            <if test="sectionId != null ">
+                #{sectionId},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 删除单个关系 -->
+    <delete id="deleteById" parameterType="Long">
+        delete from product_section_relation where id = #{0}
+    </delete>
+
+
+    <!-- 根据商品上架ID集合删除相关关系 -->
+    <delete id="deleteRelationByShelfIds" parameterType="String">
+        delete from product_section_relation where shelf_id in (#{0})
+    </delete>
+
+
+    <!-- 根据商品版块ID集合删除相关关系 -->
+    <delete id="deleteRelationBySectionIds" parameterType="String">
+        delete from product_section_relation where section_id in (#{0})
+    </delete>
+
+
+</mapper>
