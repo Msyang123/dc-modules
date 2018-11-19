@@ -78,12 +78,8 @@
     </delete>
 
     <!-- 根据商品Id集合删除商品附件 -->
-    <delete id="batchDeleteByProductIds" parameterType="list">
-        delete from product_attachment
-        where product_id in
-        <foreach collection="list" item="item" separator="," close=")" open="(">
-            #{item}
-        </foreach>
+    <delete id="batchDeleteByProductIds" parameterType="String">
+        delete from product_attachment where product_id in (#{0})
     </delete>
 
     <!-- 根据商品Id查找商品附件 -->

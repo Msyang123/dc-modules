@@ -1,6 +1,7 @@
 package com.lhiot.dc.mapper;
 
 import com.lhiot.dc.domain.ProductSpecification;
+import com.lhiot.dc.domain.ProductSpecificationParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -42,39 +43,38 @@ public interface ProductSpecificationMapper {
 
 
     /**
-     * 根据商品ID查找商品规格集合
+     * 根据商品Id集合 查找出有商品规格的商品
      *
-     * @param productId 商品id
-     * @return 商品规格集合
-     */
-    List<ProductSpecification> findListByProductId(Long productId);
-
-
-    /**
-     * 删除商品规格
-     *
-     * @param Id
-     * @return 执行结果
-     */
-    int deleteById(Long Id);
-
-
-    /**
-     * 删除商品规格 根据商品Id
-     *
-     * @param productId
-     * @return 执行结果
-     */
-    int deleteByProductId(Long productId);
-
-
-    /**
-     * 查找出有商品规格的商品集合
-     *
-     * @param productList 商品id集合
+     * @param productIds 商品id集合
      * @return 商品名称集合
      */
-    List<Map<String, Object>> findSpecificationProductIdList(List<String> productList);
+    List<Map<String, Object>> findHaveSpecificationByProductIds(String productIds);
+
+
+    /**
+     * 删除商品规格 根据Id集合
+     *
+     * @param ids
+     * @return 执行结果
+     */
+    int deleteByIds(String ids);
+
+
+    /**
+     * 查询商品规格信息列表
+     *
+     * @param param
+     * @return 商品规格信息列表
+     */
+    List<ProductSpecification> findList(ProductSpecificationParam param);
+
+    /**
+     * 查询商品规格信息总数
+     *
+     * @param param
+     * @return 总数
+     */
+    int findCount(ProductSpecificationParam param);
 
 
 }

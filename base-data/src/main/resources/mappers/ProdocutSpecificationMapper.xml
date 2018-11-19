@@ -35,7 +35,8 @@
 
 
     <!--新增商品规格-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSpecification" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSpecification" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
         insert into product_specification
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productId != null ">
@@ -116,45 +117,63 @@
 
     <!-- 查找单个商品规格 -->
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
-		select
-        <include refid="columns"/>
-		 from  product_specification
-		 where id=#{0}
-	</select>
-
-
-    <!-- 删除单个商品规格 -->
-    <delete id="deleteById" parameterType="Long">
-        delete from product_specification where id = #{0}
-    </delete>
-
-
-    <!-- 根据商品Id删除所属商品规格集合 -->
-    <delete id="deleteByProductId" parameterType="Long">
-        delete from product_specification where product_id = #{0}
-    </delete>
-
-
-    <!--根据商品Id查询商品规格集合-->
-    <select id="findListByProductId" resultMap="baseResultMap" parameterType="Long">
         select
         <include refid="columns"/>
         from product_specification
-        where product_id = #{0}
+        where id=#{0}
     </select>
 
+
+    <!-- 根据Id集合删除所属商品规格集合 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from product_specification where id in (#{0})
+    </delete>
+
+
     <!--根据商品Id集合 查找出有商品规格的商品-->
-    <select id="findSpecificationProductIdList" parameterType="list" resultType="map">
+    <select id="findHaveSpecificationByProductIds" parameterType="String" resultType="map">
         select ps.product_id productId,p.product_name productName
         from product_specification ps
         left join product p on ps.product_id=p.id
-        where ps.product_id in
-        <foreach collection="list" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
+        where ps.product_id in (#{0})
         group by ps.product_id,p.product_name
         having count(ps.id)>0
     </select>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="productId != null and productId != ''">and product_id = #{productId}</if>
+            <if test="barcode != null and barcode != ''">and barcode = #{barcode}</if>
+            <if test="packagingUnit != null and packagingUnit != ''">and packaging_unit = #{packagingUnit}</if>
+            <if test="inventorySpecification != null and inventorySpecification != ''">and inventory_specification = #{inventorySpecification}</if>
+            <if test="availableStatus != null and availableStatus != ''">and available_status = #{availableStatus}</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询商品分类集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.ProductSpecificationParam">
+        select
+        <include refid="columns"/>
+        from product_specification
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询商品分类集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductSpecificationParam" resultType="int">
+        select count(1)
+        from product_specification
+        <include refid="filter"/>
+    </select>
+
 
 
 </mapper>

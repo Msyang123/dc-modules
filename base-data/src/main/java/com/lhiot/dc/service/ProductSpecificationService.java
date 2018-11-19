@@ -1,14 +1,15 @@
 package com.lhiot.dc.service;
 
+import com.leon.microx.web.result.Pages;
 import com.lhiot.dc.domain.ProductSpecification;
+import com.lhiot.dc.domain.ProductSpecificationParam;
 import com.lhiot.dc.mapper.ProductSpecificationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * @Author xiaojian created in 2018/11/13 15:09
@@ -31,6 +32,7 @@ public class ProductSpecificationService {
      * @return 商品规格Id
      */
     public Long addProductSpecification(ProductSpecification productSpecification) {
+        productSpecification.setCreateAt(Date.from(Instant.now()));
         specificationMapper.insert(productSpecification);
         return productSpecification.getId();
     }
@@ -56,51 +58,43 @@ public class ProductSpecificationService {
         return specificationMapper.findById(specificationId);
     }
 
+
     /**
-     * 删除商品规格
+     * 根据Id集合删除商品规格
      *
-     * @param specificationId
+     * @param ids
      * @return 执行结果 true 或者 false
      */
-    public boolean delete(Long specificationId) {
-        return specificationMapper.deleteById(specificationId) > 0;
-    }
-
-
-    /**
-     * 根据商品Id删除所属商品规格集合
-     *
-     * @param productId
-     * @return 执行结果 true 或者 false
-     */
-    public boolean deleteByProductId(Long productId) {
-        return specificationMapper.deleteByProductId(productId) > 0;
-    }
-
-
-    /**
-     * 根据传入商品ID，查询所属的商品规格集合
-     *
-     * @param productIdList
-     * @return 所属的商品规格集合
-     */
-    public List<ProductSpecification> findListByProductId(Long productId) {
-        List<ProductSpecification> specificationList = specificationMapper.findListByProductId(productId);
-        return specificationList;
+    public boolean deleteByIds(String ids) {
+        return specificationMapper.deleteByIds(ids) > 0;
     }
 
 
     /**
      * 根据传入商品ID集合，查询存在规格的商品
      *
-     * @param productIdList
+     * @param productIds
      * @return 存在规格的商品名称集合
      */
-    public List<String> findSpecificationProductIdList(List<String> productIdList) {
+    public List<String> findHaveSpecificationByProductIds(String productIds) {
         List<String> resultList = new ArrayList<>();
-        List<Map<String, Object>> productList = specificationMapper.findSpecificationProductIdList(productIdList);
+        List<Map<String, Object>> productList = specificationMapper.findHaveSpecificationByProductIds(productIds);
         productList.stream().forEach(product -> resultList.add(product.get("productName").toString()));
         return resultList;
+    }
+
+
+    /**
+     * 查询商品规格信息列表
+     *
+     * @param param 参数
+     * @return 分页商品规格信息数据
+     */
+    public Pages<ProductSpecification> findList(ProductSpecificationParam param) {
+        List<ProductSpecification> list = specificationMapper.findList(param);
+        boolean pageFlag = Objects.nonNull(param.getPages()) && Objects.nonNull(param.getRows()) && param.getPages() > 0 && param.getRows() > 0;
+        int total = pageFlag ? specificationMapper.findCount(param) : list.size();
+        return Pages.of(total, list);
     }
 
 

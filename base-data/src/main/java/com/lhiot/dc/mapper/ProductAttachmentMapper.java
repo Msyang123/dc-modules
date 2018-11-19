@@ -40,10 +40,10 @@ public interface ProductAttachmentMapper {
     /**
      * 根据商品id集合，批量删除商品附件
      *
-     * @param productIdList
+     * @param ids
      * @return 执行结果
      */
-    int batchDeleteByProductIds(List<String> productIdList);
+    int batchDeleteByProductIds(String ids);
 
     /**
      * 根据商品id，查找商品附件集合

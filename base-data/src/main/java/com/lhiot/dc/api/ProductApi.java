@@ -1,11 +1,11 @@
 package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
-import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Product;
-import com.lhiot.dc.domain.ProductSpecification;
+import com.lhiot.dc.domain.ProductParam;
 import com.lhiot.dc.service.ProductService;
 import com.lhiot.dc.service.ProductSpecificationService;
 import io.swagger.annotations.Api;
@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,10 +44,9 @@ public class ProductApi {
 
     @ApiOperation("修改商品")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", name = "id", value = "商品Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = "body", name = "product", value = "商品信息", dataType = "Product", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
     })
-    @ApiHideBodyProperty("createAt")
     @PutMapping("/products/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Product product) {
         product.setId(id);
@@ -60,31 +58,36 @@ public class ProductApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品Id", dataType = "Long", required = true)
     @GetMapping("/products/{id}")
     public ResponseEntity single(@PathVariable("id") Long productId) {
-        return ResponseEntity.ok().body(productService.findById(productId));
+        Product product = productService.findById(productId);
+        //TODO 需要确认用哪种返回
+        return ResponseEntity.ok().body(product);
+        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.badRequest().body("没有找到商品信息");
+        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.notFound().build();
     }
 
 
-    @ApiOperation("根据Id删除商品")
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品Id", dataType = "Long", required = true)
-    @DeleteMapping("/products/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long productId) {
-        List<ProductSpecification> specificationList = productSpecificationService.findListByProductId(productId);
-        if (specificationList != null && !specificationList.isEmpty()) {
-            return ResponseEntity.badRequest().body("该商品存在规格信息不可删除！");
-        }
-        return productService.delete(productId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
-    }
-
-    @ApiOperation("根据Id集合批量删除商品")
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "商品Id集合以逗号隔开", dataType = "String", required = true)
-    @DeleteMapping("/products/batch/{ids}")
+    @ApiOperation("根据商品Id删除商品")
+    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品Id以英文逗号分隔", dataType = "String", required = true)
+    @DeleteMapping("/products/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        List<String> productIdList = Arrays.asList(StringUtils.tokenizeToStringArray(ids, ","));
-        List<String> searchProductNameList = productSpecificationService.findSpecificationProductIdList(productIdList);
+        List<String> searchProductNameList = productSpecificationService.findHaveSpecificationByProductIds(ids);
         if (searchProductNameList != null && !searchProductNameList.isEmpty()) {
             return ResponseEntity.badRequest().body("以下商品存在规格不可删除：" + searchProductNameList.toString());
         }
-        return productService.batchDeleteById(productIdList) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+    }
+
+
+    @ApiOperation(value = "根据条件分页查询商品信息列表", response = Product.class, responseContainer = "Set")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "param", value = "查询条件", dataType = "ProductParam")
+    })
+    @PostMapping("/products/pages")
+    @ApiHideBodyProperty("attachments")
+    public ResponseEntity search(@RequestBody ProductParam param) {
+        log.debug("查询商品信息列表\t param:{}", param);
+        Pages<Product> pages = productService.findList(param);
+        return ResponseEntity.ok(pages);
     }
 
 
