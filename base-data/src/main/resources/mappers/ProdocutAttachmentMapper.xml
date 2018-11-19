@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductAttachmentMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductAttachment">
+        <id column="id" property="id"/>
+        <result column="url" property="url"/>
+        <result column="product_id" property="productId"/>
+        <result column="sorting" property="sorting"/>
+        <result column="attachment_type" property="attachmentType"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            url,
+            product_id,
+            sorting,
+            attachment_type,
+        </trim>
+    </sql>
+
+
+    <!-- 新增单个商品附件 -->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductAttachment">
+        insert into product_attachment
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="url != null ">
+                url,
+            </if>
+            <if test="productId != null ">
+                product_id,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+            <if test="attachmentType != null ">
+                attachment_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="url != null ">
+                #{url},
+            </if>
+            <if test="productId != null ">
+                #{productId},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+            <if test="attachmentType != null ">
+                #{attachmentType},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 新增商品附件集合 -->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into product_attachment (url,product_id,sorting,attachment_type)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.url},
+            #{item.productId},
+            #{item.sorting},
+            #{item.attachmentType}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据商品Id删除商品附件 -->
+    <delete id="deleteByProductId" parameterType="Long">
+        delete from product_attachment where product_id = #{0}
+    </delete>
+
+    <!-- 根据商品Id集合删除商品附件 -->
+    <delete id="batchDeleteByProductIds" parameterType="String">
+        delete from product_attachment where product_id in (#{0})
+    </delete>
+
+    <!-- 根据商品Id查找商品附件 -->
+    <select id="findByProductId" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_attachment where product_id = #{0}
+    </select>
+
+
+</mapper>
