@@ -55,10 +55,7 @@ public class ProductShelfApi {
     @GetMapping("/product-shelves/{id}")
     public ResponseEntity single(@PathVariable("id") Long shelfId) {
         ProductShelf productShelf = shelfService.findById(shelfId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productShelf);
-        //return productShelf != null ? ResponseEntity.ok().body(productShelf) : ResponseEntity.badRequest().body("没有找到商品上架信息");
-        //return productShelf != null ? ResponseEntity.ok().body(productShelf) : ResponseEntity.notFound().build();
     }
 
 

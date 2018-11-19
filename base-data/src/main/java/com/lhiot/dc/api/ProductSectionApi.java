@@ -59,10 +59,7 @@ public class ProductSectionApi {
     @GetMapping("/product-sections/{id}")
     public ResponseEntity single(@PathVariable("id") Long sectionId) {
         ProductSection productSection = sectionService.findById(sectionId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productSection);
-        //return productSection != null ? ResponseEntity.ok().body(productSection) : ResponseEntity.badRequest().body("没有找到版块信息");
-        //return productSection != null ? ResponseEntity.ok().body(productSection) : ResponseEntity.notFound().build();
     }
 
 

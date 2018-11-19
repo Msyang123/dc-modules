@@ -59,10 +59,7 @@ public class ProductApi {
     @GetMapping("/products/{id}")
     public ResponseEntity single(@PathVariable("id") Long productId) {
         Product product = productService.findById(productId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(product);
-        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.badRequest().body("没有找到商品信息");
-        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.notFound().build();
     }
 
 

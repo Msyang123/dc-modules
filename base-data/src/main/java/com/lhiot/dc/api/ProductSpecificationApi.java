@@ -64,10 +64,7 @@ public class ProductSpecificationApi {
     @GetMapping("/product-specifications/{id}")
     public ResponseEntity single(@PathVariable("id") Long specificationId) {
         ProductSpecification productSpecification = productSpecificationService.findById(specificationId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productSpecification);
-        //return productSpecification != null ? ResponseEntity.ok().body(productSpecification) : ResponseEntity.badRequest().body("没有找到商品规格信息");
-        //return productSpecification != null ? ResponseEntity.ok().body(productSpecification) : ResponseEntity.notFound().build();
     }
 
 

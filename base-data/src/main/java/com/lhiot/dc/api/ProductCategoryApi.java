@@ -56,10 +56,7 @@ public class ProductCategoryApi {
     @GetMapping("/product-categories/{id}")
     public ResponseEntity single(@PathVariable("id") Long categoryId) {
         ProductCategory productCategory = categoryService.findById(categoryId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productCategory);
-        //return productCategory != null ? ResponseEntity.ok().body(productCategory) : ResponseEntity.badRequest().body("没有找到商品分类信息");
-        //return productCategory != null ? ResponseEntity.ok().body(productCategory) : ResponseEntity.notFound().build();
     }
 
 
