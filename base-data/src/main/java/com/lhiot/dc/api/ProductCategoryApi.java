@@ -47,7 +47,7 @@ public class ProductCategoryApi {
     @PutMapping("/product-categories/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductCategory productCategory) {
         productCategory.setId(id);
-        return categoryService.update(productCategory) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return categoryService.update(productCategory) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -67,7 +67,7 @@ public class ProductCategoryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品分类Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-categories/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return categoryService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return categoryService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

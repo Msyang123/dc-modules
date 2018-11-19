@@ -50,7 +50,7 @@ public class ProductApi {
     @PutMapping("/products/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Product product) {
         product.setId(id);
-        return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -74,7 +74,7 @@ public class ProductApi {
         if (searchProductNameList != null && !searchProductNameList.isEmpty()) {
             return ResponseEntity.badRequest().body("以下商品存在规格不可删除：" + searchProductNameList.toString());
         }
-        return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

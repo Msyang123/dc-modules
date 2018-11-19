@@ -50,7 +50,7 @@ public class ProductSectionApi {
     @PutMapping("/product-sections/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSection productSection) {
         productSection.setId(id);
-        return sectionService.update(productSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return sectionService.update(productSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -70,7 +70,7 @@ public class ProductSectionApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品版块Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-sections/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return sectionService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return sectionService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

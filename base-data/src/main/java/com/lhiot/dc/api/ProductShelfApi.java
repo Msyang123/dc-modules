@@ -47,7 +47,7 @@ public class ProductShelfApi {
     @PutMapping("/product-shelves/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductShelf productShelf) {
         productShelf.setId(id);
-        return shelfService.update(productShelf) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return shelfService.update(productShelf) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
     @ApiOperation(value = "根据Id查找商品上架", response = ProductShelf.class)
@@ -66,7 +66,7 @@ public class ProductShelfApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品上架Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-shelves/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return shelfService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return shelfService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

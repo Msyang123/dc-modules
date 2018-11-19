@@ -41,7 +41,7 @@ public class ProductSectionRelationApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "关系Id", dataType = "Long", required = true)
     @DeleteMapping("/product-section-relations/{id}")
     public ResponseEntity delete(@PathVariable("id") Long relationId) {
-        return relationService.deleteRelation(relationId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return relationService.deleteRelation(relationId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

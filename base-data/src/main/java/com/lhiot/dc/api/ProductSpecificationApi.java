@@ -55,7 +55,7 @@ public class ProductSpecificationApi {
     @PutMapping("/product-specifications/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSpecification productSpecification) {
         productSpecification.setId(id);
-        return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -79,7 +79,7 @@ public class ProductSpecificationApi {
         if (productShelfList != null && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("商品规格存在上架信息不可删除！");
         }
-        return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 
