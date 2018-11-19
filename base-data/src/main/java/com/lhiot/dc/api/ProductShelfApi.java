@@ -35,8 +35,8 @@ public class ProductShelfApi {
     @ApiHideBodyProperty("id")
     @PostMapping("/product-shelves")
     public ResponseEntity create(@RequestBody ProductShelf productShelf) {
-        Long Id = shelfService.insert(productShelf);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-shelves/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("新增商品上架信息失败！");
+        Long id = shelfService.insert(productShelf);
+        return id > 0 ? ResponseEntity.created(URI.create("/product-shelves/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("新增商品上架信息失败！");
     }
 
     @ApiOperation("修改商品上架")
@@ -47,7 +47,7 @@ public class ProductShelfApi {
     @PutMapping("/product-shelves/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductShelf productShelf) {
         productShelf.setId(id);
-        return shelfService.update(productShelf) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return shelfService.update(productShelf) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
     @ApiOperation(value = "根据Id查找商品上架", response = ProductShelf.class)
@@ -55,10 +55,7 @@ public class ProductShelfApi {
     @GetMapping("/product-shelves/{id}")
     public ResponseEntity single(@PathVariable("id") Long shelfId) {
         ProductShelf productShelf = shelfService.findById(shelfId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productShelf);
-        //return productShelf != null ? ResponseEntity.ok().body(productShelf) : ResponseEntity.badRequest().body("没有找到商品上架信息");
-        //return productShelf != null ? ResponseEntity.ok().body(productShelf) : ResponseEntity.notFound().build();
     }
 
 
@@ -66,7 +63,7 @@ public class ProductShelfApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品上架Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-shelves/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return shelfService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return shelfService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

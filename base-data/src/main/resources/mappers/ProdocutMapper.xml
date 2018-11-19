@@ -97,18 +97,32 @@
         where id = #{id}
     </update>
 
-    <!-- 查找单个商品 -->
+    <!-- 根据ID查找单个商品 -->
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from product p
         left join product_attachment pa on p.id=pa.product_id
-        where p.id=#{0}
+        where p.id = #{0}
     </select>
+
+
+    <!-- 根据code查找单个商品 -->
+    <select id="findByCode" parameterType="String" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product p
+        left join product_attachment pa on p.id=pa.product_id
+        where p.product_code = #{0}
+    </select>
+
 
     <!-- 批量删除商品集合 -->
     <delete id="deleteByIds" parameterType="String">
-        delete from product where id in (#{0})
+        delete from product where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </delete>
 
 

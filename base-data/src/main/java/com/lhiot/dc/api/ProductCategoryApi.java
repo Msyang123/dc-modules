@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductCategory;
@@ -34,8 +35,12 @@ public class ProductCategoryApi {
     @PostMapping("/product-categories")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
-        Long Id = categoryService.addProductCategory(productCategory);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-categories/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("添加商品分类失败！");
+        Tips tips = categoryService.addProductCategory(productCategory);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long id = Long.valueOf(tips.getMessage());
+        return id > 0 ? ResponseEntity.created(URI.create("/product-categories/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品分类失败！");
     }
 
 
@@ -47,7 +52,7 @@ public class ProductCategoryApi {
     @PutMapping("/product-categories/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductCategory productCategory) {
         productCategory.setId(id);
-        return categoryService.update(productCategory) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return categoryService.update(productCategory) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -56,10 +61,7 @@ public class ProductCategoryApi {
     @GetMapping("/product-categories/{id}")
     public ResponseEntity single(@PathVariable("id") Long categoryId) {
         ProductCategory productCategory = categoryService.findById(categoryId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productCategory);
-        //return productCategory != null ? ResponseEntity.ok().body(productCategory) : ResponseEntity.badRequest().body("没有找到商品分类信息");
-        //return productCategory != null ? ResponseEntity.ok().body(productCategory) : ResponseEntity.notFound().build();
     }
 
 
@@ -67,7 +69,7 @@ public class ProductCategoryApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品分类Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-categories/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return categoryService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return categoryService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

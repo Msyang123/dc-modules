@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.ProductSection;
@@ -35,7 +36,11 @@ public class ProductSectionApi {
     @PostMapping("/product-sections")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSection productSection) {
-        Long sectionId = sectionService.addSection(productSection);
+        Tips tips = sectionService.addSection(productSection);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long sectionId = Long.valueOf(tips.getMessage());
         return sectionId > 0 ?
                 ResponseEntity.created(URI.create("/product-sections/" + sectionId)).body(Maps.of("id", sectionId))
                 : ResponseEntity.badRequest().body("添加商品版块失败！");
@@ -50,7 +55,7 @@ public class ProductSectionApi {
     @PutMapping("/product-sections/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSection productSection) {
         productSection.setId(id);
-        return sectionService.update(productSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return sectionService.update(productSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -59,10 +64,7 @@ public class ProductSectionApi {
     @GetMapping("/product-sections/{id}")
     public ResponseEntity single(@PathVariable("id") Long sectionId) {
         ProductSection productSection = sectionService.findById(sectionId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productSection);
-        //return productSection != null ? ResponseEntity.ok().body(productSection) : ResponseEntity.badRequest().body("没有找到版块信息");
-        //return productSection != null ? ResponseEntity.ok().body(productSection) : ResponseEntity.notFound().build();
     }
 
 
@@ -70,7 +72,7 @@ public class ProductSectionApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "ids", value = "多个商品版块Id以英文逗号分隔", dataType = "String", required = true)
     @DeleteMapping("/product-sections/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
-        return sectionService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return sectionService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

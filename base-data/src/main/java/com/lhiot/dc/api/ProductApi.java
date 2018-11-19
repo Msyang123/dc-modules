@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.domain.Product;
@@ -38,7 +39,11 @@ public class ProductApi {
     @PostMapping("/products")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Product product) {
-        Long productId = productService.addProduct(product);
+        Tips tips = productService.addProduct(product);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long productId = Long.valueOf(tips.getMessage());
         return productId > 0 ? ResponseEntity.created(URI.create("/products/" + productId)).body(Maps.of("id", productId)) : ResponseEntity.badRequest().body("添加商品失败！");
     }
 
@@ -50,7 +55,7 @@ public class ProductApi {
     @PutMapping("/products/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Product product) {
         product.setId(id);
-        return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -59,10 +64,7 @@ public class ProductApi {
     @GetMapping("/products/{id}")
     public ResponseEntity single(@PathVariable("id") Long productId) {
         Product product = productService.findById(productId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(product);
-        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.badRequest().body("没有找到商品信息");
-        //return product != null ? ResponseEntity.ok().body(product) : ResponseEntity.notFound().build();
     }
 
 
@@ -74,7 +76,7 @@ public class ProductApi {
         if (searchProductNameList != null && !searchProductNameList.isEmpty()) {
             return ResponseEntity.badRequest().body("以下商品存在规格不可删除：" + searchProductNameList.toString());
         }
-        return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 
