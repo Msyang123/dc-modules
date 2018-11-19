@@ -39,7 +39,7 @@ public interface ProductSpecificationMapper {
      * @param Id
      * @return 商品规格对象
      */
-    ProductSpecification findById(Long Id);
+    ProductSpecification findById(Long id);
 
 
     /**
