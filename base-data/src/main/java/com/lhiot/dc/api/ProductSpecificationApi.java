@@ -42,8 +42,8 @@ public class ProductSpecificationApi {
     @PostMapping("/product-specifications")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSpecification productSpecification) {
-        Long Id = productSpecificationService.addProductSpecification(productSpecification);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
+        Long id = productSpecificationService.addProductSpecification(productSpecification);
+        return id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
     }
 
 

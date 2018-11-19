@@ -35,8 +35,8 @@ public class ProductShelfApi {
     @ApiHideBodyProperty("id")
     @PostMapping("/product-shelves")
     public ResponseEntity create(@RequestBody ProductShelf productShelf) {
-        Long Id = shelfService.insert(productShelf);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-shelves/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("新增商品上架信息失败！");
+        Long id = shelfService.insert(productShelf);
+        return id > 0 ? ResponseEntity.created(URI.create("/product-shelves/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("新增商品上架信息失败！");
     }
 
     @ApiOperation("修改商品上架")

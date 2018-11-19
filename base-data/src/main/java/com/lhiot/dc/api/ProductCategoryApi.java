@@ -34,8 +34,8 @@ public class ProductCategoryApi {
     @PostMapping("/product-categories")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
-        Long Id = categoryService.addProductCategory(productCategory);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-categories/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("添加商品分类失败！");
+        Long id = categoryService.addProductCategory(productCategory);
+        return id > 0 ? ResponseEntity.created(URI.create("/product-categories/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品分类失败！");
     }
 
 
