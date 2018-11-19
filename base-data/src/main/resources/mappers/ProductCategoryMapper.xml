@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductCategoryMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductCategory">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="rank" property="rank"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            parent_id,
+            group_name,
+            rank,
+            create_at,
+        </trim>
+    </sql>
+
+
+    <!--新增商品分类-->
+    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductCategory" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into product_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+            <if test="groupName != null ">
+                group_name,
+            </if>
+            <if test="rank != null ">
+                rank,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+            <if test="groupName != null ">
+                #{groupName},
+            </if>
+            <if test="rank != null ">
+                #{rank},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--修改商品分类-->
+    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductCategory">
+        update product_category
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="groupName != null and groupName != ''">group_name = #{groupName},</if>
+            <if test="rank != null ">rank = #{rank},</if>
+            <if test="createAt != null and createAt != ''">create_at = #{createAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 查找单个商品分类 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_category where id=#{0}
+    </select>
+
+
+    <!-- 删除多个商品分类 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from product_category where id in (#{0})
+    </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+            <if test="groupName != null and groupName != ''">and group_name like concat('%',#{groupName},'%')</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询商品分类集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.ProductCategoryParam">
+        select
+        <include refid="columns"/>
+        from product_category
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询商品分类集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductCategoryParam" resultType="int">
+        select count(1)
+        from product_category
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>
