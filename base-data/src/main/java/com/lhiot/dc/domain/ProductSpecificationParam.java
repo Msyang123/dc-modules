@@ -17,8 +17,8 @@ import java.util.Date;
 public class ProductSpecificationParam {
     @ApiModelProperty(notes = "商品ID", dataType = "Long")
     private Long productId;
-    @ApiModelProperty(notes = "商品条码", dataType = "String")
-    private String barcode;
+    @ApiModelProperty(notes = "商品条码(多个英文逗号分隔)", dataType = "String")
+    private String barCodes;
     @ApiModelProperty(notes = "打包单位", dataType = "String")
     private String packagingUnit;
     @ApiModelProperty(notes = "是否为库存规格：YES-是，NO-否", dataType = "InventorySpecification")

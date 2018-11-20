@@ -148,7 +148,12 @@
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
             <if test="productId != null and productId != ''">and product_id = #{productId}</if>
-            <if test="barcode != null and barcode != ''">and barcode = #{barcode}</if>
+            <if test="barCodes != null and barCodes != ''">
+                and barcode in
+                <foreach item="item" index="index" collection="barCodes.split(',')" open="(" separator="," close=")">
+                    '${item}'
+                </foreach>
+            </if>
             <if test="packagingUnit != null and packagingUnit != ''">and packaging_unit = #{packagingUnit}</if>
             <if test="inventorySpecification != null and inventorySpecification != ''">and inventory_specification =
                 #{inventorySpecification}
