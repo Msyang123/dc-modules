@@ -87,7 +87,7 @@ public class ProductCategoryService {
      */
     public Pages<ProductCategory> findList(ProductCategoryParam param) {
         List<ProductCategory> list = categoryMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPages()) && Objects.nonNull(param.getRows()) && param.getPages() > 0 && param.getRows() > 0;
+        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? categoryMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
