@@ -52,11 +52,11 @@ public class StoreService {
                     .sorted(Comparator.comparing(Store::getDistance));
         }
         int total = 0;
-        if (Objects.nonNull(param.getPages()) && Objects.nonNull(param.getRows())) {
+        if (Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows())) {
             //分页
             List<Store> result = storeStream.collect(Collectors.toList());
             total = result.size();
-            storeStream = result.stream().skip((param.getPages() - 1) * param.getRows())
+            storeStream = result.stream().skip((param.getPage() - 1) * param.getRows())
                     .limit(param.getRows());
         }
         return Pages.of(total, storeStream.collect(Collectors.toList()));
