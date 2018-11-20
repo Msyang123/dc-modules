@@ -3,6 +3,7 @@ package com.lhiot.dc.mapper;
 import com.lhiot.dc.domain.ProductSection;
 import com.lhiot.dc.domain.ProductSectionParam;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,12 +42,22 @@ public interface ProductSectionMapper {
 
 
     /**
+     * 根据parentId和sectionName查找单个商品版块
+     *
+     * @param parentId
+     * @param sectionName
+     * @return 商品版块对象
+     */
+    ProductSection findByParentIdAndSectionName(@Param("parentId") Long parentId, @Param("sectionName") String sectionName);
+
+
+    /**
      * 根据ID集合批量删除商品版块
      *
      * @param ids
      * @return 执行结果
      */
-    int deleteByIds(String ids);
+    int deleteByIds(@Param("ids") String ids);
 
 
     /**

@@ -3,6 +3,7 @@ package com.lhiot.dc.mapper;
 import com.lhiot.dc.domain.Product;
 import com.lhiot.dc.domain.ProductParam;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,12 +40,21 @@ public interface ProductMapper {
 
 
     /**
+     * 根据商品code查找单个商品
+     *
+     * @param code
+     * @return 商品对象
+     */
+    Product findByCode(String code);
+
+
+    /**
      * 批量删除商品集合
      *
      * @param ids
      * @return 执行结果
      */
-    int deleteByIds(String ids);
+    int deleteByIds(@Param("ids") String ids);
 
 
     /**

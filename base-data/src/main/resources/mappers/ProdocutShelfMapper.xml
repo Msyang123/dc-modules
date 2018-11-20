@@ -180,13 +180,16 @@
         <include refid="columns"/>
         from product_shelf ps
         left join product_specification psf on ps.specification_id=psf.id
-        where ps.id=#{0}
+        where ps.id = #{0}
     </select>
 
 
     <!-- 删除商品上架集合 -->
     <delete id="deleteByIds" parameterType="String">
-        delete from product_shelf where id in (#{0})
+        delete from product_shelf where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </delete>
 
 
@@ -194,8 +197,12 @@
     <select id="findListBySpecificationIds" resultMap="baseResultMap" parameterType="String">
         select
         <include refid="columns"/>
-        from product_shelf
-        where specification_id in (#{0})
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id=psf.id
+        where specification_id in
+        <foreach item="item" index="index" collection="specificationIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </select>
 
 
@@ -203,7 +210,7 @@
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
             <if test="sectionId != null and sectionId != ''">and id in (select shelf_id from product_section_relation
-                where section_id=#{sectionId})
+                where section_id = #{sectionId})
             </if>
             <if test="name != null and name != ''">and `name` like concat('%',#{name},'%')</if>
             <if test="shelfStatus != null">and shelf_status = #{shelfStatus}</if>

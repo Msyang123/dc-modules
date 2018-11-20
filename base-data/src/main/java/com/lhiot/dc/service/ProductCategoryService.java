@@ -1,6 +1,7 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.domain.ProductCategory;
 import com.lhiot.dc.domain.ProductCategoryParam;
 import com.lhiot.dc.mapper.ProductCategoryMapper;
@@ -30,12 +31,18 @@ public class ProductCategoryService {
      * 新增分类
      *
      * @param ProductCategory对象
-     * @return 商品分类Id
+     * @return Tips信息  成功在message中返回Id
      */
-    public Long addProductCategory(ProductCategory productCategory) {
+    public Tips addProductCategory(ProductCategory productCategory) {
+        // 幂等添加
+        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(),productCategory.getGroupName());
+        if (Objects.nonNull(po)) {
+            return Tips.warn("商品分类重复，添加失败.");
+        }
+
         productCategory.setCreateAt(Date.from(Instant.now()));
         categoryMapper.insert(productCategory);
-        return productCategory.getId();
+        return Tips.info(productCategory.getId() + "");
     }
 
 

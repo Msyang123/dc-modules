@@ -42,8 +42,8 @@ public class ProductSpecificationApi {
     @PostMapping("/product-specifications")
     @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSpecification productSpecification) {
-        Long Id = productSpecificationService.addProductSpecification(productSpecification);
-        return Id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + Id)).body(Maps.of("id", Id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
+        Long id = productSpecificationService.addProductSpecification(productSpecification);
+        return id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
     }
 
 
@@ -55,7 +55,7 @@ public class ProductSpecificationApi {
     @PutMapping("/product-specifications/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSpecification productSpecification) {
         productSpecification.setId(id);
-        return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败");
+        return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
     }
 
 
@@ -64,10 +64,7 @@ public class ProductSpecificationApi {
     @GetMapping("/product-specifications/{id}")
     public ResponseEntity single(@PathVariable("id") Long specificationId) {
         ProductSpecification productSpecification = productSpecificationService.findById(specificationId);
-        //TODO 需要确认用哪种返回
         return ResponseEntity.ok().body(productSpecification);
-        //return productSpecification != null ? ResponseEntity.ok().body(productSpecification) : ResponseEntity.badRequest().body("没有找到商品规格信息");
-        //return productSpecification != null ? ResponseEntity.ok().body(productSpecification) : ResponseEntity.notFound().build();
     }
 
 
@@ -79,7 +76,7 @@ public class ProductSpecificationApi {
         if (productShelfList != null && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("商品规格存在上架信息不可删除！");
         }
-        return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败");
+        return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

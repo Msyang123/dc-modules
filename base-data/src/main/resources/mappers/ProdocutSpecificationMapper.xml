@@ -120,13 +120,16 @@
         select
         <include refid="columns"/>
         from product_specification
-        where id=#{0}
+        where id = #{0}
     </select>
 
 
     <!-- 根据Id集合删除所属商品规格集合 -->
     <delete id="deleteByIds" parameterType="String">
-        delete from product_specification where id in (#{0})
+        delete from product_specification where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </delete>
 
 
@@ -147,7 +150,9 @@
             <if test="productId != null and productId != ''">and product_id = #{productId}</if>
             <if test="barcode != null and barcode != ''">and barcode = #{barcode}</if>
             <if test="packagingUnit != null and packagingUnit != ''">and packaging_unit = #{packagingUnit}</if>
-            <if test="inventorySpecification != null and inventorySpecification != ''">and inventory_specification = #{inventorySpecification}</if>
+            <if test="inventorySpecification != null and inventorySpecification != ''">and inventory_specification =
+                #{inventorySpecification}
+            </if>
             <if test="availableStatus != null and availableStatus != ''">and available_status = #{availableStatus}</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
@@ -173,7 +178,6 @@
         from product_specification
         <include refid="filter"/>
     </select>
-
 
 
 </mapper>

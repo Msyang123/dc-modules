@@ -4,6 +4,7 @@ package com.lhiot.dc.mapper;
 import com.lhiot.dc.domain.ProductShelf;
 import com.lhiot.dc.domain.ProductShelfParam;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public interface ProductShelfMapper {
      * @param ids
      * @return 执行结果
      */
-    int deleteByIds(String ids);
+    int deleteByIds(@Param("ids") String ids);
 
 
     /**
@@ -58,7 +59,7 @@ public interface ProductShelfMapper {
      * @param specificationIds 商品规格id集合
      * @return 商品上架集合
      */
-    List<ProductShelf> findListBySpecificationIds(String specificationIds);
+    List<ProductShelf> findListBySpecificationIds(@Param("specificationIds") String specificationIds);
 
 
     /**
