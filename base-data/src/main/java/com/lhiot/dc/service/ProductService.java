@@ -127,7 +127,7 @@ public class ProductService {
      */
     public Pages<Product> findList(ProductParam param) {
         List<Product> list = productMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPages()) && Objects.nonNull(param.getRows()) && param.getPages() > 0 && param.getRows() > 0;
+        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? productMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }

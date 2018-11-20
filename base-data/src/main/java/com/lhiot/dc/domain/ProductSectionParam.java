@@ -23,10 +23,10 @@ public class ProductSectionParam {
     private Date beginCreateAt;
     @ApiModelProperty(notes = "截止创建时间", dataType = "Date")
     private Date endCreateAt;
-    @ApiModelProperty(notes = "查询条数", dataType = "Integer")
+    @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
-    private Integer pages;
+    private Integer page;
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
@@ -34,7 +34,7 @@ public class ProductSectionParam {
     @JsonIgnore
     public Integer getStartRow() {
         if (this.rows != null && this.rows > 0) {
-            return (this.pages != null && this.pages > 0 ? this.pages - 1 : 0) * this.rows;
+            return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
     }

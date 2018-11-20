@@ -25,6 +25,6 @@ public class StoreSearchParam {
     @ApiModelProperty(notes = "查询条数",dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页",dataType = "Integer")
-    private Integer pages;
+    private Integer page;
 
 }

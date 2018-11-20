@@ -19,10 +19,10 @@ public class ProductParam {
     private Long categoryId;
     @ApiModelProperty(notes = "产地ID", dataType = "String")
     private String sourceCode;
-    @ApiModelProperty(notes = "查询条数", dataType = "Integer")
+    @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
-    private Integer pages;
+    private Integer page;
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
@@ -30,7 +30,7 @@ public class ProductParam {
     @JsonIgnore
     public Integer getStartRow() {
         if (this.rows != null && this.rows > 0) {
-            return (this.pages != null && this.pages > 0 ? this.pages - 1 : 0) * this.rows;
+            return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
     }
