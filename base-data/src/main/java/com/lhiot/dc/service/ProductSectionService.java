@@ -2,8 +2,8 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.ProductSection;
-import com.lhiot.dc.domain.ProductSectionParam;
+import com.lhiot.dc.entity.ProductSection;
+import com.lhiot.dc.model.ProductSectionParam;
 import com.lhiot.dc.mapper.ProductSectionMapper;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
 import lombok.extern.slf4j.Slf4j;

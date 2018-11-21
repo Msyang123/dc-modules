@@ -1,7 +1,7 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.ProductCategory;
-import com.lhiot.dc.domain.ProductCategoryParam;
+import com.lhiot.dc.entity.ProductCategory;
+import com.lhiot.dc.model.ProductCategoryParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -49,7 +49,7 @@ public interface ProductCategoryMapper {
      * @param groupName
      * @return 商品分类对象
      */
-    ProductCategory findByParentIdAndGroupName(@Param("parentId") Long parentId, @Param("sectionName") String groupName);
+    ProductCategory findByParentIdAndGroupName(@Param("parentId") Long parentId, @Param("groupName") String groupName);
 
 
     /**

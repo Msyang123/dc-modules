@@ -1,7 +1,7 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.ProductSection;
-import com.lhiot.dc.domain.ProductSectionParam;
+import com.lhiot.dc.entity.ProductSection;
+import com.lhiot.dc.model.ProductSectionParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

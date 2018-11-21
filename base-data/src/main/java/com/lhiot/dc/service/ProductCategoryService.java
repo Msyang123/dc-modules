@@ -2,8 +2,8 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.ProductCategory;
-import com.lhiot.dc.domain.ProductCategoryParam;
+import com.lhiot.dc.entity.ProductCategory;
+import com.lhiot.dc.model.ProductCategoryParam;
 import com.lhiot.dc.mapper.ProductCategoryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,14 @@ public class ProductCategoryService {
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addProductCategory(ProductCategory productCategory) {
+        if (Objects.isNull(productCategory.getParentId())) {
+            return Tips.warn("父级ID为空，添加失败.");
+        }
+        if (Objects.isNull(productCategory.getGroupName())) {
+            return Tips.warn("分类名为空，添加失败.");
+        }
         // 幂等添加
-        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(),productCategory.getGroupName());
+        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
         if (Objects.nonNull(po)) {
             return Tips.warn("商品分类重复，添加失败.");
         }

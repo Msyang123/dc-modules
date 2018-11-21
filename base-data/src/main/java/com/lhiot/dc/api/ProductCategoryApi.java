@@ -5,8 +5,8 @@ import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
-import com.lhiot.dc.domain.ProductCategory;
-import com.lhiot.dc.domain.ProductCategoryParam;
+import com.lhiot.dc.entity.ProductCategory;
+import com.lhiot.dc.model.ProductCategoryParam;
 import com.lhiot.dc.service.ProductCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -73,7 +73,7 @@ public class ProductCategoryApi {
     }
 
 
-    @ApiOperation("根据条件分页查询商品分类信息列表")
+    @ApiOperation(value = "根据条件分页查询商品分类信息列表", response = ProductCategory.class, responseContainer = "Set")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "param", value = "查询条件", dataType = "ProductCategoryParam")
     })

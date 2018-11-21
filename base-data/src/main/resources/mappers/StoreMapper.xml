@@ -3,7 +3,7 @@
 <mapper namespace="com.lhiot.dc.mapper.StoreMapper">
 
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.Store">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.Store">
         <result column="id" property="id"/>
         <result column="store_code" property="code"/>
         <result column="store_name" property="name"/>
@@ -47,7 +47,7 @@
     </sql>
 
     <!--新增门店-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.Store" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.lhiot.dc.entity.Store" useGeneratedKeys="true" keyProperty="id">
         insert into store (store_code,store_name,address,phone,image,area,status,flag_ship,store_type,video_url,
         begin_at,end_at,tape_url,application_type,latitude,longitude)
         value (#{code},#{name},#{address}, #{phone},#{image},#{area},#{status},#{flagShip},#{storeType},#{videoUrl}
@@ -55,7 +55,7 @@
     </insert>
 
     <!--根据id修改门店-->
-    <update id="update" parameterType="com.lhiot.dc.domain.Store">
+    <update id="update" parameterType="com.lhiot.dc.entity.Store">
         update store
         <set>
             <if test="code != null ">
@@ -133,7 +133,7 @@
     </select>
 
     <!--根据门店code，门店名称模糊查询-->
-    <select id="selectList" parameterType="com.lhiot.dc.domain.StoreSearchParam" resultMap="baseResultMap">
+    <select id="selectList" parameterType="com.lhiot.dc.model.StoreSearchParam" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from store

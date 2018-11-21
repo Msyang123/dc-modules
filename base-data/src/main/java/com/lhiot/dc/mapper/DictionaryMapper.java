@@ -1,7 +1,7 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.Dictionary;
-import com.lhiot.dc.domain.SearchParameter;
+import com.lhiot.dc.entity.Dictionary;
+import com.lhiot.dc.model.SearchParameter;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;

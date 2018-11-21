@@ -3,13 +3,12 @@ package com.lhiot.dc.api;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
-import com.lhiot.dc.domain.Store;
-import com.lhiot.dc.domain.StoreSearchParam;
+import com.lhiot.dc.entity.Store;
+import com.lhiot.dc.model.StoreSearchParam;
 import com.lhiot.dc.mapper.StoreMapper;
 import com.lhiot.dc.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -77,11 +76,11 @@ public class StoreApi {
 
     @PostMapping("/stores/search")
     @ApiOperation("根据位置查询门店所有列表根据距离排序")
-    @ApiImplicitParam(paramType = ApiParamType.BODY,name = "param",value = "查询条件",dataType = "StoreSearchParam",required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "param", value = "查询条件", dataType = "StoreSearchParam", required = true)
     public ResponseEntity search(@RequestBody StoreSearchParam param) {
         log.debug("根据位置查询门店列表\t param:{}", param);
         List<Store> storeList = storeService.findList(param);
-        Pages<Store> pages = storeService.filtrate(storeList,param);
+        Pages<Store> pages = storeService.filtrate(storeList, param);
         return ResponseEntity.ok(pages);
     }
 }

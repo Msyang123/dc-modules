@@ -4,9 +4,9 @@ import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
-import com.lhiot.dc.domain.Dictionary;
-import com.lhiot.dc.domain.DictionaryEntry;
-import com.lhiot.dc.domain.SearchParameter;
+import com.lhiot.dc.entity.Dictionary;
+import com.lhiot.dc.entity.DictionaryEntry;
+import com.lhiot.dc.model.SearchParameter;
 import com.lhiot.dc.mapper.DictionaryMapper;
 import com.lhiot.dc.service.DictionaryService;
 import io.swagger.annotations.*;
@@ -97,7 +97,7 @@ public class DictionaryApi {
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
         }
-        return ResponseEntity.created(URI.create("/dictionaries/"+dictCode)).body(tips);
+        return ResponseEntity.created(URI.create("/dictionaries/" + dictCode)).body(tips);
     }
 
     @Transactional

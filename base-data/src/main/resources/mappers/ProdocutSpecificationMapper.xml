@@ -3,7 +3,7 @@
 <mapper namespace="com.lhiot.dc.mapper.ProductSpecificationMapper">
 
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductSpecification">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductSpecification">
         <id column="id" property="id"/>
         <result column="product_id" property="productId"/>
         <result column="barcode" property="barcode"/>
@@ -35,7 +35,7 @@
 
 
     <!--新增商品规格-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSpecification" useGeneratedKeys="true" keyColumn="id"
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductSpecification" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
         insert into product_specification
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -99,7 +99,7 @@
     </insert>
 
     <!--修改商品规格-->
-    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductSpecification">
+    <update id="updateById" parameterType="com.lhiot.dc.entity.ProductSpecification">
         update product_specification
         <trim prefix="set" suffixOverrides=",">
             <if test="productId != null and productId != ''">product_id = #{productId},</if>
@@ -166,7 +166,7 @@
 
 
     <!--查询商品分类集合-->
-    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.ProductSpecificationParam">
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductSpecificationParam">
         select
         <include refid="columns"/>
         from product_specification
@@ -178,7 +178,7 @@
     </select>
 
     <!--查询商品分类集合总数-->
-    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductSpecificationParam" resultType="int">
+    <select id="findCount" parameterType="com.lhiot.dc.model.ProductSpecificationParam" resultType="int">
         select count(1)
         from product_specification
         <include refid="filter"/>

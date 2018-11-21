@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductSectionRelationMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductSectionRelation">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductSectionRelation">
         <id column="id" property="id"/>
         <result column="shelf_id" property="shelfId"/>
         <result column="section_id" property="sectionId"/>
@@ -19,7 +19,7 @@
     </sql>
 
     <!--新增关系-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductSectionRelation" useGeneratedKeys="true"
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductSectionRelation" useGeneratedKeys="true"
             keyColumn="id"
             keyProperty="id">
         insert into product_section_relation

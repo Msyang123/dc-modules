@@ -1,8 +1,8 @@
 package com.lhiot.dc.mapper;
 
 
-import com.lhiot.dc.domain.ProductShelf;
-import com.lhiot.dc.domain.ProductShelfParam;
+import com.lhiot.dc.entity.ProductShelf;
+import com.lhiot.dc.model.ProductShelfParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
