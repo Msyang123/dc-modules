@@ -4,7 +4,7 @@
 
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="baseResultMap"
-               type="com.lhiot.dc.domain.PaymentConfig">
+               type="com.lhiot.dc.entity.PaymentConfig">
         <id column="id" property="id"/>
         <result column="alias" property="alias"/>
         <result column="partner_id" property="partnerId"/>
@@ -32,7 +32,7 @@
     </sql>
 
     <!--新增支付签名信息-->
-    <insert id="create" parameterType="com.lhiot.dc.domain.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
+    <insert id="create" parameterType="com.lhiot.dc.entity.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
         insert into payment_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="alias != null ">
@@ -89,7 +89,7 @@
     </insert>
 
     <!--根据id修改支付签名信息-->
-    <update id="update" parameterType="com.lhiot.dc.domain.PaymentConfig">
+    <update id="update" parameterType="com.lhiot.dc.entity.PaymentConfig">
         update payment_config
         <set>
             <if test="alias != null ">

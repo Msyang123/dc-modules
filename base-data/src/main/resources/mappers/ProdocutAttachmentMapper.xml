@@ -3,7 +3,7 @@
 <mapper namespace="com.lhiot.dc.mapper.ProductAttachmentMapper">
 
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductAttachment">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductAttachment">
         <id column="id" property="id"/>
         <result column="url" property="url"/>
         <result column="product_id" property="productId"/>
@@ -25,7 +25,7 @@
 
 
     <!-- 新增单个商品附件 -->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductAttachment">
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductAttachment">
         insert into product_attachment
 
         <trim prefix="(" suffix=")" suffixOverrides=",">

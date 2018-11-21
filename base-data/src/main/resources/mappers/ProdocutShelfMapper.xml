@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductShelfMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductShelf">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductShelf">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="specification_id" property="specificationId"/>
@@ -17,7 +17,7 @@
         <result column="original_price" property="originalPrice"/>
         <result column="product_image" property="productImage"/>
         <result column="shelf_type" property="shelfType"/>
-        <association property="specification" javaType="com.lhiot.dc.domain.ProductSpecification">
+        <association property="specification" javaType="com.lhiot.dc.entity.ProductSpecification">
             <id column="psf_id" property="id"/>
             <result column="product_id" property="productId"/>
             <result column="barcode" property="barcode"/>
@@ -65,7 +65,7 @@
 
 
     <!--新增商品上架-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductShelf" useGeneratedKeys="true" keyColumn="id"
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductShelf" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
         insert into product_shelf
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -153,7 +153,7 @@
     </insert>
 
     <!--修改商品上架-->
-    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductShelf">
+    <update id="updateById" parameterType="com.lhiot.dc.entity.ProductShelf">
         update product_shelf
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null and name != ''">`name` = #{name},</if>
@@ -168,7 +168,6 @@
             <if test="description != null and description != ''">description = #{description},</if>
             <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
             <if test="applications != null and applications != ''">application_type = #{applications},</if>
-            <if test="createAt != null">create_at = #{createAt},</if>
         </trim>
         where id = #{id}
     </update>
@@ -227,7 +226,7 @@
 
 
     <!--查询商品上架集合-->
-    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.ProductShelfParam">
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductShelfParam">
         select
         <include refid="columns"/>
         from product_shelf ps
@@ -244,7 +243,7 @@
     </select>
 
     <!--查询商品上架集合总数-->
-    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductShelfParam" resultType="int">
+    <select id="findCount" parameterType="com.lhiot.dc.model.ProductShelfParam" resultType="int">
         select count(1)
         from product_shelf
         <include refid="filter"/>

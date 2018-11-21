@@ -3,7 +3,7 @@
 <mapper namespace="com.lhiot.dc.mapper.DictionaryEntryMapper">
 
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.DictionaryEntry" >
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.DictionaryEntry" >
         <id column="id" property="id"/>
         <result column="dict_code" property="dictCode" />
         <result column="name" property="name" />
@@ -25,7 +25,7 @@
     </sql>
 
     <!--新增字典数据-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.DictionaryEntry" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.lhiot.dc.entity.DictionaryEntry" useGeneratedKeys="true" keyProperty="id">
         insert into dictionary_entry
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="dictCode != null ">

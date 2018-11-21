@@ -1,12 +1,11 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.Store;
-import com.lhiot.dc.domain.StoreSearchParam;
+import com.lhiot.dc.entity.Store;
+import com.lhiot.dc.model.StoreSearchParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhangfeng created in 2018/9/22 9:09

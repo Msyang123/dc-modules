@@ -1,7 +1,7 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.util.StringUtils;
-import com.lhiot.dc.domain.ProductSectionRelation;
+import com.lhiot.dc.entity.ProductSectionRelation;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

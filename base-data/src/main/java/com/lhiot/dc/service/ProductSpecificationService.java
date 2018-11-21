@@ -1,8 +1,8 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
-import com.lhiot.dc.domain.ProductSpecification;
-import com.lhiot.dc.domain.ProductSpecificationParam;
+import com.lhiot.dc.entity.ProductSpecification;
+import com.lhiot.dc.model.ProductSpecificationParam;
 import com.lhiot.dc.mapper.ProductSpecificationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

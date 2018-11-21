@@ -2,9 +2,9 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.Product;
-import com.lhiot.dc.domain.ProductAttachment;
-import com.lhiot.dc.domain.ProductParam;
+import com.lhiot.dc.entity.Product;
+import com.lhiot.dc.entity.ProductAttachment;
+import com.lhiot.dc.model.ProductParam;
 import com.lhiot.dc.mapper.ProductAttachmentMapper;
 import com.lhiot.dc.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
