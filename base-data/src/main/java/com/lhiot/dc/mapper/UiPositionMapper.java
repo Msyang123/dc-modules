@@ -18,7 +18,7 @@ public interface UiPositionMapper {
     /**
      * 新增位置
      *
-     * @param UiPosition对象
+     * @param uiPosition 位置对象
      * @return 执行结果
      */
     int insert(UiPosition uiPosition);
@@ -27,7 +27,7 @@ public interface UiPositionMapper {
     /**
      * 修改位置
      *
-     * @param UiPosition对象
+     * @param uiPosition 位置对象
      * @return 执行结果
      */
     int updateById(UiPosition uiPosition);
@@ -36,7 +36,7 @@ public interface UiPositionMapper {
     /**
      * 根据code查找单个位置
      *
-     * @param code
+     * @param code 位置code
      * @return 位置对象
      */
     UiPosition findByCode(@Param("code") String code);
@@ -45,8 +45,8 @@ public interface UiPositionMapper {
     /**
      * 根据ID查找单个位置
      *
-     * @param positionId
-     * @return 商品分类对象
+     * @param positionId 位置ID
+     * @return 位置对象
      */
     UiPosition findById(Long positionId);
 
@@ -54,7 +54,7 @@ public interface UiPositionMapper {
     /**
      * 根据ID集合删除位置集合
      *
-     * @param ids
+     * @param ids 位置ID集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -63,15 +63,15 @@ public interface UiPositionMapper {
     /**
      * 查询位置信息列表
      *
-     * @param param
-     * @return 商品分类信息列表
+     * @param param  参数
+     * @return 位置信息列表
      */
     List<UiPosition> findList(UiPositionParam param);
 
     /**
      * 查询位置信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(UiPositionParam param);

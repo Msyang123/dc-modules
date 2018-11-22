@@ -3,7 +3,6 @@ package com.lhiot.dc.api;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.UiPosition;
 import com.lhiot.dc.model.UiPositionParam;
@@ -33,8 +32,8 @@ public class UiPositionApi {
     }
 
     @ApiOperation("添加位置")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "uiPosition", value = "位置信息", dataType = "UiPosition", required = true)
     @PostMapping("/ui-positions")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody UiPosition uiPosition) {
         Tips tips = positionService.addUiPosition(uiPosition);
         if (tips.err()) {
