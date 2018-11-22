@@ -7,13 +7,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @Author xiaojian created in 2018/11/13 10:51
+ * @author xiaojian created in 2018/11/13 10:51
  **/
 @Data
 @ApiModel
 @EqualsAndHashCode(of = "url")
 public class ProductAttachment {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "附件地址", dataType = "String")
     private String url;

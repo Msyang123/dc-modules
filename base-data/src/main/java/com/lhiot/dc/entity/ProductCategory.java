@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @ApiModel
 public class ProductCategory {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "父级ID", dataType = "Long")
     private Long parentId;

@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * 广告类别枚举
+ *
  * @author xiaojian  created in  2018/11/21 10:15
  */
 public enum AdvertiseType {

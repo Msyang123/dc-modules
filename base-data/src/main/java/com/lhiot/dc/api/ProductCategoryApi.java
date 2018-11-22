@@ -3,7 +3,6 @@ package com.lhiot.dc.api;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductCategory;
 import com.lhiot.dc.model.ProductCategoryParam;
@@ -32,8 +31,8 @@ public class ProductCategoryApi {
     }
 
     @ApiOperation("添加商品分类")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productCategory", value = "商品分类信息", dataType = "ProductCategory", required = true)
     @PostMapping("/product-categories")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
         Tips tips = categoryService.addProductCategory(productCategory);
         if (tips.err()) {

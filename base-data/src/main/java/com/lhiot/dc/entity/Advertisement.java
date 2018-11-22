@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @ApiModel
 public class Advertisement {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "位置Id", dataType = "Long")
     private Long positionId;

@@ -29,7 +29,7 @@ public class UiPositionService {
     /**
      * 新增位置
      *
-     * @param UiPosition对象
+     * @param uiPosition 位置对象
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addUiPosition(UiPosition uiPosition) {
@@ -46,7 +46,7 @@ public class UiPositionService {
     /**
      * 修改位置
      *
-     * @param UiPosition对象
+     * @param uiPosition 位置对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(UiPosition uiPosition) {
@@ -57,7 +57,7 @@ public class UiPositionService {
     /**
      * 根据位置ID查找单个位置
      *
-     * @param positionId
+     * @param positionId 位置ID
      * @return 商品版块对象
      */
     public UiPosition findById(Long positionId) {
@@ -68,7 +68,7 @@ public class UiPositionService {
     /**
      * 根据Id集合批量删除位置信息
      *
-     * @param ids
+     * @param ids 位置ID集合
      * @return 执行结果 true 或者 false
      */
     public boolean batchDeleteByIds(String ids) {

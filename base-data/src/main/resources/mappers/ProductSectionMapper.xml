@@ -138,7 +138,6 @@
             <if test="sectionName != null and sectionName != ''">section_name = #{sectionName},</if>
             <if test="sectionImg != null and sectionImg != ''">section_img = #{sectionImg},</if>
             <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
-            <if test="createAt != null and createAt != ''">create_at = #{createAt},</if>
             <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
         </trim>
         where id = #{id}

@@ -18,7 +18,7 @@ public interface ProductSectionMapper {
     /**
      * 新增商品版块
      *
-     * @param ProductSection对象
+     * @param productSection 商品版块对象
      * @return 执行结果
      */
     int insert(ProductSection productSection);
@@ -27,7 +27,7 @@ public interface ProductSectionMapper {
     /**
      * 修改商品版块
      *
-     * @param ProductSection对象
+     * @param productSection 商品版块对象
      * @return 执行结果
      */
     int updateById(ProductSection productSection);
@@ -35,7 +35,7 @@ public interface ProductSectionMapper {
     /**
      * 根据ID查找单个商品版块
      *
-     * @param sectionId
+     * @param sectionId 商品版块ID
      * @return 商品版块对象
      */
     ProductSection findById(Long sectionId);
@@ -44,8 +44,8 @@ public interface ProductSectionMapper {
     /**
      * 根据parentId和sectionName查找单个商品版块
      *
-     * @param parentId
-     * @param sectionName
+     * @param parentId 父ID
+     * @param sectionName 板块名称
      * @return 商品版块对象
      */
     ProductSection findByParentIdAndSectionName(@Param("parentId") Long parentId, @Param("sectionName") String sectionName);
@@ -54,7 +54,7 @@ public interface ProductSectionMapper {
     /**
      * 根据ID集合批量删除商品版块
      *
-     * @param ids
+     * @param ids 商品版块ID集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -63,7 +63,7 @@ public interface ProductSectionMapper {
     /**
      * 查询商品版块信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品版块信息列表
      */
     List<ProductSection> findList(ProductSectionParam param);
@@ -71,7 +71,7 @@ public interface ProductSectionMapper {
     /**
      * 查询商品版块信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(ProductSectionParam param);

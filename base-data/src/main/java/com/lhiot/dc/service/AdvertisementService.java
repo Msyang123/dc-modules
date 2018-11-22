@@ -30,7 +30,7 @@ public class AdvertisementService {
     /**
      * 新增广告
      *
-     * @param Advertisement对象
+     * @param advertisement 广告对象
      * @return 返回广告Id
      */
     public Long addAdvertisement(Advertisement advertisement) {
@@ -43,7 +43,7 @@ public class AdvertisementService {
     /**
      * 修改广告
      *
-     * @param Advertisement对象
+     * @param advertisement 广告对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(Advertisement advertisement) {
@@ -54,7 +54,7 @@ public class AdvertisementService {
     /**
      * 根据广告ID查找单个广告
      *
-     * @param id
+     * @param id 广告ID
      * @return 广告对象
      */
     public Advertisement findById(Long id) {
@@ -65,7 +65,7 @@ public class AdvertisementService {
     /**
      * 根据Id集合批量删除广告信息
      *
-     * @param ids
+     * @param ids 广告Id集合
      * @return 执行结果 true 或者 false
      */
     public boolean batchDeleteByIds(String ids) {

@@ -2,7 +2,6 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
-import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.Advertisement;
 import com.lhiot.dc.model.AdvertisementParam;
@@ -32,8 +31,8 @@ public class AdvertisementApi {
     }
 
     @ApiOperation("添加广告")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "advertisement", value = "广告信息", dataType = "Advertisement",required = true)
     @PostMapping("/advertisements")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Advertisement advertisement) {
         Long id = advertisementService.addAdvertisement(advertisement);
         return id > 0 ? ResponseEntity.created(URI.create("/advertisements/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加广告失败！");
