@@ -43,7 +43,7 @@
             ps.description,
             ps.shelf_status,
             ps.application_type,
-            ps.sorting ps_sorting,
+            ps.sorting,
             ps.image,
             ps.create_at,
             ps.original_price,
