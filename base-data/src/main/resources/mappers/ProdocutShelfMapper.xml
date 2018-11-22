@@ -214,7 +214,7 @@
             <if test="name != null and name != ''">and `name` like concat('%',#{name},'%')</if>
             <if test="shelfStatus != null">and shelf_status = #{shelfStatus}</if>
             <if test="shelfType != null">and shelf_type = #{shelfType}</if>
-            <if test="applications != null and applications != ''">and application_type = #{applications}</if>
+            <if test="applications != null">and application_type = #{applications}</if>
             <if test="minPrice != null">and price <![CDATA[ >= ]]> #{minPrice}</if>
             <if test="maxPrice != null">and price <![CDATA[ <= ]]> #{maxPrice}</if>
             <if test="minOriginalPrice != null">and original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>

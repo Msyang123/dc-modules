@@ -155,10 +155,8 @@
                 </foreach>
             </if>
             <if test="packagingUnit != null and packagingUnit != ''">and packaging_unit = #{packagingUnit}</if>
-            <if test="inventorySpecification != null and inventorySpecification != ''">and inventory_specification =
-                #{inventorySpecification}
-            </if>
-            <if test="availableStatus != null and availableStatus != ''">and available_status = #{availableStatus}</if>
+            <if test="inventorySpecification != null">and inventory_specification = #{inventorySpecification}</if>
+            <if test="availableStatus != null">and available_status = #{availableStatus}</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
         </trim>
