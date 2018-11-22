@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author xiaojian created in 2018/11/13 12:08
+ * @author xiaojian created in 2018/11/13 12:08
  **/
 @Mapper
 @Repository
@@ -19,7 +19,7 @@ public interface ProductSpecificationMapper {
     /**
      * 新增商品规格
      *
-     * @param ProductSpecification对象
+     * @param productSpecification 商品规格对象
      * @return 执行结果
      */
     int insert(ProductSpecification productSpecification);
@@ -28,7 +28,7 @@ public interface ProductSpecificationMapper {
     /**
      * 修改商品规格
      *
-     * @param ProductSpecification对象
+     * @param productSpecification 商品规格对象
      * @return 执行结果
      */
     int updateById(ProductSpecification productSpecification);
@@ -37,7 +37,7 @@ public interface ProductSpecificationMapper {
     /**
      * 根据ID查找单个商品规格
      *
-     * @param Id
+     * @param id 商品规格ID
      * @return 商品规格对象
      */
     ProductSpecification findById(Long id);
@@ -55,7 +55,7 @@ public interface ProductSpecificationMapper {
     /**
      * 删除商品规格 根据Id集合
      *
-     * @param ids
+     * @param ids 商品规格Id集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -64,7 +64,7 @@ public interface ProductSpecificationMapper {
     /**
      * 查询商品规格信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品规格信息列表
      */
     List<ProductSpecification> findList(ProductSpecificationParam param);
@@ -72,7 +72,7 @@ public interface ProductSpecificationMapper {
     /**
      * 查询商品规格信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(ProductSpecificationParam param);

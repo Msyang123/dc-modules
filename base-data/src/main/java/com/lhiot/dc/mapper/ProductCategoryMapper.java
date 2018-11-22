@@ -18,7 +18,7 @@ public interface ProductCategoryMapper {
     /**
      * 新增商品分类
      *
-     * @param ProductCategory对象
+     * @param productCategory 商品分类对象
      * @return 执行结果
      */
     int insert(ProductCategory productCategory);
@@ -27,7 +27,7 @@ public interface ProductCategoryMapper {
     /**
      * 修改商品分类
      *
-     * @param ProductCategory对象
+     * @param productCategory 商品分类对象
      * @return 执行结果
      */
     int updateById(ProductCategory productCategory);
@@ -36,7 +36,7 @@ public interface ProductCategoryMapper {
     /**
      * 根据ID查找单个商品分类
      *
-     * @param categoryId
+     * @param categoryId 商品分类ID
      * @return 商品分类对象
      */
     ProductCategory findById(Long categoryId);
@@ -45,8 +45,8 @@ public interface ProductCategoryMapper {
     /**
      * 根据parentId和groupName查找单个商品分类
      *
-     * @param parentId
-     * @param groupName
+     * @param parentId 父级ID
+     * @param groupName 分类名
      * @return 商品分类对象
      */
     ProductCategory findByParentIdAndGroupName(@Param("parentId") Long parentId, @Param("groupName") String groupName);
@@ -55,7 +55,7 @@ public interface ProductCategoryMapper {
     /**
      * 根据ID集合删除商品分类集合
      *
-     * @param ids
+     * @param ids ID集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -64,7 +64,7 @@ public interface ProductCategoryMapper {
     /**
      * 查询商品分类信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品分类信息列表
      */
     List<ProductCategory> findList(ProductCategoryParam param);
@@ -72,7 +72,7 @@ public interface ProductCategoryMapper {
     /**
      * 查询商品分类信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(ProductCategoryParam param);

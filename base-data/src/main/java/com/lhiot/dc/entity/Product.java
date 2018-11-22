@@ -9,12 +9,12 @@ import java.util.List;
 
 
 /**
- * @Author xiaojian created in 2018/11/12 17:09
+ * @author xiaojian created in 2018/11/12 17:09
  **/
 @Data
 @ApiModel
 public class Product {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "商品编码", dataType = "String")
     private String code;

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @ApiModel
 public class ProductSection {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "位置ID", dataType = "Long")
     private Long positionId;

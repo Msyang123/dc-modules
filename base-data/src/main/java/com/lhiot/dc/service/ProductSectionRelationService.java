@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author xiaojian  created in  2018/11/16 9:18
@@ -28,8 +29,8 @@ public class ProductSectionRelationService {
     /**
      * 新增商品上架与版块关系
      *
-     * @param ProductSectionRelation对象
-     * @return 新增商品版块Id
+     * @param productSectionRelation 商品上架与版块关系对象
+     * @return 商品上架与版块关系Id
      */
     public Long addRelation(ProductSectionRelation productSectionRelation) {
         relationMapper.insert(productSectionRelation);
@@ -39,17 +40,18 @@ public class ProductSectionRelationService {
     /**
      * 新增批量商品上架与版块关系
      *
-     * @param sectionId
-     * @param shelfIds
+     * @param sectionId 版块ID
+     * @param shelfIds  商品上架ID集合
      * @return 执行结果
      */
     public boolean addRelationList(Long sectionId, String shelfIds) {
         List<ProductSectionRelation> psrList = new ArrayList<>();
-        List<String> shelfIdList = Arrays.asList(StringUtils.tokenizeToStringArray(shelfIds, ","));
+        String [] shelfIdArrays=StringUtils.tokenizeToStringArray(shelfIds,",");
+        List<String> shelfIdList= Stream.of(shelfIdArrays).collect(Collectors.toList());
         ProductSectionRelation productSectionRelation;
         for (String shelfId : shelfIdList) {
             productSectionRelation = new ProductSectionRelation();
-            productSectionRelation.setSectionId(Long.valueOf(sectionId));
+            productSectionRelation.setSectionId(sectionId);
             productSectionRelation.setShelfId(Long.valueOf(shelfId));
             psrList.add(productSectionRelation);
         }
@@ -60,7 +62,7 @@ public class ProductSectionRelationService {
     /**
      * 删除商品上架与版块关系
      *
-     * @param relationId
+     * @param relationId 关系ID
      * @return 执行结果 true 或者 false
      */
     public boolean deleteRelation(Long relationId) {
@@ -71,8 +73,8 @@ public class ProductSectionRelationService {
     /**
      * 批量删除商品上架与版块关系
      *
-     * @param sectionId
-     * @param shelfIds
+     * @param sectionId 商品版块ID
+     * @param shelfIds  商品上架ID集合
      * @return 执行结果 true 或者 false
      */
     public boolean deleteRelationList(Long sectionId, String shelfIds) {

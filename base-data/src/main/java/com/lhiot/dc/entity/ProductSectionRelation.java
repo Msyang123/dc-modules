@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @ApiModel
 public class ProductSectionRelation {
-    @ApiModelProperty(notes = "主键Id", dataType = "Long")
+    @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "商品上架ID", dataType = "Long")
     private Long shelfId;

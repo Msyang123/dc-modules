@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * @Author xiaojian created in 2018/11/13 15:09
+ * @author xiaojian created in 2018/11/13 15:09
  **/
 @Service
 @Slf4j
@@ -28,7 +28,7 @@ public class ProductSpecificationService {
     /**
      * 新增商品规格
      *
-     * @param ProductSpecification对象
+     * @param productSpecification 商品规格对象
      * @return 商品规格Id
      */
     public Long addProductSpecification(ProductSpecification productSpecification) {
@@ -40,7 +40,7 @@ public class ProductSpecificationService {
     /**
      * 修改商品规格
      *
-     * @param ProductSpecification对象
+     * @param productSpecification 商品规格对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(ProductSpecification productSpecification) {
@@ -51,7 +51,7 @@ public class ProductSpecificationService {
     /**
      * 根据商品规格ID查找单个商品规格
      *
-     * @param specificationId
+     * @param specificationId  商品规格ID
      * @return 商品规格对象
      */
     public ProductSpecification findById(Long specificationId) {
@@ -62,7 +62,7 @@ public class ProductSpecificationService {
     /**
      * 根据Id集合删除商品规格
      *
-     * @param ids
+     * @param ids 商品规格ID集合
      * @return 执行结果 true 或者 false
      */
     public boolean deleteByIds(String ids) {
@@ -73,13 +73,13 @@ public class ProductSpecificationService {
     /**
      * 根据传入商品ID集合，查询存在规格的商品
      *
-     * @param productIds
+     * @param productIds  商品ID集合
      * @return 存在规格的商品名称集合
      */
     public List<String> findHaveSpecificationByProductIds(String productIds) {
         List<String> resultList = new ArrayList<>();
         List<Map<String, Object>> productList = specificationMapper.findHaveSpecificationByProductIds(productIds);
-        productList.stream().forEach(product -> resultList.add(product.get("productName").toString()));
+        productList.forEach(product -> resultList.add(product.get("productName").toString()));
         return resultList;
     }
 

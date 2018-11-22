@@ -36,8 +36,8 @@ public class ProductApi {
     }
 
     @ApiOperation("添加商品")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
     @PostMapping("/products")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Product product) {
         Tips tips = productService.addProduct(product);
         if (tips.err()) {

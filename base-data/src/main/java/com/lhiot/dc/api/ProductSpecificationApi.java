@@ -3,7 +3,6 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
-import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.entity.ProductSpecification;
@@ -39,8 +38,8 @@ public class ProductSpecificationApi {
 
 
     @ApiOperation("添加商品规格")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
     @PostMapping("/product-specifications")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody ProductSpecification productSpecification) {
         Long id = productSpecificationService.addProductSpecification(productSpecification);
         return id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品规格失败！");

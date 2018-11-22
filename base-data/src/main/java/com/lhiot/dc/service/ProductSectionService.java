@@ -34,10 +34,13 @@ public class ProductSectionService {
     /**
      * 新增商品版块
      *
-     * @param ProductSection对象
+     * @param productSection 商品版块对象
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addSection(ProductSection productSection) {
+        if (Objects.isNull(productSection.getSectionName())) {
+            return Tips.warn("商品版块名称为空，添加失败.");
+        }
         // 幂等添加
         ProductSection po = sectionMapper.findByParentIdAndSectionName(productSection.getParentId(),productSection.getSectionName());
         if (Objects.nonNull(po)) {
@@ -53,7 +56,7 @@ public class ProductSectionService {
     /**
      * 修改商品版块信息
      *
-     * @param ProductSection对象
+     * @param productSection 商品版块对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(ProductSection productSection) {
@@ -64,7 +67,7 @@ public class ProductSectionService {
     /**
      * 根据商品版块ID查找单个商品版块
      *
-     * @param sectionId
+     * @param sectionId 商品版块ID
      * @return 商品版块对象
      */
     public ProductSection findById(Long sectionId) {
@@ -75,7 +78,7 @@ public class ProductSectionService {
     /**
      * 根据Id集合批量删除商品版块信息
      *
-     * @param ids
+     * @param ids Id集合
      * @return 执行结果 true 或者 false
      */
     public boolean batchDeleteByIds(String ids) {

@@ -2,7 +2,6 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
-import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.model.ProductShelfParam;
@@ -32,7 +31,7 @@ public class ProductShelfApi {
 
 
     @ApiOperation("新增商品上架")
-    @ApiHideBodyProperty("id")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productShelf", value = "商品上架信息", dataType = "ProductShelf", required = true)
     @PostMapping("/product-shelves")
     public ResponseEntity create(@RequestBody ProductShelf productShelf) {
         Long id = shelfService.insert(productShelf);
