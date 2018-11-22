@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ArticleSectionRelationMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ArticleSectionRelation">
+        <id column="id" property="id"/>
+        <result column="section_id" property="sectionId"/>
+        <result column="article_id" property="articleId"/>
+        <result column="sorting" property="sorting"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            section_id,
+            article_id,
+            sorting,
+        </trim>
+    </sql>
+
+    <!--新增关系-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ArticleSectionRelation" useGeneratedKeys="true"
+            keyColumn="id"
+            keyProperty="id">
+        insert into article_section_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sectionId != null ">
+                section_id,
+            </if>
+            <if test="articleId != null ">
+                article_id,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sectionId != null ">
+                #{sectionId},
+            </if>
+            <if test="articleId != null ">
+                #{articleId},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+        </trim>
+    </insert>
+
+    <!--批量新增关系-->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into article_section_relation (section_id,article_id,sorting)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.sectionId},
+            #{item.articleId},
+            #{item.sorting}
+            )
+        </foreach>
+    </insert>
+
+
+    <!-- 删除单个关系 -->
+    <delete id="deleteById" parameterType="Long">
+        delete from article_section_relation where id = #{0}
+    </delete>
+
+
+    <!-- 根据文章ID集合删除相关关系 -->
+    <delete id="deleteRelationByArticleIds" parameterType="String">
+        delete from article_section_relation where article_id in
+        <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据文章版块ID集合删除相关关系 -->
+    <delete id="deleteRelationBySectionIds" parameterType="String">
+        delete from article_section_relation where section_id in
+        <foreach item="item" index="index" collection="sectionIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- 根据文章版块ID集合删除相关关系 -->
+    <delete id="deleteRelationList">
+        delete from article_section_relation where section_id = #{sectionId}
+        <if test="articleIds != null and articleIds != ''">
+            and article_id in
+            <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
+                ${item}
+            </foreach>
+        </if>
+    </delete>
+
+
+</mapper>

@@ -18,7 +18,7 @@ public interface AdvertisementMapper {
     /**
      * 新增广告
      *
-     * @param Advertisement对象
+     * @param advertisement 广告对象
      * @return 执行结果
      */
     int insert(Advertisement advertisement);
@@ -27,7 +27,7 @@ public interface AdvertisementMapper {
     /**
      * 修改广告
      *
-     * @param Advertisement对象
+     * @param advertisement 广告对象
      * @return 执行结果
      */
     int updateById(Advertisement advertisement);
@@ -36,7 +36,7 @@ public interface AdvertisementMapper {
     /**
      * 根据ID查找单个广告
      *
-     * @param id
+     * @param id 广告ID
      * @return 广告对象
      */
     Advertisement findById(Long id);
@@ -45,7 +45,7 @@ public interface AdvertisementMapper {
     /**
      * 根据ID集合删除广告集合
      *
-     * @param ids
+     * @param ids ID集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -54,7 +54,7 @@ public interface AdvertisementMapper {
     /**
      * 查询广告信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品分类信息列表
      */
     List<Advertisement> findList(AdvertisementParam param);
@@ -62,7 +62,7 @@ public interface AdvertisementMapper {
     /**
      * 查询广告信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(AdvertisementParam param);
