@@ -5,52 +5,57 @@ import com.leon.microx.util.Pair;
 import com.leon.microx.util.cache.SimpleCache;
 import com.leon.microx.web.http.RemoteInvoker;
 import com.lhiot.dc.dictionary.module.Dictionary;
-import org.springframework.core.ParameterizedTypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 /**
  * @author Leon (234239150@qq.com) created in 11:47 18.10.16
  */
+@Slf4j
 public class DictionaryClient {
 
     private RemoteInvoker.Requester httpClient;
 
     private Pair<Long, TimeUnit> cacheTtl = Pair.of(10_000L, TimeUnit.MILLISECONDS);
 
-    private final SimpleCache<Object, Object> localCache = new SimpleCache<>();
+    private final SimpleCache<String, Dictionary> localCache = new SimpleCache<>();
 
-    public DictionaryClient(String server, RemoteInvoker httpClient) {
+    private static final Pair<String, HttpMethod> DICTIONARY_API = Pair.of("/dictionaries/{code}", HttpMethod.GET);
+
+    DictionaryClient(String server, RemoteInvoker httpClient) {
         this.httpClient = httpClient.server(server);
     }
 
-    private DictionaryClient withCacheTtl(Pair<Long, TimeUnit> cacheTtl) {
+    void withCacheTtl(Pair<Long, TimeUnit> cacheTtl) {
         this.cacheTtl = cacheTtl;
-        return this;
     }
 
-    public Dictionary dictionary(String code) {
-        Object value = localCache.get(code);
+    public Optional<Dictionary> dictionary(String code){
+        return this.dictionary(code, true);
+    }
+
+    public Optional<Dictionary> dictionary(String code, boolean includeEntries) {
+        Dictionary value = localCache.get(code);
         if (Objects.isNull(value)) {
-            value = this.caching(code, () ->
-                    this.httpClient.uriVariables(Maps.of("code", code)).queryParams(Maps.of("includeEntries", "true"))
-                            .request("/dictionary/{code}", HttpMethod.GET, ParameterizedTypeReference.forType(Dictionary.class))
-            );
+            RemoteInvoker.Requester client = this.httpClient.uriVariables(Maps.of("code", code));
+            if (includeEntries){
+                client.queryParams(Maps.of("includeEntries", "true"));
+            }
+            try {
+                ResponseEntity<Dictionary> response = client.request(DICTIONARY_API, Dictionary.class);
+                if (response.getStatusCode().is2xxSuccessful() && response.hasBody()) {
+                    value = response.getBody();
+                    localCache.put(code, value, cacheTtl.getFirst(), cacheTtl.getSecond());
+                }
+            }catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
         }
-        return (Dictionary) value;
-    }
-
-    private <T> T caching(Object key, Supplier<ResponseEntity<T>> supplier) {
-        T value = null;
-        ResponseEntity<T> response = supplier.get();
-        if (response.getStatusCode().is2xxSuccessful() && response.hasBody()) {
-            value = response.getBody();
-            localCache.put(key, value, cacheTtl.getFirst(), cacheTtl.getSecond());
-        }
-        return value;
+        return Optional.ofNullable(value);
     }
 }
