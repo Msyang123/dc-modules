@@ -24,13 +24,12 @@ public class DictionaryClient {
 
     private final SimpleCache<Object, Object> localCache = new SimpleCache<>();
 
-    public DictionaryClient(String server, RemoteInvoker httpClient) {
+    DictionaryClient(String server, RemoteInvoker httpClient) {
         this.httpClient = httpClient.server(server);
     }
 
-    private DictionaryClient withCacheTtl(Pair<Long, TimeUnit> cacheTtl) {
+    void withCacheTtl(Pair<Long, TimeUnit> cacheTtl) {
         this.cacheTtl = cacheTtl;
-        return this;
     }
 
     public Dictionary dictionary(String code) {
