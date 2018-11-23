@@ -1,8 +1,8 @@
 package com.lhiot.dc.mapper;
 
 
-import com.lhiot.dc.domain.ProductShelf;
-import com.lhiot.dc.domain.ProductShelfParam;
+import com.lhiot.dc.entity.ProductShelf;
+import com.lhiot.dc.model.ProductShelfParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ public interface ProductShelfMapper {
     /**
      * 新增商品上架
      *
-     * @param ProductShelf对象
+     * @param productShelf 商品上架对象
      * @return 执行结果
      */
     int insert(ProductShelf productShelf);
@@ -29,7 +29,7 @@ public interface ProductShelfMapper {
     /**
      * 修改商品上架
      *
-     * @param ProductShelf对象
+     * @param productShelf 商品上架对象
      * @return 执行结果
      */
     int updateById(ProductShelf productShelf);
@@ -38,7 +38,7 @@ public interface ProductShelfMapper {
     /**
      * 根据ID查找单个商品上架
      *
-     * @param shelfId
+     * @param shelfId 商品上架ID
      * @return 商品上架对象
      */
     ProductShelf findById(Long shelfId);
@@ -47,7 +47,7 @@ public interface ProductShelfMapper {
     /**
      * 删除商品上架集合
      *
-     * @param ids
+     * @param ids 商品上架ID集合
      * @return 执行结果
      */
     int deleteByIds(@Param("ids") String ids);
@@ -65,7 +65,7 @@ public interface ProductShelfMapper {
     /**
      * 查询商品上架信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品上架信息列表
      */
     List<ProductShelf> findList(ProductShelfParam param);
@@ -73,7 +73,7 @@ public interface ProductShelfMapper {
     /**
      * 查询商品上架信息总数
      *
-     * @param param
+     * @param param 参数
      * @return 总数
      */
     int findCount(ProductShelfParam param);

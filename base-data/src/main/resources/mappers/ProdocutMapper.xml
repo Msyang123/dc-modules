@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.Product">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.Product">
         <id column="id" property="id"/>
         <result column="product_code" property="code"/>
         <result column="product_name" property="name"/>
@@ -10,7 +10,7 @@
         <result column="source_code" property="sourceCode"/>
         <result column="description" property="description"/>
         <result column="create_at" property="createAt"/>
-        <collection property="attachments" ofType="com.lhiot.dc.domain.ProductAttachment">
+        <collection property="attachments" ofType="com.lhiot.dc.entity.ProductAttachment">
             <id column="aid" property="id"/>
             <result column="url" property="url"/>
             <result column="product_id" property="productId"/>
@@ -39,7 +39,7 @@
     </sql>
 
     <!-- 新增商品 -->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.Product" useGeneratedKeys="true" keyColumn="id"
+    <insert id="insert" parameterType="com.lhiot.dc.entity.Product" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
         insert into product
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -85,7 +85,7 @@
     </insert>
 
     <!-- 修改商品 -->
-    <update id="updateById" parameterType="com.lhiot.dc.domain.Product">
+    <update id="updateById" parameterType="com.lhiot.dc.entity.Product">
         update product
         <trim prefix="set" suffixOverrides=",">
             <if test="code != null and code != ''">product_code = #{code},</if>
@@ -137,7 +137,7 @@
     </sql>
 
     <!--查询商品集合-->
-    <select id="findList" parameterType="com.lhiot.dc.domain.ProductParam" resultMap="baseResultMap">
+    <select id="findList" parameterType="com.lhiot.dc.model.ProductParam" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from product p
@@ -155,7 +155,7 @@
 
 
     <!--查询商品集合总数-->
-    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductParam" resultType="int">
+    <select id="findCount" parameterType="com.lhiot.dc.model.ProductParam" resultType="int">
         select count(1)
         from product
         <include refid="filter"/>

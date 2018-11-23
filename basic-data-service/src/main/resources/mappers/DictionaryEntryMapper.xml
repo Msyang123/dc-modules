@@ -3,8 +3,7 @@
 <mapper namespace="com.lhiot.dc.mapper.DictionaryEntryMapper">
 
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="BaseResultMap"
-        type="com.lhiot.dc.domain.DictionaryEntry" >
+    <resultMap id="DictionaryEntry" type="com.lhiot.dc.domain.DictionaryEntry" >
         <id column="id" property="id"/>
         <result column="dict_code" property="dictCode" />
         <result column="name" property="name" />
@@ -14,7 +13,7 @@
     </resultMap>
 
     <!-- base查询字段  -->
-    <sql id="Base_Column_List" >
+    <sql id="columns" >
         <trim suffixOverrides="," >
             id,
             dict_code,
@@ -23,6 +22,30 @@
             sort,
             attach,
         </trim>
+    </sql>
+
+    <!-- base where条件  -->
+    <sql id="allWhereCondition" >
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="dictCode != null ">
+                and dict_code = #{dictCode}
+            </if>
+            <if test="name != null ">
+                and name = #{name}
+            </if>
+            <if test="code != null ">
+                and code = #{code}
+            </if>
+            <if test="sort != null ">
+                and sort = #{sort}
+            </if>
+            <if test="attach != null ">
+                and attach = #{attach}
+            </if>
+        </where>
     </sql>
 
     <!--新增字典数据-->
@@ -96,65 +119,29 @@
     </delete>
 
 
-    <select id="findByDictCode" resultMap="BaseResultMap"
-            parameterType="java.lang.String">
-        select <include refid="Base_Column_List" />
-        from dictionary_entry where dict_code = #{0}
+    <select id="findByDictCode" resultMap="DictionaryEntry" parameterType="java.lang.String">
+        select <include refid="columns" /> from dictionary_entry where dict_code = #{0}
     </select>
 
-    <select id="selectByDictCodeAndEntryCode" resultMap="BaseResultMap"
-            parameterType="map">
-        select <include refid="Base_Column_List" />
-        from dictionary_entry where dict_code = #{dictCode} and code = #{code}
+    <select id="selectByDictCodeAndEntryCode" resultMap="DictionaryEntry" parameterType="map">
+        select <include refid="columns" /> from dictionary_entry where dict_code = #{dictCode} and code = #{code}
     </select>
 
     <!-- 根据id查找字典数据 -->
-	<select id="selectById" resultMap="BaseResultMap"
-		parameterType="long"> select <include refid="Base_Column_List" />
-		from dictionary_entry where id = #{id}
+	<select id="selectById" resultMap="DictionaryEntry" parameterType="long">
+        select <include refid="columns" /> from dictionary_entry where id = #{id}
 	</select>
 
 
-    <!-- base where条件  -->
-    <sql id="Base_Where_Condition" >
-        <where>
-            <if test="id != null ">
-                and id = #{id}
-            </if>
-            <if test="dictCode != null ">
-                and dict_code = #{dictCode}
-            </if>
-            <if test="name != null ">
-                and name = #{name}
-            </if>
-            <if test="code != null ">
-                and code = #{code}
-            </if>
-            <if test="sort != null ">
-                and sort = #{sort}
-            </if>
-            <if test="attach != null ">
-                and attach = #{attach}
-            </if>
-        </where>
-    </sql>
-
-
     <!--查询字典数据列表-->
-     <select id="pageDictionaryEntrys" resultMap="BaseResultMap"
-        parameterType="com.lhiot.dc.domain.DictionaryEntry">
-	        select <include refid="Base_Column_List" />
-	        from dictionary_entry
-	        <include refid="Base_Where_Condition" />
+     <select id="pageDictionaryEntrys" resultMap="DictionaryEntry" parameterType="com.lhiot.dc.domain.DictionaryEntry">
+	        select <include refid="columns" /> from dictionary_entry
+	        <include refid="allWhereCondition" />
 	        <include refid="common.pager" />
     </select>
 
     <!--查询字典数据总记录-->
-    <select id="pageDictionaryEntryCounts" resultType="long"
-        parameterType="com.lhiot.dc.domain.DictionaryEntry">
-            select count(1)
-            from dictionary_entry
-            <include refid="Base_Where_Condition" />
+    <select id="pageDictionaryEntryCounts" resultType="long" parameterType="com.lhiot.dc.domain.DictionaryEntry">
+            select count(1) from dictionary_entry <include refid="allWhereCondition" />
     </select>
-
 </mapper>

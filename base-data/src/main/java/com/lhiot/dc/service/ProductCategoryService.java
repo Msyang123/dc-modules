@@ -2,8 +2,8 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.ProductCategory;
-import com.lhiot.dc.domain.ProductCategoryParam;
+import com.lhiot.dc.entity.ProductCategory;
+import com.lhiot.dc.model.ProductCategoryParam;
 import com.lhiot.dc.mapper.ProductCategoryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,12 +30,15 @@ public class ProductCategoryService {
     /**
      * 新增分类
      *
-     * @param ProductCategory对象
+     * @param productCategory 分类对象
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addProductCategory(ProductCategory productCategory) {
+        if (Objects.isNull(productCategory.getGroupName())) {
+            return Tips.warn("分类名为空，添加失败.");
+        }
         // 幂等添加
-        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(),productCategory.getGroupName());
+        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
         if (Objects.nonNull(po)) {
             return Tips.warn("商品分类重复，添加失败.");
         }
@@ -49,7 +52,7 @@ public class ProductCategoryService {
     /**
      * 修改商品分类信息
      *
-     * @param ProductCategory对象
+     * @param productCategory 商品分类对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(ProductCategory productCategory) {
@@ -60,7 +63,7 @@ public class ProductCategoryService {
     /**
      * 根据商品分类ID查找单个商品分类
      *
-     * @param categoryId
+     * @param categoryId  商品分类ID
      * @return 商品版块对象
      */
     public ProductCategory findById(Long categoryId) {
@@ -71,7 +74,7 @@ public class ProductCategoryService {
     /**
      * 根据Id集合批量删除分类信息
      *
-     * @param ids
+     * @param ids 商品分类ID集合
      * @return 执行结果 true 或者 false
      */
     public boolean batchDeleteByIds(String ids) {

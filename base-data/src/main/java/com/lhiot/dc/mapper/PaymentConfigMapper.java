@@ -1,6 +1,6 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.PaymentConfig;
+import com.lhiot.dc.entity.PaymentConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

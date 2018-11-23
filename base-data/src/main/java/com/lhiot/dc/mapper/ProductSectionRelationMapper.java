@@ -1,6 +1,6 @@
 package com.lhiot.dc.mapper;
 
-import com.lhiot.dc.domain.ProductSectionRelation;
+import com.lhiot.dc.entity.ProductSectionRelation;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 新增商品上架与版块关系记录
      *
-     * @param ProductSectionRelation 对象
+     * @param productSectionRelation 商品上架与版块关系对象
      * @return 执行结果
      */
     int insert(ProductSectionRelation productSectionRelation);
@@ -26,7 +26,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 新增批量商品上架与版块关系
      *
-     * @param List<ProductSectionRelation>对象
+     * @param list 商品上架与版块关系集合
      * @return 执行结果
      */
     int insertList(List<ProductSectionRelation> list);
@@ -35,7 +35,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 删除商品上架与版块关系记录
      *
-     * @param relationId
+     * @param relationId 关系ID
      * @return 执行结果
      */
     int deleteById(Long relationId);
@@ -44,7 +44,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 根据商品上架ID集合 删除商品上架与版块关系记录
      *
-     * @param shelfIds
+     * @param shelfIds  商品上架ID集合
      * @return 执行结果
      */
     int deleteRelationByShelfIds(@Param("shelfIds") String shelfIds);
@@ -53,7 +53,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 根据商品版块ID集合 删除商品上架与版块关系记录
      *
-     * @param sectionIds
+     * @param sectionIds 商品版块ID集合
      * @return 执行结果
      */
     int deleteRelationBySectionIds(@Param("sectionIds") String sectionIds);
@@ -62,8 +62,8 @@ public interface ProductSectionRelationMapper {
     /**
      * 批量删除商品上架与版块关系记录
      *
-     * @param sectionId
-     * @param shelfIds
+     * @param sectionId 商品版块ID
+     * @param shelfIds  商品上架ID集合
      * @return 执行结果
      */
     int deleteRelationList(@Param("sectionId") Long sectionId,@Param("shelfIds") String shelfIds);

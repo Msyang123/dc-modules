@@ -4,7 +4,7 @@ import com.leon.microx.web.result.Multiple;
 import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
-import com.lhiot.dc.domain.PaymentConfig;
+import com.lhiot.dc.entity.PaymentConfig;
 import com.lhiot.dc.mapper.PaymentConfigMapper;
 import com.lhiot.dc.service.PaymentConfigService;
 import io.swagger.annotations.Api;

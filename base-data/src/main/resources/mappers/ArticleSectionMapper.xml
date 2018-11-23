@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ArticleSectionMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ArticleSection">
+        <id column="id" property="id"/>
+        <result column="position_id" property="positionId"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="create_at" property="createAt"/>
+        <result column="sorting" property="sorting"/>
+        <result column="application_type" property="applications"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            position_id,
+            name_cn,
+            name_en,
+            parent_id,
+            create_at,
+            application_type,
+            sorting,
+        </trim>
+    </sql>
+
+
+    <!--新增文章版块-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ArticleSection" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into article_section
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                position_id,
+            </if>
+            <if test="nameCn != null ">
+                name_cn,
+            </if>
+            <if test="nameEn != null ">
+                name_en,
+            </if>
+            <if test="parentId != null ">
+                parent_id,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+            <if test="applications != null ">
+                application_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                #{positionId},
+            </if>
+            <if test="nameCn != null ">
+                #{nameCn},
+            </if>
+            <if test="nameEn != null ">
+                #{nameEn},
+            </if>
+            <if test="parentId != null ">
+                #{parentId},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+            <if test="applications != null ">
+                #{applications},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--修改文章版块-->
+    <update id="updateById" parameterType="com.lhiot.dc.entity.ArticleSection">
+        update article_section
+        <trim prefix="set" suffixOverrides=",">
+            <if test="positionId != null and positionId != ''">position_id = #{positionId},</if>
+            <if test="nameCn != null and nameCn != ''">name_cn = #{nameCn},</if>
+            <if test="nameEn != null and nameEn != ''">name_en = #{nameEn},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
+            <if test="applications != null">application_type = #{applications},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据id查找单个文章版块 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from article_section
+        where id = #{0}
+    </select>
+
+
+    <!-- 根据parentId和nameCn查找单个文章版块 -->
+    <select id="findByParentIdAndNameCn" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from article_section
+        where parent_id = #{parentId} and name_cn = #{nameCn}
+    </select>
+
+
+    <!-- 删除多个文章版块 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from article_section where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="positionId != null and positionId != ''">and position_id = #{positionId}</if>
+            <if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+            <if test="nameCn != null and nameCn != ''">and name_cn like concat('%',#{nameCn},'%')</if>
+            <if test="nameEn != null and nameEn != ''">and name_en like concat('%',#{nameEn},'%')</if>
+            <if test="applications != null">and application_type = #{applications}</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询文章版块集合-->
+    <select id="findList" parameterType="com.lhiot.dc.model.ArticleSectionParam" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from article_section
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+
+    <!--查询文章版块集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.model.ArticleSectionParam" resultType="int">
+        select count(1)
+        from article_section
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>

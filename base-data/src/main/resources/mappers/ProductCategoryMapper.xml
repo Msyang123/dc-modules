@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductCategoryMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.ProductCategory">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductCategory">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="group_name" property="groupName"/>
@@ -24,7 +24,7 @@
 
 
     <!--新增商品分类-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.ProductCategory" useGeneratedKeys="true" keyColumn="id"
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductCategory" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
         insert into product_category
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -59,13 +59,12 @@
 
 
     <!--修改商品分类-->
-    <update id="updateById" parameterType="com.lhiot.dc.domain.ProductCategory">
+    <update id="updateById" parameterType="com.lhiot.dc.entity.ProductCategory">
         update product_category
         <trim prefix="set" suffixOverrides=",">
             <if test="parentId != null ">parent_id = #{parentId},</if>
             <if test="groupName != null and groupName != ''">group_name = #{groupName},</if>
             <if test="rank != null ">rank = #{rank},</if>
-            <if test="createAt != null and createAt != ''">create_at = #{createAt},</if>
         </trim>
         where id = #{id}
     </update>
@@ -108,7 +107,7 @@
 
 
     <!--查询商品分类集合-->
-    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.ProductCategoryParam">
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductCategoryParam">
         select
         <include refid="columns"/>
         from product_category
@@ -120,7 +119,7 @@
     </select>
 
     <!--查询商品分类集合总数-->
-    <select id="findCount" parameterType="com.lhiot.dc.domain.ProductCategoryParam" resultType="int">
+    <select id="findCount" parameterType="com.lhiot.dc.model.ProductCategoryParam" resultType="int">
         select count(1)
         from product_category
         <include refid="filter"/>

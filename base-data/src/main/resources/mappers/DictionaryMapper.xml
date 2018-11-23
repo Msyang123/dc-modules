@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.DictionaryMapper">
     <!-- 数据库字段对象关系映射 -->
-    <resultMap id="baseResultMap" type="com.lhiot.dc.domain.Dictionary">
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.Dictionary">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="name" property="name"/>
@@ -10,13 +10,13 @@
         <result column="description" property="description"/>
     </resultMap>
 
-    <resultMap id="associationResultMap" type="com.lhiot.dc.domain.Dictionary">
+    <resultMap id="associationResultMap" type="com.lhiot.dc.entity.Dictionary">
         <id column="id" property="id"/>
         <result column="parent_id" property="parentId"/>
         <result column="name" property="name"/>
         <result column="code" property="code"/>
         <result column="description" property="description"/>
-        <collection property="entries" column="code" ofType="com.lhiot.dc.domain.DictionaryEntry"
+        <collection property="entries" column="code" ofType="com.lhiot.dc.entity.DictionaryEntry"
                     select="com.lhiot.dc.mapper.DictionaryEntryMapper.selectByDictCode">
             <id column="id" property="id"/>
             <result column="dict_code" property="dictCode"/>
@@ -39,7 +39,7 @@
     </sql>
 
     <!--新增字典-->
-    <insert id="insert" parameterType="com.lhiot.dc.domain.Dictionary" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.lhiot.dc.entity.Dictionary" useGeneratedKeys="true" keyProperty="id">
         insert into dictionary
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="parentId != null ">
@@ -72,7 +72,7 @@
     </insert>
 
     <!--根据code修改字典-->
-    <update id="update" parameterType="com.lhiot.dc.domain.Dictionary">
+    <update id="update" parameterType="com.lhiot.dc.entity.Dictionary">
         update dictionary
         <set>
             <if test="parentId != null ">
@@ -100,7 +100,7 @@
     </select>
 
     <!--查询字典列表-->
-    <select id="list" resultMap="baseResultMap" parameterType="com.lhiot.dc.domain.SearchParameter">
+    <select id="list" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.SearchParameter">
         select
         <include refid="columns"/>
         from dictionary
@@ -115,7 +115,7 @@
     </select>
 
     <!--查询字典总记录-->
-    <select id="count" resultType="int" parameterType="com.lhiot.dc.domain.SearchParameter">
+    <select id="count" resultType="int" parameterType="com.lhiot.dc.model.SearchParameter">
         select count(1)
         from dictionary
         where code = #{dictionaryCode}

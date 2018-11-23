@@ -1,13 +1,12 @@
 package com.lhiot.dc.service;
 
-import com.leon.microx.util.BeanUtils;
 import com.leon.microx.util.Maps;
 import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.Dictionary;
-import com.lhiot.dc.domain.DictionaryEntry;
-import com.lhiot.dc.domain.SearchParameter;
+import com.lhiot.dc.entity.Dictionary;
+import com.lhiot.dc.entity.DictionaryEntry;
+import com.lhiot.dc.model.SearchParameter;
 import com.lhiot.dc.mapper.DictionaryEntryMapper;
 import com.lhiot.dc.mapper.DictionaryMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,8 +5,8 @@ import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
-import com.lhiot.dc.domain.Product;
-import com.lhiot.dc.domain.ProductParam;
+import com.lhiot.dc.entity.Product;
+import com.lhiot.dc.model.ProductParam;
 import com.lhiot.dc.service.ProductService;
 import com.lhiot.dc.service.ProductSpecificationService;
 import io.swagger.annotations.Api;
@@ -36,8 +36,8 @@ public class ProductApi {
     }
 
     @ApiOperation("添加商品")
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
     @PostMapping("/products")
-    @ApiHideBodyProperty("id")
     public ResponseEntity create(@RequestBody Product product) {
         Tips tips = productService.addProduct(product);
         if (tips.err()) {

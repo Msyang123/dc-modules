@@ -2,9 +2,9 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.domain.Product;
-import com.lhiot.dc.domain.ProductAttachment;
-import com.lhiot.dc.domain.ProductParam;
+import com.lhiot.dc.entity.Product;
+import com.lhiot.dc.entity.ProductAttachment;
+import com.lhiot.dc.model.ProductParam;
 import com.lhiot.dc.mapper.ProductAttachmentMapper;
 import com.lhiot.dc.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class ProductService {
     /**
      * 新增商品
      *
-     * @param Product对象
+     * @param product 商品对象
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addProduct(Product product) {
@@ -49,10 +49,7 @@ public class ProductService {
         List<ProductAttachment> attachments = product.getAttachments();
         if (result > 0 && attachments != null && !attachments.isEmpty()) {
             attachments = attachments.stream()
-                    .map(attach -> {
-                        attach.setProductId(product.getId());
-                        return attach;
-                    })
+                    .peek(attach -> attach.setProductId(product.getId()))
                     .collect(Collectors.toList());
             attachmentMapper.insertList(attachments);
         }
@@ -62,7 +59,7 @@ public class ProductService {
     /**
      * 修改商品
      *
-     * @param Product对象
+     * @param product 商品对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(Product product) {
@@ -75,10 +72,7 @@ public class ProductService {
         //得到最新的商品附件 进行排序 和设置商品id值
         List<ProductAttachment> newAttachments = product.getAttachments();
         newAttachments = newAttachments != null ? newAttachments.stream()
-                .map(attach -> {
-                    attach.setProductId(product.getId());
-                    return attach;
-                })
+                .peek(attach -> attach.setProductId(product.getId()))
                 .sorted(Comparator.comparing(ProductAttachment::getUrl))
                 .collect(Collectors.toList()) : new ArrayList();
 
@@ -86,7 +80,7 @@ public class ProductService {
         if (!oldAttachments.equals(newAttachments)) {
             attachmentMapper.deleteByProductId(product.getId());
 
-            if (newAttachments != null && !newAttachments.isEmpty()) {
+            if (!newAttachments.isEmpty()) {
                 attachmentMapper.insertList(newAttachments);
             }
         }
@@ -97,19 +91,18 @@ public class ProductService {
     /**
      * 根据商品ID查找单个商品
      *
-     * @param productId
+     * @param productId 商品ID
      * @return 商品对象
      */
     public Product findById(Long productId) {
-        Product product = productMapper.findById(productId);
-        return product;
+        return productMapper.findById(productId);
     }
 
 
     /**
      * 根据商品ID集合批量删除商品
      *
-     * @param ids
+     * @param ids 商品ID集合
      * @return 执行结果 true 或者 false
      */
     public boolean batchDeleteByIds(String ids) {
@@ -122,7 +115,7 @@ public class ProductService {
     /**
      * 根据条件查询商品信息列表
      *
-     * @param param
+     * @param param 参数
      * @return 商品信息列表
      */
     public Pages<Product> findList(ProductParam param) {
