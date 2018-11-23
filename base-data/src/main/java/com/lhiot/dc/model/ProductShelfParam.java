@@ -2,7 +2,6 @@ package com.lhiot.dc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leon.microx.predefine.OnOff;
-import com.lhiot.dc.entity.type.ApplicationType;
 import com.lhiot.dc.entity.type.ShelfType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,8 +23,8 @@ public class ProductShelfParam {
     private OnOff shelfStatus;
     @ApiModelProperty(notes = "上架类型：NORMAL-普通商品,GIFT-赠品", dataType = "ShelfType")
     private ShelfType shelfType;
-    @ApiModelProperty(notes = "应用类型", dataType = "ApplicationType")
-    private ApplicationType[] applicationTypes;
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
+    private String applicationType;
     @ApiModelProperty(notes = "最小特价", dataType = "Integer")
     private Integer minPrice;
     @ApiModelProperty(notes = "最大特价", dataType = "Integer")
@@ -45,16 +44,6 @@ public class ProductShelfParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
-
-
-    @JsonIgnore
-    public String getApplications() {
-        return ApplicationType.convert(applicationTypes);
-    }
-
-    public void setApplications(String applicationTypes) {
-        this.applicationTypes = ApplicationType.convert(applicationTypes);
-    }
 
     @JsonIgnore
     public Integer getStartRow() {

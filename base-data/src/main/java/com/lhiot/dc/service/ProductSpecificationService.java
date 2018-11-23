@@ -51,7 +51,7 @@ public class ProductSpecificationService {
     /**
      * 根据商品规格ID查找单个商品规格
      *
-     * @param specificationId  商品规格ID
+     * @param specificationId 商品规格ID
      * @return 商品规格对象
      */
     public ProductSpecification findById(Long specificationId) {
@@ -73,7 +73,7 @@ public class ProductSpecificationService {
     /**
      * 根据传入商品ID集合，查询存在规格的商品
      *
-     * @param productIds  商品ID集合
+     * @param productIds 商品ID集合
      * @return 存在规格的商品名称集合
      */
     public List<String> findHaveSpecificationByProductIds(String productIds) {

@@ -26,7 +26,7 @@ public interface ArticleSectionRelationMapper {
     /**
      * 新增文章与版块关系
      *
-     * @param list  文章与版块关系集合
+     * @param list 文章与版块关系集合
      * @return 执行结果
      */
     int insertList(List<ArticleSectionRelation> list);
@@ -35,7 +35,7 @@ public interface ArticleSectionRelationMapper {
     /**
      * 删除文章与版块关系记录
      *
-     * @param relationId  关系ID
+     * @param relationId 关系ID
      * @return 执行结果
      */
     int deleteById(Long relationId);
@@ -62,10 +62,10 @@ public interface ArticleSectionRelationMapper {
     /**
      * 批量删除文章与版块关系记录
      *
-     * @param sectionId 版块ID
+     * @param sectionId  版块ID
      * @param articleIds 文章ID集合
      * @return 执行结果
      */
-    int deleteRelationList(@Param("sectionId") Long sectionId,@Param("articleIds") String articleIds);
+    int deleteRelationList(@Param("sectionId") Long sectionId, @Param("articleIds") String articleIds);
 
 }

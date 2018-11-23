@@ -1,10 +1,13 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
+import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.model.ProductShelfParam;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
 import com.lhiot.dc.mapper.ProductShelfMapper;
+import com.lhiot.dc.util.DictionaryCodes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,22 +27,31 @@ import java.util.Objects;
 public class ProductShelfService {
     private ProductShelfMapper shelfMapper;
     private ProductSectionRelationMapper relationMapper;
+    private DictionaryClient dictionaryClient;
 
-    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper) {
+    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper, DictionaryClient dictionaryClient) {
         this.shelfMapper = shelfMapper;
         this.relationMapper = relationMapper;
+        this.dictionaryClient = dictionaryClient;
     }
 
     /**
      * 新增商品上架信息
      *
      * @param productShelf 商品上架对象
-     * @return 商品上架Id
+     * @return Tips信息  成功在message中返回Id
      */
-    public Long insert(ProductShelf productShelf) {
+    public Tips insert(ProductShelf productShelf) {
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(productShelf.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
         productShelf.setCreateAt(Date.from(Instant.now()));
         shelfMapper.insert(productShelf);
-        return productShelf.getId();
+        return Tips.info(productShelf.getId() + "");
     }
 
 
@@ -47,10 +59,18 @@ public class ProductShelfService {
      * 修改商品上架信息
      *
      * @param productShelf 商品上架对象
-     * @return 执行结果 true 或者 false
+     * @return Tips信息 执行结果
      */
-    public boolean update(ProductShelf productShelf) {
-        return shelfMapper.updateById(productShelf) > 0;
+    public Tips update(ProductShelf productShelf) {
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(productShelf.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
+        int result = shelfMapper.updateById(productShelf);
+        return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }
 
 

@@ -46,8 +46,8 @@ public class ProductSectionRelationService {
      */
     public boolean addRelationList(Long sectionId, String shelfIds) {
         List<ProductSectionRelation> psrList = new ArrayList<>();
-        String [] shelfIdArrays=StringUtils.tokenizeToStringArray(shelfIds,",");
-        List<String> shelfIdList= Stream.of(shelfIdArrays).collect(Collectors.toList());
+        String[] shelfIdArrays = StringUtils.tokenizeToStringArray(shelfIds, ",");
+        List<String> shelfIdList = Stream.of(shelfIdArrays).collect(Collectors.toList());
         ProductSectionRelation productSectionRelation;
         for (String shelfId : shelfIdList) {
             productSectionRelation = new ProductSectionRelation();
