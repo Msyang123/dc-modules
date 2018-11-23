@@ -23,7 +23,7 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@Api("支付签名配置接口")
+@Api(description = "支付签名配置接口")
 public class PaymentConfigApi {
 
     private PaymentConfigService paymentConfigService;

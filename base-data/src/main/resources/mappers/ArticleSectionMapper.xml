@@ -10,7 +10,7 @@
         <result column="parent_id" property="parentId"/>
         <result column="create_at" property="createAt"/>
         <result column="sorting" property="sorting"/>
-        <result column="application_type" property="applications"/>
+        <result column="application_type" property="applicationType"/>
     </resultMap>
 
 
@@ -52,7 +52,7 @@
             <if test="createAt != null ">
                 create_at,
             </if>
-            <if test="applications != null ">
+            <if test="applicationType != null ">
                 application_type,
             </if>
         </trim>
@@ -75,8 +75,8 @@
             <if test="createAt != null ">
                 #{createAt},
             </if>
-            <if test="applications != null ">
-                #{applications},
+            <if test="applicationType != null ">
+                #{applicationType},
             </if>
         </trim>
     </insert>
@@ -86,12 +86,12 @@
     <update id="updateById" parameterType="com.lhiot.dc.entity.ArticleSection">
         update article_section
         <trim prefix="set" suffixOverrides=",">
-            <if test="positionId != null and positionId != ''">position_id = #{positionId},</if>
+            <if test="positionId != null">position_id = #{positionId},</if>
             <if test="nameCn != null and nameCn != ''">name_cn = #{nameCn},</if>
             <if test="nameEn != null and nameEn != ''">name_en = #{nameEn},</if>
-            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
             <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
-            <if test="applications != null">application_type = #{applications},</if>
+            <if test="applicationType != null">application_type = #{applicationType},</if>
         </trim>
         where id = #{id}
     </update>
@@ -127,11 +127,11 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null and positionId != ''">and position_id = #{positionId}</if>
-            <if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+            <if test="positionId != null">and position_id = #{positionId}</if>
+            <if test="parentId != null">and parent_id = #{parentId}</if>
             <if test="nameCn != null and nameCn != ''">and name_cn like concat('%',#{nameCn},'%')</if>
             <if test="nameEn != null and nameEn != ''">and name_en like concat('%',#{nameEn},'%')</if>
-            <if test="applications != null">and application_type = #{applications}</if>
+            <if test="applicationType != null">and application_type = #{applicationType}</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
         </trim>
@@ -145,7 +145,7 @@
         from article_section
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by id desc
+            order by sorting asc , id desc
             limit #{startRow} , #{rows}
         </if>
     </select>

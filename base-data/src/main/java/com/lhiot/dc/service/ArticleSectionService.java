@@ -2,10 +2,12 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
+import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.ArticleSection;
 import com.lhiot.dc.mapper.ArticleSectionMapper;
 import com.lhiot.dc.mapper.ArticleSectionRelationMapper;
 import com.lhiot.dc.model.ArticleSectionParam;
+import com.lhiot.dc.util.DictionaryCodes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,12 @@ import java.util.Objects;
 public class ArticleSectionService {
     private ArticleSectionMapper articleSectionMapper;
     private ArticleSectionRelationMapper relationMapper;
+    private DictionaryClient dictionaryClient;
 
-    public ArticleSectionService(ArticleSectionMapper articleSectionMapper,ArticleSectionRelationMapper relationMapper) {
+    public ArticleSectionService(ArticleSectionMapper articleSectionMapper, ArticleSectionRelationMapper relationMapper, DictionaryClient dictionaryClient) {
         this.articleSectionMapper = articleSectionMapper;
         this.relationMapper = relationMapper;
+        this.dictionaryClient = dictionaryClient;
     }
 
     /**
@@ -40,9 +44,15 @@ public class ArticleSectionService {
         if (Objects.isNull(articleSection.getNameCn())) {
             return Tips.warn("文章版块中文名称为空，添加失败.");
         }
-
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(articleSection.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, articleSection.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
         // 幂等添加
-        ArticleSection po = articleSectionMapper.findByParentIdAndNameCn(articleSection.getParentId(),articleSection.getNameCn());
+        ArticleSection po = articleSectionMapper.findByParentIdAndNameCn(articleSection.getParentId(), articleSection.getNameCn());
         if (Objects.nonNull(po)) {
             return Tips.warn("文章版块重复，添加失败.");
         }
@@ -57,12 +67,19 @@ public class ArticleSectionService {
      * 修改文章版块信息
      *
      * @param articleSection 文章版块对象
-     * @return 执行结果 true 或者 false
+     * @return Tips信息 执行结果
      */
-    public boolean update(ArticleSection articleSection) {
-        return articleSectionMapper.updateById(articleSection) > 0;
+    public Tips update(ArticleSection articleSection) {
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(articleSection.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, articleSection.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
+        int result = articleSectionMapper.updateById(articleSection);
+        return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }
-
 
 
     /**
@@ -102,8 +119,6 @@ public class ArticleSectionService {
         int total = pageFlag ? articleSectionMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
-
-
 
 
 }

@@ -44,7 +44,7 @@ public interface ProductSectionRelationMapper {
     /**
      * 根据商品上架ID集合 删除商品上架与版块关系记录
      *
-     * @param shelfIds  商品上架ID集合
+     * @param shelfIds 商品上架ID集合
      * @return 执行结果
      */
     int deleteRelationByShelfIds(@Param("shelfIds") String shelfIds);
@@ -66,7 +66,7 @@ public interface ProductSectionRelationMapper {
      * @param shelfIds  商品上架ID集合
      * @return 执行结果
      */
-    int deleteRelationList(@Param("sectionId") Long sectionId,@Param("shelfIds") String shelfIds);
+    int deleteRelationList(@Param("sectionId") Long sectionId, @Param("shelfIds") String shelfIds);
 
 
 }

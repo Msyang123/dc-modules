@@ -1,7 +1,5 @@
 package com.lhiot.dc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lhiot.dc.entity.type.ApplicationType;
 import com.lhiot.dc.entity.type.PositionType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,18 +20,8 @@ public class UiPosition {
     private String code;
     @ApiModelProperty(notes = "描述", dataType = "String")
     private String description;
-    @ApiModelProperty(notes = "应用类型", dataType = "ApplicationType")
-    private ApplicationType[] applicationTypes;
-
-    @JsonIgnore
-    public String getApplications() {
-        return ApplicationType.convert(applicationTypes);
-    }
-
-    public void setApplications(String applicationTypes) {
-        this.applicationTypes = ApplicationType.convert(applicationTypes);
-    }
-
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
+    private String applicationType;
 
 
 }

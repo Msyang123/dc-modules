@@ -90,7 +90,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="code != null and code != ''">product_code = #{code},</if>
             <if test="name != null and name != ''">product_name = #{name},</if>
-            <if test="categoryId != null and categoryId != ''">category_id = #{categoryId},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
             <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode},</if>
             <if test="description != null and description != ''">description = #{description},</if>
         </trim>

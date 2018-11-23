@@ -42,14 +42,14 @@ public class ArticleSectionRelationService {
     /**
      * 新增批量文章与版块关系
      *
-     * @param sectionId 版块ID
+     * @param sectionId  版块ID
      * @param articleIds 文章ID集合
      * @return 执行结果
      */
     public boolean addRelationList(Long sectionId, String articleIds) {
         List<ArticleSectionRelation> asrList = new ArrayList<>();
-        String [] articleIdArrays=StringUtils.tokenizeToStringArray(articleIds,",");
-        List<String> articleIdList=Stream.of(articleIdArrays).collect(Collectors.toList());
+        String[] articleIdArrays = StringUtils.tokenizeToStringArray(articleIds, ",");
+        List<String> articleIdList = Stream.of(articleIdArrays).collect(Collectors.toList());
         ArticleSectionRelation articleSectionRelation;
         for (String articleId : articleIdList) {
             articleSectionRelation = new ArticleSectionRelation();
@@ -75,7 +75,7 @@ public class ArticleSectionRelationService {
     /**
      * 批量删除文章与版块关系
      *
-     * @param sectionId 版块ID
+     * @param sectionId  版块ID
      * @param articleIds 文章ID集合
      * @return 执行结果 true 或者 false
      */
