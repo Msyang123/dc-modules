@@ -4,6 +4,7 @@ import com.leon.microx.util.Maps;
 import com.leon.microx.util.Pair;
 import com.leon.microx.util.cache.SimpleCache;
 import com.leon.microx.web.http.RemoteInvoker;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.dictionary.module.Dictionary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,14 @@ public class DictionaryClient {
 
     void withCacheTtl(Pair<Long, TimeUnit> cacheTtl) {
         this.cacheTtl = cacheTtl;
+    }
+
+    public Tips<Dictionary> dictTips(String code){
+        Optional<Dictionary> optional = this.dictionary(code);
+        if (optional.isPresent()){
+            return Tips.<Dictionary>info("exist").data(optional.get());
+        }
+        return Tips.warn("not found");
     }
 
     public Optional<Dictionary> dictionary(String code){
