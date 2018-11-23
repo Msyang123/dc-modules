@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductMapper">
     <insert id="insert" parameterType="com.lhiot.dc.domain.Product" useGeneratedKeys="true" keyColumn="id">
-        INSERT INTO product (product_code,product_name,category_id,source_code,status,description,create_at)
-        VALUE (#{code},#{name},#{categoryId},#{sourceCode},#{status},#{description},#{createAt})
+        INSERT INTO product (product_code,product_name,category_id,source_code,description,create_at)
+        VALUE (#{code},#{name},#{categoryId},#{sourceCode},#{description},#{createAt})
     </insert>
 
     <update id="updateById" parameterType="com.lhiot.dc.domain.Product">

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.ProductShelfMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductShelf">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="specification_id" property="specificationId"/>
+        <result column="shelf_qty" property="shelfQty"/>
+        <result column="price" property="price"/>
+        <result column="description" property="description"/>
+        <result column="shelf_status" property="shelfStatus"/>
+        <result column="application_type" property="applications"/>
+        <result column="sorting" property="sorting"/>
+        <result column="image" property="image"/>
+        <result column="create_at" property="createAt"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="product_image" property="productImage"/>
+        <result column="shelf_type" property="shelfType"/>
+        <association property="specification" javaType="com.lhiot.dc.entity.ProductSpecification">
+            <id column="psf_id" property="id"/>
+            <result column="product_id" property="productId"/>
+            <result column="barcode" property="barcode"/>
+            <result column="packaging_unit" property="packagingUnit"/>
+            <result column="weight" property="weight"/>
+            <result column="limit_inventory" property="limitInventory"/>
+            <result column="inventory_specification" property="inventorySpecification"/>
+            <result column="available_status" property="availableStatus"/>
+            <result column="psf_create_at" property="createAt"/>
+            <result column="specification_qty" property="specificationQty"/>
+        </association>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            ps.id id,
+            ps.`name` ,
+            ps.specification_id,
+            ps.shelf_qty,
+            ps.price,
+            ps.description,
+            ps.shelf_status,
+            ps.application_type,
+            ps.sorting ps_sorting,
+            ps.image,
+            ps.create_at,
+            ps.original_price,
+            ps.product_image,
+            ps.shelf_type,
+
+            psf.id psf_id,
+            psf.product_id,
+            psf.barcode,
+            psf.packaging_unit,
+            psf.weight,
+            psf.limit_inventory,
+            psf.inventory_specification,
+            psf.available_status,
+            psf.create_at psf_create_at,
+            psf.specification_qty,
+        </trim>
+    </sql>
+
+
+    <!--新增商品上架-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.ProductShelf" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into product_shelf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null ">
+                `name`,
+            </if>
+            <if test="specificationId != null ">
+                specification_id,
+            </if>
+            <if test="shelfQty != null ">
+                shelf_qty,
+            </if>
+            <if test="price != null ">
+                price,
+            </if>
+            <if test="description != null ">
+                description,
+            </if>
+            <if test="shelfStatus != null ">
+                shelf_status,
+            </if>
+            <if test="applications != null ">
+                application_type,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+            <if test="image != null ">
+                image,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+            <if test="originalPrice != null ">
+                original_price,
+            </if>
+            <if test="productImage != null ">
+                product_image,
+            </if>
+            <if test="shelfType != null ">
+                shelf_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null ">
+                #{name},
+            </if>
+            <if test="specificationId != null ">
+                #{specificationId},
+            </if>
+            <if test="shelfQty != null ">
+                #{shelfQty},
+            </if>
+            <if test="price != null ">
+                #{price},
+            </if>
+            <if test="description != null ">
+                #{description},
+            </if>
+            <if test="shelfStatus != null ">
+                #{shelfStatus},
+            </if>
+            <if test="applications != null ">
+                #{applications},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+            <if test="image != null ">
+                #{image},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+            <if test="originalPrice != null ">
+                #{originalPrice},
+            </if>
+            <if test="productImage != null ">
+                #{productImage},
+            </if>
+            <if test="shelfType != null ">
+                #{shelfType},
+            </if>
+        </trim>
+    </insert>
+
+    <!--修改商品上架-->
+    <update id="updateById" parameterType="com.lhiot.dc.entity.ProductShelf">
+        update product_shelf
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">`name` = #{name},</if>
+            <if test="specificationId != null and specificationId != ''">specification_id = #{specificationId},</if>
+            <if test="shelfQty != null and shelfQty != ''">shelf_qty = #{shelfQty},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="originalPrice != null and originalPrice != ''">original_price = #{originalPrice},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="productImage != null and productImage != ''">product_image = #{productImage},</if>
+            <if test="shelfStatus != null ">shelf_status = #{shelfStatus},</if>
+            <if test="shelfType != null ">shelf_type = #{shelfType},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
+            <if test="applications != null and applications != ''">application_type = #{applications},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 查找单个商品上架 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id=psf.id
+        where ps.id = #{0}
+    </select>
+
+
+    <!-- 删除商品上架集合 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from product_shelf where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!--根据商品规格Id集合查询商品上架集合-->
+    <select id="findListBySpecificationIds" resultMap="baseResultMap" parameterType="String">
+        select
+        <include refid="columns"/>
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id=psf.id
+        where specification_id in
+        <foreach item="item" index="index" collection="specificationIds.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="sectionId != null and sectionId != ''">and id in (select shelf_id from product_section_relation
+                where section_id = #{sectionId})
+            </if>
+            <if test="name != null and name != ''">and `name` like concat('%',#{name},'%')</if>
+            <if test="shelfStatus != null">and shelf_status = #{shelfStatus}</if>
+            <if test="shelfType != null">and shelf_type = #{shelfType}</if>
+            <if test="applications != null and applications != ''">and application_type = #{applications}</if>
+            <if test="minPrice != null">and price <![CDATA[ >= ]]> #{minPrice}</if>
+            <if test="maxPrice != null">and price <![CDATA[ <= ]]> #{maxPrice}</if>
+            <if test="minOriginalPrice != null">and original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
+            <if test="maxOriginalPrice != null">and original_price <![CDATA[ <= ]]> #{maxOriginalPrice}</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询商品上架集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductShelfParam">
+        select
+        <include refid="columns"/>
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id=psf.id
+        inner join (
+        select id from product_shelf
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+        ) pw on ps.id=pw.id
+        order by ps.id desc
+    </select>
+
+    <!--查询商品上架集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.model.ProductShelfParam" resultType="int">
+        select count(1)
+        from product_shelf
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>

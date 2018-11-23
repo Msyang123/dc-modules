@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.UiPositionMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.UiPosition">
+        <id column="id" property="id"/>
+        <result column="application_type" property="applications"/>
+        <result column="position_type" property="positionType"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            application_type,
+            position_type,
+            code,
+            description,
+        </trim>
+    </sql>
+
+
+    <!--新增位置-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.UiPosition" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into ui_position
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applications != null ">
+                application_type,
+            </if>
+            <if test="positionType != null ">
+                position_type,
+            </if>
+            <if test="code != null ">
+                code,
+            </if>
+            <if test="description != null ">
+                description,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applications != null ">
+                #{applications},
+            </if>
+            <if test="positionType != null ">
+                #{positionType},
+            </if>
+            <if test="code != null ">
+                #{code},
+            </if>
+            <if test="description != null ">
+                #{description},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--修改位置-->
+    <update id="updateById" parameterType="com.lhiot.dc.entity.UiPosition">
+        update ui_position
+        <trim prefix="set" suffixOverrides=",">
+            <if test="applications != null ">application_type = #{applications},</if>
+            <if test="positionType != null ">position_type = #{positionType},</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据id查找单个位置 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from ui_position where id = #{0}
+    </select>
+
+
+    <!-- 根据code查找单个位置 -->
+    <select id="findByCode" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from ui_position where code = #{code}
+    </select>
+
+
+    <!-- 删除多个位置 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from ui_position where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="positionType != null ">and application_type = #{positionType}</if>
+            <if test="applications != null ">and position_type = #{applications}</if>
+            <if test="codes != null and codes != ''">
+                and code in
+                <foreach item="item" index="index" collection="codes.split(',')" open="(" separator="," close=")">
+                    '${item}'
+                </foreach>
+            </if>
+        </trim>
+    </sql>
+
+
+    <!--查询商品分类集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.UiPositionParam">
+        select
+        <include refid="columns"/>
+        from ui_position
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询商品分类集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.model.UiPositionParam" resultType="int">
+        select count(1)
+        from ui_position
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>

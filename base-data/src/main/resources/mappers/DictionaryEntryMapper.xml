@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.DictionaryEntryMapper">
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.DictionaryEntry" >
+        <id column="id" property="id"/>
+        <result column="dict_code" property="dictCode" />
+        <result column="name" property="name" />
+        <result column="code" property="code" />
+        <result column="sort" property="sort" />
+        <result column="attach" property="attach" />
+    </resultMap>
+
+    <!-- base查询字段  -->
+    <sql id="columns" >
+        <trim suffixOverrides="," >
+            id,
+            dict_code,
+            name,
+            code,
+            sort,
+            attach,
+        </trim>
+    </sql>
+
+    <!--新增字典数据-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.DictionaryEntry" useGeneratedKeys="true" keyProperty="id">
+        insert into dictionary_entry
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="dictCode != null ">
+                dict_code,
+            </if>
+            <if test="name != null ">
+                name,
+            </if>
+            <if test="code != null ">
+                code,
+            </if>
+            <if test="sort != null ">
+                sort,
+            </if>
+            <if test="attach != null ">
+                attach,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="dictCode != null ">
+                #{dictCode},
+            </if>
+            <if test="name != null ">
+                #{name},
+            </if>
+            <if test="code != null ">
+                #{code},
+            </if>
+            <if test="sort != null ">
+                #{sort},
+            </if>
+            <if test="attach != null ">
+                #{attach},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据id修改字典数据-->
+    <update id="updateByDictCodeAndEntryCode" parameterType="map">
+        update dictionary_entry
+        <set>
+            <if test="entry.name != null ">
+                name = #{entry.name},
+            </if>
+            <if test="entry.sort != null ">
+                sort = #{entry.sort},
+            </if>
+            <if test="entry.attach != null ">
+                attach = #{entry.attach},
+            </if>
+        </set>
+        where dict_code = #{dictCode} and code = #{code}
+    </update>
+
+
+    <delete id="deleteByDictCode" parameterType="java.lang.String">
+        delete from dictionary_entry where dict_code = #{0}
+    </delete>
+
+    <delete id="deleteByDictCodeAndEntryCode" parameterType="map">
+        delete from dictionary_entry where dict_code = #{dictCode} and code = #{code}
+    </delete>
+
+    <select id="selectByDictCode" resultMap="baseResultMap" parameterType="java.lang.String">
+        select <include refid="columns" />
+        from dictionary_entry where dict_code = #{0}
+    </select>
+
+    <select id="selectByDictCodeAndEntryCode" resultMap="baseResultMap" parameterType="map">
+        select <include refid="columns" />
+        from dictionary_entry where dict_code = #{dictCode} and code = #{code}
+    </select>
+
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhiot.dc.mapper.AdvertisementMapper">
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="baseResultMap" type="com.lhiot.dc.entity.Advertisement">
+        <id column="id" property="id"/>
+        <result column="position_id" property="positionId"/>
+        <result column="image" property="image"/>
+        <result column="advertise_name" property="advertiseName"/>
+        <result column="advertise_relation" property="advertiseRelation"/>
+        <result column="advertise_type" property="advertiseType"/>
+        <result column="advertise_status" property="advertiseStatus"/>
+        <result column="sorting" property="sorting"/>
+        <result column="begin_at" property="beginAt"/>
+        <result column="end_at" property="endAt"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+
+
+    <!-- base查询字段  -->
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            id,
+            position_id,
+            image,
+            advertise_name,
+            advertise_relation,
+            advertise_type,
+            advertise_status,
+            sorting,
+            begin_at,
+            end_at,
+            create_at,
+        </trim>
+    </sql>
+
+
+    <!--新增位置-->
+    <insert id="insert" parameterType="com.lhiot.dc.entity.Advertisement" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into advertisement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                position_id,
+            </if>
+            <if test="image != null ">
+                image,
+            </if>
+            <if test="advertiseName != null ">
+                advertise_name,
+            </if>
+            <if test="advertiseRelation != null ">
+                advertise_relation,
+            </if>
+            <if test="advertiseType != null ">
+                advertise_type,
+            </if>
+            <if test="advertiseStatus != null ">
+                advertise_status,
+            </if>
+            <if test="sorting != null ">
+                sorting,
+            </if>
+            <if test="beginAt != null ">
+                begin_at,
+            </if>
+            <if test="endAt != null ">
+                end_at,
+            </if>
+            <if test="createAt != null ">
+                create_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="positionId != null ">
+                #{positionId},
+            </if>
+            <if test="image != null ">
+                #{image},
+            </if>
+            <if test="advertiseName != null ">
+                #{advertiseName},
+            </if>
+            <if test="advertiseRelation != null ">
+                #{advertiseRelation},
+            </if>
+            <if test="advertiseType != null ">
+                #{advertiseType},
+            </if>
+            <if test="advertiseStatus != null ">
+                #{advertiseStatus},
+            </if>
+            <if test="sorting != null ">
+                #{sorting},
+            </if>
+            <if test="beginAt != null ">
+                #{beginAt},
+            </if>
+            <if test="endAt != null ">
+                #{endAt},
+            </if>
+            <if test="createAt != null ">
+                #{createAt},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--修改广告-->
+    <update id="updateById" parameterType="com.lhiot.dc.entity.Advertisement">
+        update advertisement
+        <trim prefix="set" suffixOverrides=",">
+            <if test="positionId != null ">position_id = #{positionId},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="advertiseName != null and advertiseName != ''">advertise_name = #{advertiseName},</if>
+            <if test="advertiseRelation != null and advertiseRelation != ''">
+                advertise_relation = #{advertiseRelation},
+            </if>
+            <if test="advertiseType != null ">advertise_type = #{advertiseType},</if>
+            <if test="advertiseStatus != null ">advertise_status = #{advertiseStatus},</if>
+            <if test="sorting != null ">sorting = #{sorting},</if>
+            <if test="beginAt != null ">begin_at = #{beginAt},</if>
+            <if test="endAt != null ">end_at = #{endAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <!-- 根据id查找单个广告 -->
+    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from advertisement where id = #{0}
+    </select>
+
+
+    <!-- 删除多个位置 -->
+    <delete id="deleteByIds" parameterType="String">
+        delete from advertisement where id in
+        <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+
+
+    <!-- filter查询条件  -->
+    <sql id="filter">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="positionId != null ">and position_id = #{positionId}</if>
+            <if test="advertiseName != null ">and advertise_name like concat('%',#{advertiseName},'%')</if>
+            <if test="advertiseType != null ">and advertise_type = #{advertiseType}</if>
+            <if test="advertiseStatus != null ">and advertise_status = #{advertiseStatus}</if>
+            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+        </trim>
+    </sql>
+
+
+    <!--查询广告集合-->
+    <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.AdvertisementParam">
+        select
+        <include refid="columns"/>
+        from advertisement
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询广告集合总数-->
+    <select id="findCount" parameterType="com.lhiot.dc.model.AdvertisementParam" resultType="int">
+        select count(1)
+        from advertisement
+        <include refid="filter"/>
+    </select>
+
+
+</mapper>

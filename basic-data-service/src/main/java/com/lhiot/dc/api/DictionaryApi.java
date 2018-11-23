@@ -20,7 +20,7 @@ import java.net.URI;
 /**
  * @author Leon (234239150@qq.com) created in 11:22 18.10.15
  */
-@Api(description = "数据字典")
+@Api("数据字典")
 @Slf4j
 @RestController
 @RequestMapping("/dictionaries")

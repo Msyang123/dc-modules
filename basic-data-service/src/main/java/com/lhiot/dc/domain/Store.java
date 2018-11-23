@@ -10,7 +10,7 @@ import lombok.Data;
 /**
 * Description:门店实体类
 * @author Limiaojun
-* @date 2018/06/04
+*  2018/06/04
 */
 @Data
 @ApiModel
@@ -68,7 +68,7 @@ public class Store{
     *旗舰店ID
     */
     @ApiModelProperty(notes = "旗舰店ID", dataType = "Long")
-    private Long Flagship;
+    private Long flagShip;
 
     /**
     *门店类型：00-普通门店  01-旗舰店
