@@ -27,10 +27,10 @@ public class DictionaryCodes {
     public static Tips dictionaryCode(DictionaryClient client, String code, String entryCode) {
         Optional<Dictionary> optional = client.dictionary(code);
         if (!optional.isPresent()) {
-            return Tips.warn("没有找到" + code + "字典项.");
+            return Tips.warn("没有找到" + code + "字典");
         }
         if (!optional.get().hasEntry(entryCode)){
-            return Tips.warn("没有找到" + code + "字典项的"+entryCode+"子项.");
+            return Tips.warn("没有找到字典项"+entryCode);
         }
         return Tips.info("成功找到字典及字典子项");
     }

@@ -2,6 +2,7 @@ package com.lhiot.dc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lhiot.dc.entity.type.ApplicationType;
+import com.lhiot.dc.entity.type.CoordinateType;
 import com.lhiot.dc.entity.type.StoreStatus;
 import com.lhiot.dc.entity.type.StoreType;
 import io.swagger.annotations.ApiModel;
@@ -81,9 +82,11 @@ public class Store {
     @ApiModelProperty(notes = "经度", dataType = "BigDecimal")
     private BigDecimal longitude;
 
-    @ApiModelProperty(notes = "启用该门店的应用类型", dataType = "String")
+    @ApiModelProperty(notes = "启用该门店的应用类型,可以是多个以逗号分隔的字符串", dataType = "String")
     private String applicationType;
 
+    @ApiModelProperty(notes = "坐标系类型",dataType = "CoordinateType")
+    private CoordinateType coordinateType;
 
     @JsonIgnore
     @ApiModelProperty(hidden = true)
