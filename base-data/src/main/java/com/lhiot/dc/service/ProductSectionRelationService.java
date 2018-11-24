@@ -39,7 +39,6 @@ public class ProductSectionRelationService {
         if(!poList.isEmpty()){
             return Tips.warn("商品上架与版块关系重复，添加失败.");
         }
-
         relationMapper.insert(productSectionRelation);
         return Tips.info(productSectionRelation.getId() + "");
     }

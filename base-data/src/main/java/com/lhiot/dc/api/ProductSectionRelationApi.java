@@ -58,10 +58,7 @@ public class ProductSectionRelationApi {
     @PostMapping("/product-section-relations/batches")
     public ResponseEntity createBatch(@RequestParam("sectionId") Long sectionId, @RequestParam("shelfIds") String shelfIds) {
         Tips tips = relationService.addRelationList(sectionId, shelfIds);
-        if (tips.err()) {
-            return ResponseEntity.badRequest().body(tips.getMessage());
-        }
-        return ResponseEntity.ok().build();
+        return tips.err() ? ResponseEntity.badRequest().body(tips.getMessage()) : ResponseEntity.ok().build();
     }
 
 
