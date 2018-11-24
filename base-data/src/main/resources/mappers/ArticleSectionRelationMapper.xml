@@ -99,4 +99,19 @@
     </delete>
 
 
+    <!--根据文章版块ID查询文章与版块关系记录-->
+    <select id="selectRelationList" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from article_section_relation
+        where section_id = #{sectionId}
+        <if test="articleIds != null and articleIds != ''">
+            and article_id in
+            <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
+                ${item}
+            </foreach>
+        </if>
+    </select>
+
+
 </mapper>
