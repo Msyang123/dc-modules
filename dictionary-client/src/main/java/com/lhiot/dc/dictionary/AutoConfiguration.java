@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.lhiot.dc.dictionary.DictionaryClient.DEFAULT_LOCAL_CACHE_TTL;
+
 /**
  * @author Leon (234239150@qq.com) created in 11:22 18.10.19
  */
@@ -24,7 +26,7 @@ public class AutoConfiguration {
 
     private static final String CONFIG_KEY = "dictionary-service";
     private String baseUrl;
-    private Long cacheSeconds;
+    private Long cacheSeconds = DEFAULT_LOCAL_CACHE_TTL;
 
     public AutoConfiguration(ObjectProvider<RestTemplate> provider) {
         this.restTemplate = provider.getIfAvailable(RestTemplate::new);
@@ -42,9 +44,7 @@ public class AutoConfiguration {
     @Bean
     public DictionaryClient dictionaryClient(@Qualifier("dictionaryClientRemoteInvoker") RemoteInvoker remoteInvoker) {
         DictionaryClient client = new DictionaryClient(CONFIG_KEY, remoteInvoker);
-        if (this.cacheSeconds > 1L) {
-            client.withCacheTtl(Pair.of(this.cacheSeconds, TimeUnit.SECONDS));
-        }
+        client.withCacheTtl(Pair.of(this.cacheSeconds, TimeUnit.SECONDS));
         return client;
     }
 }

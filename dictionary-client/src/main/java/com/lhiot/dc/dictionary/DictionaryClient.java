@@ -20,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class DictionaryClient {
 
+    static final long DEFAULT_LOCAL_CACHE_TTL = 10_000L;
+
     private RemoteInvoker.Requester httpClient;
 
-    private Pair<Long, TimeUnit> cacheTtl = Pair.of(10_000L, TimeUnit.MILLISECONDS);
+    private Pair<Long, TimeUnit> cacheTtl = Pair.of(DEFAULT_LOCAL_CACHE_TTL, TimeUnit.MILLISECONDS);
 
     private final SimpleCache<String, Dictionary> localCache = new SimpleCache<>();
 
