@@ -16,7 +16,7 @@ public class StoreSearchParam {
     private String name;
     private String code;
 
-    private ApplicationType applicationType;
+    private String applicationType;
     private Integer distance;
     @ApiModelProperty(notes = "纬度",dataType = "Double")
     private Double lat;

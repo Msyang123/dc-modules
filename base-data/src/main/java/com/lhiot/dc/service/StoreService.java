@@ -66,7 +66,7 @@ public class StoreService {
         if (Objects.isNull(param.getApplicationType())) {
             return true;
         }
-        return Arrays.asList(store.getApplicationTypes()).contains(param.getApplicationType());
+        return Arrays.asList(store.getApplicationType()).contains(param.getApplicationType());
     }
 
     private void distance(Store store, StoreSearchParam param) {
