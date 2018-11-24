@@ -1,8 +1,6 @@
 package com.lhiot.dc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leon.microx.predefine.OnOff;
-import com.lhiot.dc.entity.type.ApplicationType;
 import com.lhiot.dc.entity.type.ShelfType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,14 +15,14 @@ import java.util.Date;
 @Data
 @ApiModel
 public class ProductShelf {
+    @ApiModelProperty(notes = "规格对象", dataType = "ProductSpecification", readOnly = true)
+    private ProductSpecification productSpecification;
     @ApiModelProperty(notes = "主键Id", dataType = "Long", readOnly = true)
     private Long id;
     @ApiModelProperty(notes = "上架名称", dataType = "String")
     private String name;
     @ApiModelProperty(notes = "规格ID", dataType = "Long")
     private Long specificationId;
-    @ApiModelProperty(notes = "规格对象", dataType = "ProductSpecification", readOnly = true)
-    private ProductSpecification specification;
     @ApiModelProperty(notes = "上架数量", dataType = "BigDecimal")
     private BigDecimal shelfQty;
     @ApiModelProperty(notes = "特价", dataType = "Integer")
@@ -45,16 +43,8 @@ public class ProductShelf {
     private String description;
     @ApiModelProperty(notes = "排序字段", dataType = "Integer")
     private Integer sorting;
-    @ApiModelProperty(notes = "应用类型", dataType = "ApplicationType")
-    private ApplicationType[] applicationTypes;
+    @ApiModelProperty(notes = "应用类型", dataType = "String")
+    private String applicationType;
 
-    @JsonIgnore
-    public String getApplications() {
-        return ApplicationType.convert(applicationTypes);
-    }
-
-    public void setApplications(String applicationTypes) {
-        this.applicationTypes = ApplicationType.convert(applicationTypes);
-    }
 
 }

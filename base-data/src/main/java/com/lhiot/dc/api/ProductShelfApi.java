@@ -2,6 +2,8 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.model.ProductShelfParam;
@@ -21,7 +23,7 @@ import java.net.URI;
  **/
 @RestController
 @Slf4j
-@Api("商品上架接口")
+@Api(description = "商品上架接口")
 public class ProductShelfApi {
     private ProductShelfService shelfService;
 
@@ -31,22 +33,30 @@ public class ProductShelfApi {
 
 
     @ApiOperation("新增商品上架")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productShelf", value = "商品上架信息", dataType = "ProductShelf", required = true)
     @PostMapping("/product-shelves")
+    @ApiHideBodyProperty("productSpecification")
     public ResponseEntity create(@RequestBody ProductShelf productShelf) {
-        Long id = shelfService.insert(productShelf);
+        Tips tips = shelfService.insert(productShelf);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long id = Long.valueOf(tips.getMessage());
         return id > 0 ? ResponseEntity.created(URI.create("/product-shelves/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("新增商品上架信息失败！");
     }
 
     @ApiOperation("修改商品上架")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productShelf", value = "商品上架信息", dataType = "ProductShelf", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-shelves/{id}")
+    @ApiHideBodyProperty("productSpecification")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductShelf productShelf) {
         productShelf.setId(id);
-        return shelfService.update(productShelf) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
+        Tips tips = shelfService.update(productShelf);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "根据Id查找商品上架", response = ProductShelf.class)

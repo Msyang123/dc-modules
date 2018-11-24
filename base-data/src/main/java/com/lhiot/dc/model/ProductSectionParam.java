@@ -23,6 +23,10 @@ public class ProductSectionParam {
     private Date beginCreateAt;
     @ApiModelProperty(notes = "截止创建时间", dataType = "Date")
     private Date endCreateAt;
+    @ApiModelProperty(notes = "是否加载版块下商品上架信息(为空则默认为false)", dataType = "Boolean")
+    private Boolean includeShelves;
+    @ApiModelProperty(notes = "加载商品上架最大条数(includeShelves为true起用，为空则加载所有)", dataType = "Long")
+    private Long includeShelvesQty;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")

@@ -81,7 +81,7 @@ public class DictionaryService {
             entryMapper.deleteByDictCode(dictCode);
             return;
         }
-        entryMapper.deleteByDictCodeAndEntryCode(Maps.of("dictCode",dictCode,"code",code));
+        entryMapper.deleteByDictCodeAndEntryCode(Maps.of("dictCode", dictCode, "code", code));
     }
 
     public Tips addEntry(String dictCode, DictionaryEntry entry) {
@@ -89,7 +89,7 @@ public class DictionaryService {
         if (Objects.isNull(dictionary)) {
             return Tips.warn("未找到字典，请先添加此字典");
         }
-        DictionaryEntry po = entryMapper.selectByDictCodeAndEntryCode(Maps.of("dictCode",dictCode,"code",entry.getCode()));
+        DictionaryEntry po = entryMapper.selectByDictCodeAndEntryCode(Maps.of("dictCode", dictCode, "code", entry.getCode()));
         if (Objects.nonNull(po)) {   // 幂等
             return Tips.warn("此字典下已有该code项！请不要使用重复的code码");
         }

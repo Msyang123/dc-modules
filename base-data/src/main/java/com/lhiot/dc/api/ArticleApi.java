@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @RestController
 @Slf4j
-@Api("文章接口")
+@Api(description = "文章接口")
 public class ArticleApi {
     private ArticleService articleService;
 

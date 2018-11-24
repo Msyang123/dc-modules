@@ -23,13 +23,13 @@ public class PaymentConfigService {
         this.paymentConfigMapper = paymentConfigMapper;
     }
 
-    public Tips addConfig(PaymentConfig config){
-      PaymentConfig searchConfig = paymentConfigMapper.selectByName(config.getAlias());
-      if (Objects.nonNull(searchConfig)){
-          return Tips.warn("此名称的配置已存在！");
-      }
-      paymentConfigMapper.create(config);
-      return Tips.empty();
+    public Tips addConfig(PaymentConfig config) {
+        PaymentConfig searchConfig = paymentConfigMapper.selectByName(config.getAlias());
+        if (Objects.nonNull(searchConfig)) {
+            return Tips.warn("此名称的配置已存在！");
+        }
+        paymentConfigMapper.create(config);
+        return Tips.empty();
     }
 
 }

@@ -21,7 +21,7 @@ import java.net.URI;
 /**
  * @author Leon (234239150@qq.com) created in 11:22 18.10.15
  */
-@Api("数据字典")
+@Api(description = "数据字典")
 @Slf4j
 @RestController
 @RequestMapping("/dictionaries")
@@ -70,7 +70,7 @@ public class DictionaryApi {
     @ApiOperation(value = "查询一个字典数据", response = Dictionary.class)
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "code", value = "字典code", required = true, dataType = "String"),
-            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeEntries", value = "是否加载字典子项", dataType = "includeEntries")
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeEntries", value = "是否加载字典子项", dataType = "Boolean")
     })
     public ResponseEntity dictionary(@PathVariable("code") String code, @RequestParam(value = "includeEntries", required = false) boolean includeEntries) {
         return ResponseEntity.ok().body(service.findByCode(code, includeEntries));

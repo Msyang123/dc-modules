@@ -63,7 +63,7 @@ public interface UiPositionMapper {
     /**
      * 查询位置信息列表
      *
-     * @param param  参数
+     * @param param 参数
      * @return 位置信息列表
      */
     List<UiPosition> findList(UiPositionParam param);
@@ -75,7 +75,6 @@ public interface UiPositionMapper {
      * @return 总数
      */
     int findCount(UiPositionParam param);
-
 
 
 }

@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api("文章版块接口")
+@Api(description = "文章版块接口")
 public class ArticleSectionApi {
     private ArticleSectionService articleSectionService;
 
@@ -31,7 +31,7 @@ public class ArticleSectionApi {
     }
 
     @ApiOperation("添加文章版块")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection",dataTypeClass = ArticleSection.class ,required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", dataTypeClass = ArticleSection.class, required = true)
     @PostMapping("/article-sections")
     public ResponseEntity create(@RequestBody ArticleSection articleSection) {
         Tips tips = articleSectionService.addArticleSection(articleSection);
@@ -53,7 +53,11 @@ public class ArticleSectionApi {
     @PutMapping("/article-sections/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
-        return articleSectionService.update(articleSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
+        Tips tips = articleSectionService.update(articleSection);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        return ResponseEntity.ok().build();
     }
 
 

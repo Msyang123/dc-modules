@@ -81,20 +81,13 @@ public class Store {
     @ApiModelProperty(notes = "经度", dataType = "BigDecimal")
     private BigDecimal longitude;
 
-    @ApiModelProperty(notes = "启用该门店的应用数组")
-    private ApplicationType[] applicationTypes;
+    @ApiModelProperty(notes = "启用该门店的应用类型", dataType = "String")
+    private String applicationType;
+
 
     @JsonIgnore
     @ApiModelProperty(hidden = true)
     private Double distance;
 
 
-    @JsonIgnore
-    public String getApplications() {
-        return ApplicationType.convert(applicationTypes);
-    }
-
-    public void setApplications(String applicationTypes) {
-        this.applicationTypes = ApplicationType.convert(applicationTypes);
-    }
 }

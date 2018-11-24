@@ -45,7 +45,7 @@ public interface ProductCategoryMapper {
     /**
      * 根据parentId和groupName查找单个商品分类
      *
-     * @param parentId 父级ID
+     * @param parentId  父级ID
      * @param groupName 分类名
      * @return 商品分类对象
      */

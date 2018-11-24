@@ -24,7 +24,7 @@ public class ArticleService {
     private ArticleMapper articleMapper;
     private ArticleSectionRelationMapper relationMapper;
 
-    public ArticleService(ArticleMapper articleMapper,ArticleSectionRelationMapper relationMapper) {
+    public ArticleService(ArticleMapper articleMapper, ArticleSectionRelationMapper relationMapper) {
         this.articleMapper = articleMapper;
         this.relationMapper = relationMapper;
     }
@@ -45,7 +45,7 @@ public class ArticleService {
     /**
      * 修改文章信息
      *
-     * @param article  文章对象
+     * @param article 文章对象
      * @return 执行结果 true 或者 false
      */
     public boolean update(Article article) {

@@ -163,7 +163,7 @@
         from advertisement
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by id desc
+            order by sorting asc , id desc
             limit #{startRow} , #{rows}
         </if>
     </select>

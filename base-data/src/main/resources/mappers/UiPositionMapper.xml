@@ -4,7 +4,7 @@
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="baseResultMap" type="com.lhiot.dc.entity.UiPosition">
         <id column="id" property="id"/>
-        <result column="application_type" property="applications"/>
+        <result column="application_type" property="applicationType"/>
         <result column="position_type" property="positionType"/>
         <result column="code" property="code"/>
         <result column="description" property="description"/>
@@ -28,7 +28,7 @@
             keyProperty="id">
         insert into ui_position
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="applications != null ">
+            <if test="applicationType != null ">
                 application_type,
             </if>
             <if test="positionType != null ">
@@ -42,8 +42,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="applications != null ">
-                #{applications},
+            <if test="applicationType != null ">
+                #{applicationType},
             </if>
             <if test="positionType != null ">
                 #{positionType},
@@ -62,7 +62,7 @@
     <update id="updateById" parameterType="com.lhiot.dc.entity.UiPosition">
         update ui_position
         <trim prefix="set" suffixOverrides=",">
-            <if test="applications != null ">application_type = #{applications},</if>
+            <if test="applicationType != null ">application_type = #{applicationType},</if>
             <if test="positionType != null ">position_type = #{positionType},</if>
             <if test="code != null and code != ''">code = #{code},</if>
             <if test="description != null and description != ''">description = #{description},</if>
@@ -100,7 +100,7 @@
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
             <if test="positionType != null ">and application_type = #{positionType}</if>
-            <if test="applications != null ">and position_type = #{applications}</if>
+            <if test="applicationType != null ">and position_type = #{applicationType}</if>
             <if test="codes != null and codes != ''">
                 and code in
                 <foreach item="item" index="index" collection="codes.split(',')" open="(" separator="," close=")">

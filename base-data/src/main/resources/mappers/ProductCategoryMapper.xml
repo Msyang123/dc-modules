@@ -98,7 +98,7 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="parentId != null and parentId != ''">and parent_id = #{parentId}</if>
+            <if test="parentId != null">and parent_id = #{parentId}</if>
             <if test="groupName != null and groupName != ''">and group_name like concat('%',#{groupName},'%')</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
@@ -113,7 +113,7 @@
         from product_category
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by id desc
+            order by rank asc , id desc
             limit #{startRow} , #{rows}
         </if>
     </select>

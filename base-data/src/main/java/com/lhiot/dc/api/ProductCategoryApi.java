@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api("商品分类接口")
+@Api(description = "商品分类接口")
 public class ProductCategoryApi {
     private ProductCategoryService categoryService;
 
