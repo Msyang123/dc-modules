@@ -21,7 +21,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api("广告接口")
+@Api(description = "广告接口")
 public class AdvertisementApi {
 
     private AdvertisementService advertisementService;
@@ -31,7 +31,7 @@ public class AdvertisementApi {
     }
 
     @ApiOperation("添加广告")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "advertisement", value = "广告信息", dataType = "Advertisement",required = true)
+    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "advertisement", value = "广告信息", dataType = "Advertisement", required = true)
     @PostMapping("/advertisements")
     public ResponseEntity create(@RequestBody Advertisement advertisement) {
         Long id = advertisementService.addAdvertisement(advertisement);

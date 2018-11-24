@@ -2,9 +2,11 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
+import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.UiPosition;
 import com.lhiot.dc.model.UiPositionParam;
 import com.lhiot.dc.mapper.UiPositionMapper;
+import com.lhiot.dc.util.DictionaryCodes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +23,11 @@ import java.util.Objects;
 public class UiPositionService {
 
     private UiPositionMapper positionMapper;
+    private DictionaryClient dictionaryClient;
 
-    public UiPositionService(UiPositionMapper positionMapper) {
+    public UiPositionService(UiPositionMapper positionMapper, DictionaryClient dictionaryClient) {
         this.positionMapper = positionMapper;
+        this.dictionaryClient = dictionaryClient;
     }
 
     /**
@@ -33,6 +37,14 @@ public class UiPositionService {
      * @return Tips信息  成功在message中返回Id
      */
     public Tips addUiPosition(UiPosition uiPosition) {
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(uiPosition.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, uiPosition.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
+
         // 幂等添加
         UiPosition po = positionMapper.findByCode(uiPosition.getCode());
         if (Objects.nonNull(po)) {
@@ -47,10 +59,18 @@ public class UiPositionService {
      * 修改位置
      *
      * @param uiPosition 位置对象
-     * @return 执行结果 true 或者 false
+     * @return Tips信息 执行结果
      */
-    public boolean update(UiPosition uiPosition) {
-        return positionMapper.updateById(uiPosition) > 0;
+    public Tips update(UiPosition uiPosition) {
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(uiPosition.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, uiPosition.getApplicationType());
+            if (tips.err()) {
+                return tips;
+            }
+        }
+        int result = positionMapper.updateById(uiPosition);
+        return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }
 
 

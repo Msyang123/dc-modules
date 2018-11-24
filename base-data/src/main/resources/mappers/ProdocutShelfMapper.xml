@@ -3,21 +3,21 @@
 <mapper namespace="com.lhiot.dc.mapper.ProductShelfMapper">
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductShelf">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
+        <id column="ps_id" property="id"/>
+        <result column="ps_name" property="name"/>
         <result column="specification_id" property="specificationId"/>
         <result column="shelf_qty" property="shelfQty"/>
         <result column="price" property="price"/>
         <result column="description" property="description"/>
         <result column="shelf_status" property="shelfStatus"/>
-        <result column="application_type" property="applications"/>
-        <result column="sorting" property="sorting"/>
+        <result column="application_type" property="applicationType"/>
+        <result column="ps_sorting" property="sorting"/>
         <result column="image" property="image"/>
-        <result column="create_at" property="createAt"/>
+        <result column="ps_create_at" property="createAt"/>
         <result column="original_price" property="originalPrice"/>
         <result column="product_image" property="productImage"/>
         <result column="shelf_type" property="shelfType"/>
-        <association property="specification" javaType="com.lhiot.dc.entity.ProductSpecification">
+        <association property="productSpecification" javaType="com.lhiot.dc.entity.ProductSpecification">
             <id column="psf_id" property="id"/>
             <result column="product_id" property="productId"/>
             <result column="barcode" property="barcode"/>
@@ -35,8 +35,8 @@
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
-            ps.id id,
-            ps.`name` ,
+            ps.id ps_id,
+            ps.`name` ps_name,
             ps.specification_id,
             ps.shelf_qty,
             ps.price,
@@ -45,7 +45,7 @@
             ps.application_type,
             ps.sorting ps_sorting,
             ps.image,
-            ps.create_at,
+            ps.create_at ps_create_at,
             ps.original_price,
             ps.product_image,
             ps.shelf_type,
@@ -87,7 +87,7 @@
             <if test="shelfStatus != null ">
                 shelf_status,
             </if>
-            <if test="applications != null ">
+            <if test="applicationType != null ">
                 application_type,
             </if>
             <if test="sorting != null ">
@@ -128,8 +128,8 @@
             <if test="shelfStatus != null ">
                 #{shelfStatus},
             </if>
-            <if test="applications != null ">
-                #{applications},
+            <if test="applicationType != null ">
+                #{applicationType},
             </if>
             <if test="sorting != null ">
                 #{sorting},
@@ -157,17 +157,17 @@
         update product_shelf
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null and name != ''">`name` = #{name},</if>
-            <if test="specificationId != null and specificationId != ''">specification_id = #{specificationId},</if>
-            <if test="shelfQty != null and shelfQty != ''">shelf_qty = #{shelfQty},</if>
-            <if test="price != null and price != ''">price = #{price},</if>
-            <if test="originalPrice != null and originalPrice != ''">original_price = #{originalPrice},</if>
+            <if test="specificationId != null">specification_id = #{specificationId},</if>
+            <if test="shelfQty != null">shelf_qty = #{shelfQty},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
             <if test="image != null and image != ''">image = #{image},</if>
             <if test="productImage != null and productImage != ''">product_image = #{productImage},</if>
             <if test="shelfStatus != null ">shelf_status = #{shelfStatus},</if>
             <if test="shelfType != null ">shelf_type = #{shelfType},</if>
             <if test="description != null and description != ''">description = #{description},</if>
             <if test="sorting != null and sorting != ''">sorting = #{sorting},</if>
-            <if test="applications != null and applications != ''">application_type = #{applications},</if>
+            <if test="applicationType != null">application_type = #{applicationType},</if>
         </trim>
         where id = #{id}
     </update>
@@ -198,23 +198,38 @@
         <include refid="columns"/>
         from product_shelf ps
         left join product_specification psf on ps.specification_id=psf.id
-        where specification_id in
+        where ps.specification_id in
         <foreach item="item" index="index" collection="specificationIds.split(',')" open="(" separator="," close=")">
             ${item}
         </foreach>
     </select>
 
 
+    <!--根据商品版块Id查询商品上架集合 -->
+    <select id="findListBySectionId" resultMap="baseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="columns"/>
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id=psf.id
+        left join product_section_relation psr on ps.id=psr.shelf_id
+        where psr.section_id = #{sectionId}
+        order by ps.sorting asc , ps.id desc
+        <if test="includeShelvesQty != null and includeShelvesQty >= 0 ">
+            limit 0 , #{includeShelvesQty}
+        </if>
+    </select>
+
+
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="sectionId != null and sectionId != ''">and id in (select shelf_id from product_section_relation
+            <if test="sectionId != null">and id in (select shelf_id from product_section_relation
                 where section_id = #{sectionId})
             </if>
             <if test="name != null and name != ''">and `name` like concat('%',#{name},'%')</if>
             <if test="shelfStatus != null">and shelf_status = #{shelfStatus}</if>
             <if test="shelfType != null">and shelf_type = #{shelfType}</if>
-            <if test="applications != null and applications != ''">and application_type = #{applications}</if>
+            <if test="applicationType != null">and application_type = #{applicationType}</if>
             <if test="minPrice != null">and price <![CDATA[ >= ]]> #{minPrice}</if>
             <if test="maxPrice != null">and price <![CDATA[ <= ]]> #{maxPrice}</if>
             <if test="minOriginalPrice != null">and original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
@@ -235,11 +250,11 @@
         select id from product_shelf
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by id desc
+            order by sorting asc , id desc
             limit #{startRow} , #{rows}
         </if>
         ) pw on ps.id=pw.id
-        order by ps.id desc
+        order by ps.sorting asc , id desc
     </select>
 
     <!--查询商品上架集合总数-->

@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api("UI位置接口")
+@Api(description = "UI位置接口")
 public class UiPositionApi {
 
     private UiPositionService positionService;
@@ -52,7 +52,12 @@ public class UiPositionApi {
     @PutMapping("/ui-positions/{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody UiPosition uiPosition) {
         uiPosition.setId(id);
-        return positionService.update(uiPosition) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
+
+        Tips tips = positionService.update(uiPosition);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        return ResponseEntity.ok().build();
     }
 
 

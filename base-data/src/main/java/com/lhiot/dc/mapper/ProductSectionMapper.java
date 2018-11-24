@@ -42,9 +42,19 @@ public interface ProductSectionMapper {
 
 
     /**
+     * 根据id查找单个商品版块 包含商品上架信息
+     *
+     * @param id 商品版块ID
+     * @param includeShelvesQty 包含商品上架数量
+     * @return 商品版块对象
+     */
+    ProductSection findByIdIncludeShelves(@Param("id") Long id,@Param("includeShelvesQty") Long includeShelvesQty);
+
+
+    /**
      * 根据parentId和sectionName查找单个商品版块
      *
-     * @param parentId 父ID
+     * @param parentId    父ID
      * @param sectionName 板块名称
      * @return 商品版块对象
      */
@@ -67,6 +77,16 @@ public interface ProductSectionMapper {
      * @return 商品版块信息列表
      */
     List<ProductSection> findList(ProductSectionParam param);
+
+
+    /**
+     * 查询商品版块信息列表   包含商品上架信息
+     *
+     * @param param 参数
+     * @return 商品版块信息列表
+     */
+    List<ProductSection> findListIncludeShelves(ProductSectionParam param);
+
 
     /**
      * 查询商品版块信息总数

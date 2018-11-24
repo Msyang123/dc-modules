@@ -1,12 +1,15 @@
 package com.lhiot.dc.api;
 
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
+import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.Store;
 import com.lhiot.dc.model.StoreSearchParam;
 import com.lhiot.dc.mapper.StoreMapper;
 import com.lhiot.dc.service.StoreService;
+import com.lhiot.dc.util.DictionaryCodes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -22,15 +25,17 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@Api("门店接口")
+@Api(description = "门店接口")
 public class StoreApi {
 
     private StoreService storeService;
     private StoreMapper storeMapper;
+    private DictionaryClient dictionaryClient;
 
-    public StoreApi(StoreService storeService, StoreMapper storeMapper) {
+    public StoreApi(StoreService storeService, StoreMapper storeMapper, DictionaryClient dictionaryClient) {
         this.storeService = storeService;
         this.storeMapper = storeMapper;
+        this.dictionaryClient = dictionaryClient;
     }
 
     @ApiOperation(value = "根据id查询门店", notes = "根据id查询门店")
@@ -58,6 +63,13 @@ public class StoreApi {
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "store", value = "要添加的门店", required = true, dataType = "Store")
     public ResponseEntity create(@RequestBody Store store) {
         log.debug("添加门店\t param:{}", store);
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(store.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, store.getApplicationType());
+            if (tips.err()) {
+                return ResponseEntity.badRequest().body(tips.getMessage());
+            }
+        }
         return ResponseEntity.ok(storeMapper.insert(store));
     }
 
@@ -65,9 +77,16 @@ public class StoreApi {
     @ApiOperation(value = "根据id更新门店")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "要更新的门店id", required = true, dataType = "Long")
     @ApiHideBodyProperty("id")
-    public ResponseEntity<Integer> update(@PathVariable("id") Long id, @RequestBody Store store) {
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Store store) {
         log.debug("根据id更新门店\t param:{}", store);
         store.setId(id);
+        //验证应用类型字典项及子项是否存在
+        if (Objects.nonNull(store.getApplicationType())) {
+            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, store.getApplicationType());
+            if (tips.err()) {
+                return ResponseEntity.badRequest().body(tips.getMessage());
+            }
+        }
         return ResponseEntity.ok(storeMapper.update(store));
     }
 

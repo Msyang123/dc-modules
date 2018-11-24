@@ -63,7 +63,7 @@ public class ProductCategoryService {
     /**
      * 根据商品分类ID查找单个商品分类
      *
-     * @param categoryId  商品分类ID
+     * @param categoryId 商品分类ID
      * @return 商品版块对象
      */
     public ProductCategory findById(Long categoryId) {

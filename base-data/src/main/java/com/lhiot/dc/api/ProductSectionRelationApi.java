@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Slf4j
-@Api("商品版块与商品上架关系接口")
+@Api(description = "商品版块与商品上架关系接口")
 public class ProductSectionRelationApi {
 
     private ProductSectionRelationService relationService;

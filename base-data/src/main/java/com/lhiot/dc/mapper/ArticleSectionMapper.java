@@ -52,7 +52,6 @@ public interface ArticleSectionMapper {
     ArticleSection findByParentIdAndNameCn(@Param("parentId") Long parentId, @Param("nameCn") String nameCn);
 
 
-
     /**
      * 根据ID集合批量删除文章版块
      *
