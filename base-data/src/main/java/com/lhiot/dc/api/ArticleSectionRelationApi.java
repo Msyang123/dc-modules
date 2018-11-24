@@ -51,8 +51,8 @@ public class ArticleSectionRelationApi {
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "articleIds", value = "多个文章Id以英文逗号分隔", dataType = "String", required = true)
     })
     @PostMapping("/article-section-relations/batches")
-    public ResponseEntity createBatch(@RequestParam("sectionId") String sectionId, @RequestParam("articleIds") String articleIds) {
-        return relationService.addRelationList(Long.valueOf(sectionId), articleIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("批量添加版块与文章关系失败！");
+    public ResponseEntity createBatch(@RequestParam("sectionId") Long sectionId, @RequestParam("articleIds") String articleIds) {
+        return relationService.addRelationList(sectionId, articleIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("批量添加版块与文章关系失败！");
     }
 
 
@@ -62,8 +62,8 @@ public class ArticleSectionRelationApi {
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "articleIds", value = "多个文章Id以英文逗号分隔,为空则删除此版块所有文章关系", dataType = "String")
     })
     @DeleteMapping("/article-section-relations/batches")
-    public ResponseEntity deleteBatch(@RequestParam("sectionId") String sectionId, @RequestParam(value = "articleIds", required = false) String articleIds) {
-        return relationService.deleteRelationList(Long.valueOf(sectionId), articleIds) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
+    public ResponseEntity deleteBatch(@RequestParam("sectionId") Long sectionId, @RequestParam(value = "articleIds", required = false) String articleIds) {
+        return relationService.deleteRelationList(sectionId, articleIds) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 
