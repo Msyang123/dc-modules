@@ -254,7 +254,7 @@
             limit #{startRow} , #{rows}
         </if>
         ) pw on ps.id=pw.id
-        order by ps.sorting asc , id desc
+        order by ps.sorting asc , ps.id desc
     </select>
 
     <!--查询商品上架集合总数-->
