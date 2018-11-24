@@ -26,4 +26,4 @@ lhiot:
   dictionary:
     server:
       base-url: http://basic-data-service-v1-0
-      cache-seconds: 3
+      cache-seconds: 600

@@ -18,7 +18,7 @@
         <result column="begin_at" property="beginAt"/>
         <result column="end_at" property="endAt"/>
         <result column="tape_url" property="tapeUrl"/>
-        <result column="application_type" property="applications"/>
+        <result column="application_type" property="applicationType"/>
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
     </resultMap>
@@ -51,7 +51,7 @@
         insert into store (store_code,store_name,address,phone,image,area,status,flag_ship,store_type,video_url,
         begin_at,end_at,tape_url,application_type,latitude,longitude)
         value (#{code},#{name},#{address}, #{phone},#{image},#{area},#{status},#{flagShip},#{storeType},#{videoUrl}
-                ,#{beginAt},#{endAt},#{tapeUrl},#{applications},#{latitude},#{longitude})
+                ,#{beginAt},#{endAt},#{tapeUrl},#{applicationType},#{latitude},#{longitude})
     </insert>
 
     <!--根据id修改门店-->
@@ -103,8 +103,8 @@
             <if test="longitude != null">
                 longitude = #{longitude},
             </if>
-            <if test="applications != null">
-                application_type = #{applications},
+            <if test="applicationType != null">
+                application_type = #{applicationType},
             </if>
         </set>
         where id=#{id}
