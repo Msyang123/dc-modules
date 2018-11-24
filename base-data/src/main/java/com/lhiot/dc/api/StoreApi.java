@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhangfeng created in 2018/9/22 8:57
@@ -36,7 +37,11 @@ public class StoreApi {
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "主键id", required = true, dataType = "Long")
     @GetMapping("/stores/{id}")
     public ResponseEntity<Store> findStore(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(storeMapper.selectById(id));
+        Store store = storeMapper.selectById(id);
+        if (Objects.isNull(store)){
+            ResponseEntity.badRequest().body("门店不存在");
+        }
+        return ResponseEntity.ok(store);
     }
 
     @GetMapping("/stores/code/{code}")
