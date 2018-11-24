@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -26,8 +27,10 @@ public class Article {
     private ArticleType articleType;
     @ApiModelProperty(notes = "发布状态（PUBLISH-发布  UN_PUBLISH-未发布）", dataType = "ArticleStatus")
     private ArticleStatus articleStatus;
+    @NotNull(message = "文章内容不能为空")
     @ApiModelProperty(notes = "文章内容", dataType = "String")
     private String content;
+    @NotNull(message = "文章标题不能为空")
     @ApiModelProperty(notes = "文章标题", dataType = "String")
     private String title;
     @ApiModelProperty(notes = "内容简介图片url", dataType = "String")
