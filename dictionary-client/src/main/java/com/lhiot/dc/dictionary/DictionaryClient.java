@@ -9,10 +9,12 @@ import com.lhiot.dc.dictionary.module.Dictionary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 /**
  * @author Leon (234239150@qq.com) created in 11:47 18.10.16
@@ -38,15 +40,19 @@ public class DictionaryClient {
         this.cacheTtl = cacheTtl;
     }
 
-    public Tips<Dictionary> dictTips(String code){
+    public HasEntry of(String dictionaryCode) {
+        return new HasEntry(this.dictionary(dictionaryCode, true).orElse(null));
+    }
+
+    public Tips<Dictionary> dictTips(String code) {
         Optional<Dictionary> optional = this.dictionary(code);
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             return Tips.<Dictionary>info("exist").data(optional.get());
         }
         return Tips.warn("not found");
     }
 
-    public Optional<Dictionary> dictionary(String code){
+    public Optional<Dictionary> dictionary(String code) {
         return this.dictionary(code, true);
     }
 
@@ -54,7 +60,7 @@ public class DictionaryClient {
         Dictionary value = localCache.get(code);
         if (Objects.isNull(value)) {
             RemoteInvoker.Requester client = this.httpClient.uriVariables(Maps.of("code", code));
-            if (includeEntries){
+            if (includeEntries) {
                 client.queryParams(Maps.of("includeEntries", "true"));
             }
             try {
@@ -63,10 +69,26 @@ public class DictionaryClient {
                     value = response.getBody();
                     localCache.put(code, value, cacheTtl.getFirst(), cacheTtl.getSecond());
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
         return Optional.ofNullable(value);
+    }
+
+    public static class HasEntry {
+
+        private Dictionary dictionary;
+
+        HasEntry(@Nullable Dictionary dictionary) {
+            this.dictionary = dictionary;
+        }
+
+        public boolean has(String... entryCodes) {
+            if (Objects.isNull(this.dictionary)) {
+                return false;
+            }
+            return Stream.of(entryCodes).allMatch(this.dictionary::hasEntry);
+        }
     }
 }
