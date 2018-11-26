@@ -1,8 +1,9 @@
+
 server:
   port: 8231
 spring:
   application:
-    name: basic-data-service-v1-0
+    name: basic-data-service-v1-0-yangjiawen
   cloud:
     config:
       name: basic-data-service-v1-0, rabbit-mq, application
