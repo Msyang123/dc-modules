@@ -90,4 +90,19 @@
     </delete>
 
 
+    <!--根据商品版块ID查询商品上架与版块关系记录-->
+    <select id="selectRelationList" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_section_relation
+        where section_id = #{sectionId}
+        <if test="shelfIds != null and shelfIds != ''">
+            and shelf_id in
+            <foreach item="item" index="index" collection="shelfIds.split(',')" open="(" separator="," close=")">
+                ${item}
+            </foreach>
+        </if>
+    </select>
+
+
 </mapper>

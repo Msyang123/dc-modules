@@ -68,4 +68,15 @@ public interface ArticleSectionRelationMapper {
      */
     int deleteRelationList(@Param("sectionId") Long sectionId, @Param("articleIds") String articleIds);
 
+
+    /**
+     * 查询文章与版块关系记录
+     *
+     * @param sectionId 文章版块ID
+     * @param articleIds  文章ID集合
+     * @return 关系集合
+     */
+    List<ArticleSectionRelation> selectRelationList(@Param("sectionId") Long sectionId, @Param("articleIds") String articleIds);
+
+
 }
