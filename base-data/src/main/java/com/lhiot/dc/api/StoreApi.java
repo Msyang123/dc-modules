@@ -67,7 +67,7 @@ public class StoreApi {
     public ResponseEntity findStoreByCode(@PathVariable("code") String code,@RequestParam("applicationType") String applicationType) {
         log.debug("根据门店编码查询门店信息");
         Store store = storeMapper.selectByCode(code);
-        if (Objects.isNull(store) || store.getApplicationType().contains(applicationType)) {
+        if (Objects.isNull(store) || !store.getApplicationType().contains(applicationType)) {
             return ResponseEntity.badRequest().body("门店不存在");
         }
         return ResponseEntity.ok(store);
