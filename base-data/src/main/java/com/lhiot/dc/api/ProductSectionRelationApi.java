@@ -1,5 +1,6 @@
 package com.lhiot.dc.api;
 
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductSectionRelation;
 import com.lhiot.dc.service.ProductSectionRelationService;
@@ -30,7 +31,11 @@ public class ProductSectionRelationApi {
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSectionRelation", value = "版块与商品上架关系信息", dataType = "ProductSectionRelation", required = true)
     @PostMapping("/product-section-relations")
     public ResponseEntity create(@RequestBody ProductSectionRelation productSectionRelation) {
-        Long relationId = relationService.addRelation(productSectionRelation);
+        Tips tips = relationService.addRelation(productSectionRelation);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long relationId = Long.valueOf(tips.getMessage());
         return relationId > 0 ?
                 ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().body("添加商品与版块关系记录失败！");
@@ -52,7 +57,8 @@ public class ProductSectionRelationApi {
     })
     @PostMapping("/product-section-relations/batches")
     public ResponseEntity createBatch(@RequestParam("sectionId") Long sectionId, @RequestParam("shelfIds") String shelfIds) {
-        return relationService.addRelationList(sectionId, shelfIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("批量添加版块与商品上架关系失败！");
+        Tips tips = relationService.addRelationList(sectionId, shelfIds);
+        return tips.err() ? ResponseEntity.badRequest().body(tips.getMessage()) : ResponseEntity.ok().build();
     }
 
 
