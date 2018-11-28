@@ -49,7 +49,7 @@ public class ProductShelfApi {
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-shelves/{id}")
-    @ApiHideBodyProperty("productSpecification")
+    @ApiHideBodyProperty({"id","productSpecification"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductShelf productShelf) {
         productShelf.setId(id);
         Tips tips = shelfService.update(productShelf);

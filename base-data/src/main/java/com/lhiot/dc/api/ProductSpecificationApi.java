@@ -3,6 +3,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.entity.ProductSpecification;
@@ -52,6 +53,7 @@ public class ProductSpecificationApi {
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
     })
     @PutMapping("/product-specifications/{id}")
+    @ApiHideBodyProperty("id")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSpecification productSpecification) {
         productSpecification.setId(id);
         return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

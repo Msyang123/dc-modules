@@ -52,8 +52,8 @@ public class ArticleSectionService {
             }
         }
         // 幂等添加
-        ArticleSection po = articleSectionMapper.findByParentIdAndNameCn(articleSection.getParentId(), articleSection.getNameCn());
-        if (Objects.nonNull(po)) {
+        List<ArticleSection> po = articleSectionMapper.findListByParentIdAndNameCn(articleSection.getParentId(), articleSection.getNameCn());
+        if (!po.isEmpty()) {
             return Tips.warn("文章版块重复，添加失败.");
         }
 

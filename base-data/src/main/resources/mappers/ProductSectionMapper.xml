@@ -148,8 +148,8 @@
     </select>
 
 
-    <!-- 根据parentId和sectionName查找单个商品版块 -->
-    <select id="findByParentIdAndSectionName" resultMap="baseResultMap">
+    <!-- 根据parentId和sectionName查找商品版块集合 -->
+    <select id="findListByParentIdAndSectionName" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from product_section p

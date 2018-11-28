@@ -43,13 +43,13 @@ public interface ArticleSectionMapper {
 
 
     /**
-     * 根据parentId和name_cn查找单个文章版块
+     * 根据parentId和name_cn查找单个文章版块集合
      *
      * @param parentId 父级编号
      * @param nameCn   板块中文名称
-     * @return 文章版块对象
+     * @return 文章版块集合
      */
-    ArticleSection findByParentIdAndNameCn(@Param("parentId") Long parentId, @Param("nameCn") String nameCn);
+    List<ArticleSection> findListByParentIdAndNameCn(@Param("parentId") Long parentId, @Param("nameCn") String nameCn);
 
 
     /**
