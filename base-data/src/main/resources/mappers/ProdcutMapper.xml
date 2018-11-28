@@ -8,6 +8,7 @@
         <result column="product_name" property="name"/>
         <result column="category_id" property="categoryId"/>
         <result column="source_code" property="sourceCode"/>
+        <result column="benefit" property="benefit"/>
         <result column="description" property="description"/>
         <result column="create_at" property="createAt"/>
         <collection property="attachments" ofType="com.lhiot.dc.entity.ProductAttachment">
@@ -28,6 +29,7 @@
             p.product_name,
             p.category_id,
             p.source_code,
+            p.benefit,
             p.description,
             p.create_at,
             pa.id aid,
@@ -55,6 +57,9 @@
             <if test="sourceCode != null ">
                 source_code,
             </if>
+            <if test="benefit != null ">
+                benefit,
+            </if>
             <if test="description != null ">
                 description,
             </if>
@@ -75,6 +80,9 @@
             <if test="sourceCode != null ">
                 #{sourceCode},
             </if>
+            <if test="benefit != null ">
+                #{benefit},
+            </if>
             <if test="description != null ">
                 #{description},
             </if>
@@ -92,6 +100,7 @@
             <if test="name != null and name != ''">product_name = #{name},</if>
             <if test="categoryId != null">category_id = #{categoryId},</if>
             <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode},</if>
+            <if test="benefit != null and benefit != ''">benefit = #{benefit},</if>
             <if test="description != null and description != ''">description = #{description},</if>
         </trim>
         where id = #{id}
