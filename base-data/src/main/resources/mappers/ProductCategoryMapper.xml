@@ -78,8 +78,8 @@
     </select>
 
 
-    <!-- 根据parentId和groupName查找单个商品分类 -->
-    <select id="findByParentIdAndGroupName" resultMap="baseResultMap">
+    <!-- 根据parentId和groupName查找商品分类集合 -->
+    <select id="findListByParentIdAndGroupName" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from product_category where parent_id = #{parentId} and group_name = #{groupName}

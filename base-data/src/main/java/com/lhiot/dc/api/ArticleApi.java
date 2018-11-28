@@ -2,6 +2,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.Article;
 import com.lhiot.dc.model.ArticleParam;
@@ -52,6 +53,7 @@ public class ArticleApi {
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "article", value = "文章信息", dataType = "Article", required = true)
     })
     @PutMapping("/articles/{id}")
+    @ApiHideBodyProperty("id")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Article article) {
         article.setId(id);
         return articleService.update(article) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

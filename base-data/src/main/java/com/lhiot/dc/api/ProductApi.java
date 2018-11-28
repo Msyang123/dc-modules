@@ -53,6 +53,7 @@ public class ProductApi {
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
     })
     @PutMapping("/products/{id}")
+    @ApiHideBodyProperty({"id","code"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Product product) {
         product.setId(id);
         return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

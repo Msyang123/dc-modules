@@ -42,8 +42,8 @@ public class ProductSectionService {
             return Tips.warn("商品版块名称为空，添加失败.");
         }
         // 幂等添加
-        ProductSection po = sectionMapper.findByParentIdAndSectionName(productSection.getParentId(), productSection.getSectionName());
-        if (Objects.nonNull(po)) {
+        List<ProductSection> po = sectionMapper.findListByParentIdAndSectionName(productSection.getParentId(), productSection.getSectionName());
+        if (!po.isEmpty()) {
             return Tips.warn("商品版块重复，添加失败.");
         }
 

@@ -52,13 +52,13 @@ public interface ProductSectionMapper {
 
 
     /**
-     * 根据parentId和sectionName查找单个商品版块
+     * 根据parentId和sectionName查找商品版块集合
      *
      * @param parentId    父ID
      * @param sectionName 板块名称
-     * @return 商品版块对象
+     * @return 商品版块集合
      */
-    ProductSection findByParentIdAndSectionName(@Param("parentId") Long parentId, @Param("sectionName") String sectionName);
+    List<ProductSection> findListByParentIdAndSectionName(@Param("parentId") Long parentId, @Param("sectionName") String sectionName);
 
 
     /**

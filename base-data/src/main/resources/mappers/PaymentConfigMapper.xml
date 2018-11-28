@@ -108,9 +108,6 @@
     <update id="update" parameterType="com.lhiot.dc.entity.PaymentConfig">
         update payment_config
         <set>
-            <if test="configName != null ">
-                config_name = #{configName},
-            </if>
             <if test="appId != null ">
                 app_id = #{appId},
             </if>

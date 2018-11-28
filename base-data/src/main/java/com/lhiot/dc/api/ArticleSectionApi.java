@@ -3,6 +3,7 @@ package com.lhiot.dc.api;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ArticleSection;
 import com.lhiot.dc.model.ArticleSectionParam;
@@ -51,6 +52,7 @@ public class ArticleSectionApi {
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", required = true)
     })
     @PutMapping("/article-sections/{id}")
+    @ApiHideBodyProperty("id")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
