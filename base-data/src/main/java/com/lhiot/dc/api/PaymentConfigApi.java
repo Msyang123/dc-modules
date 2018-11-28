@@ -1,7 +1,7 @@
 package com.lhiot.dc.api;
 
-import com.leon.microx.web.result.Multiple;
 import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.result.Tuple;
 import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.PaymentConfig;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,7 +41,7 @@ public class PaymentConfigApi {
     public ResponseEntity create(@RequestBody PaymentConfig config) {
         Tips tips = paymentConfigService.addConfig(config);
         if (tips.err()) {
-            return ResponseEntity.badRequest().body("此名称的配置已存在！");
+            return ResponseEntity.badRequest().body(tips.getMessage());
         }
         return ResponseEntity.ok().build();
     }
@@ -48,17 +49,18 @@ public class PaymentConfigApi {
     @ApiOperation("修改支付配置信息")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "支付配置Id", required = true, dataType = "Long")
     @ApiHideBodyProperty("id")
-    @PutMapping("payment-config/{id}")
+    @PutMapping("/payment-config/{id}")
     public ResponseEntity updateConfig(@PathVariable("id") Long id, @RequestBody PaymentConfig config) {
         config.setId(id);
-        if (paymentConfigMapper.update(config) < 0) {
-            return ResponseEntity.badRequest().build();
+        Tips tips = paymentConfigService.updateConfig(config);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
         }
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "根据支付商户名称简称查询支付配置信息", response = PaymentConfig.class)
-    @ApiImplicitParam(paramType = "query", name = "name", value = "支付商户名称简称", dataType = "String", required = true)
+    @ApiOperation(value = "根据配置名称查询支付配置信息", response = PaymentConfig.class)
+    @ApiImplicitParam(paramType = "query", name = "name", value = "配置名称", dataType = "String", required = true)
     @GetMapping("/payment-config")
     public ResponseEntity findByName(@RequestParam("name") String name) {
         PaymentConfig paymentConfig = paymentConfigMapper.selectByName(name);
@@ -86,6 +88,6 @@ public class PaymentConfigApi {
         if (CollectionUtils.isEmpty(paymentConfigList)) {
             return ResponseEntity.badRequest().body("没有找到配置信息！");
         }
-        return ResponseEntity.ok().body(Multiple.of(paymentConfigList));
+        return ResponseEntity.ok().body(Tuple.of(paymentConfigList));
     }
 }
