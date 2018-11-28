@@ -223,7 +223,7 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="sectionId != null">and b_ps.id in (select b_psr.shelf_id from product_section_relation  b_psr
+            <if test="sectionId != null">and b_ps.id in (select b_psr.shelf_id from product_section_relation b_psr
                 where b_psr.section_id = #{sectionId})
             </if>
             <if test="name != null and name != ''">and b_ps.`name` like concat('%',#{name},'%')</if>
@@ -238,7 +238,7 @@
             <if test="endCreateAt != null">and b_ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
             <if test="keyword != null and keyword != ''">
                 and b_ps.`name` like concat('%',#{keyword},'%')
-                or  b_psf.barcode like concat('%',#{keyword},'%')
+                or b_psf.barcode like concat('%',#{keyword},'%')
             </if>
         </trim>
     </sql>
@@ -249,11 +249,11 @@
         select
         <include refid="columns"/>
         from product_shelf ps
-        left join product_specification psf on ps.specification_id=psf.id
+        left join product_specification psf on ps.specification_id = psf.id
         inner join (
         select b_ps.id
         from product_shelf b_ps
-        left join product_specification b_psf on b_ps.specification_id=b_psf.id
+        left join product_specification b_psf on b_ps.specification_id = b_psf.id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
             order by b_ps.sorting asc , b_ps.id desc
@@ -267,7 +267,7 @@
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductShelfParam" resultType="int">
         select count(1)
         from product_shelf b_ps
-        left join product_specification b_psf on b_ps.specification_id=b_psf.id
+        left join product_specification b_psf on b_ps.specification_id = b_psf.id
         <include refid="filter"/>
     </select>
 
