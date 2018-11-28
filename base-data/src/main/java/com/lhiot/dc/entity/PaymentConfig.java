@@ -1,7 +1,7 @@
 package com.lhiot.dc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lhiot.dc.entity.type.PayPlatformType;
+import com.lhiot.dc.entity.type.PayPlatform;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,53 +12,65 @@ import lombok.Data;
 @Data
 @ApiModel
 public class PaymentConfig {
-
+    @ApiModelProperty(notes = "配置Id", dataType = "Long")
     private Long id;
 
     /**
-     *支付商户名称简称
+     * 配置名称
      */
-    @ApiModelProperty(notes = "支付商户名称简称", dataType = "String")
-    private String alias;
+    @ApiModelProperty(notes = "配置名称", dataType = "String")
+    private String configName;
 
     /**
-     *微信支付APPID/支付宝APPID
+     * 应用ID
      */
-    @ApiModelProperty(notes = "微信支付APPID/支付宝APPID", dataType = "String")
-    private String partnerId;
+    @ApiModelProperty(notes = "应用ID", dataType = "String")
+    private String appId;
 
     /**
-     *微信支付秘钥/支付宝公钥
+     * 应用密钥
      */
-    @ApiModelProperty(notes = "微信支付秘钥/支付宝公钥", dataType = "String")
-    private String partnerKey;
+    @ApiModelProperty(notes = "应用密钥", dataType = "String")
+    private String appSecretKey;
 
     /**
-     *支付宝私钥
+     * 商户ID
      */
-    @ApiModelProperty(notes = "支付宝私钥", dataType = "String")
-    private String privateKey;
+    @ApiModelProperty(notes = " 商户ID", dataType = "String")
+    private String merchantId;
 
     /**
-     *微信退款签名包
+     * 商户密钥（微信有，支付宝使用的sdk不需要传）
      */
-    @ApiModelProperty(notes = "微信退款签名包", dataType = "String")
-    private String pkcs12Url;
+    @ApiModelProperty(notes = "商户密钥", dataType = "String")
+    private String merchantSecretKey;
 
     /**
-     *支付宝商户帐号
+     * 第三方密钥（支付宝私钥 / 微信pkcs12文件URL）
      */
-    @ApiModelProperty(notes = "支付宝商户帐号", dataType = "String")
-    private String aliSellerId;
+    @ApiModelProperty(notes = "第三方密钥（支付宝私钥 / 微信pkcs12文件URL）", dataType = "String")
+    private String thirdPartyKey;
 
     /**
-     *支付平台
+     * 支付完成 - 回调地址
      */
-    @ApiModelProperty(notes = "支付平台", dataType = "PayPlatformType")
-    private PayPlatformType payPlatformType;
+    @ApiModelProperty(notes = "支付完成 - 回调地址", dataType = "String")
+    private String payedNotifyUrl;
 
     /**
-     *备注
+     * 退款 - 回调地址
+     */
+    @ApiModelProperty(notes = "退款 - 回调地址", dataType = "String")
+    private String refundNotifyUrl;
+
+    /**
+     * 支付平台
+     */
+    @ApiModelProperty(notes = "支付平台", dataType = "PayPlatform")
+    private PayPlatform platform;
+
+    /**
+     * 备注
      */
     @ApiModelProperty(notes = "备注", dataType = "String")
     private String remark;

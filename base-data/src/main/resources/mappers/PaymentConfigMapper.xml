@@ -6,13 +6,15 @@
     <resultMap id="baseResultMap"
                type="com.lhiot.dc.entity.PaymentConfig">
         <id column="id" property="id"/>
-        <result column="alias" property="alias"/>
-        <result column="partner_id" property="partnerId"/>
-        <result column="partner_key" property="partnerKey"/>
-        <result column="private_key" property="privateKey"/>
-        <result column="pkcs12_url" property="pkcs12Url"/>
-        <result column="ali_seller_id" property="aliSellerId"/>
-        <result column="pay_platform_type" property="payPlatformType"/>
+        <result column="config_name" property="configName"/>
+        <result column="app_id" property="appId"/>
+        <result column="app_secret_key" property="appSecretKey"/>
+        <result column="merchant_id" property="merchantId"/>
+        <result column="merchant_secret_key" property="merchantSecretKey"/>
+        <result column="third_party_key" property="thirdPartyKey"/>
+        <result column="payed_notify_url" property="payedNotifyUrl"/>
+        <result column="refund_notify_url" property="refundNotifyUrl"/>
+        <result column="platform" property="platform"/>
         <result column="remark" property="remark"/>
     </resultMap>
 
@@ -20,13 +22,15 @@
     <sql id="columns">
         <trim suffixOverrides=",">
             id,
-            alias,
-            partner_id,
-            partner_key,
-            private_key,
-            pkcs12_url,
-            ali_seller_id,
-            pay_platform_type,
+            config_name,
+            app_id,
+            app_secret_key,
+            merchant_id,
+            merchant_secret_key,
+            third_party_key,
+            payed_notify_url,
+            refund_notify_url,
+            platform,
             remark,
         </trim>
     </sql>
@@ -35,52 +39,64 @@
     <insert id="create" parameterType="com.lhiot.dc.entity.PaymentConfig" useGeneratedKeys="true" keyProperty="id">
         insert into payment_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="alias != null ">
-                alias,
+            <if test="configName != null ">
+                config_name,
             </if>
-            <if test="partnerId != null ">
-                partner_id,
+            <if test="appId != null ">
+                app_id,
             </if>
-            <if test="partnerKey != null ">
-                partner_key,
+            <if test="appSecretKey != null ">
+                app_secret_key,
             </if>
-            <if test="privateKey != null ">
-                private_key,
+            <if test="merchantId != null ">
+                merchant_id,
             </if>
-            <if test="pkcs12Url != null ">
-                pkcs12_url,
+            <if test="merchantSecretKey != null ">
+                merchant_secret_key,
             </if>
-            <if test="aliSellerId != null ">
-                ali_seller_id,
+            <if test="thirdPartyKey != null ">
+                third_party_key,
             </if>
-            <if test="payPlatformType != null ">
-                pay_platform_type,
+            <if test="payedNotifyUrl != null ">
+                payed_notify_url,
+            </if>
+            <if test="refundNotifyUrl != null ">
+                refund_notify_url,
+            </if>
+            <if test="platform != null ">
+                platform,
             </if>
             <if test="remark != null ">
                 remark,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="alias != null ">
-                #{alias},
+            <if test="configName != null ">
+                #{configName},
             </if>
-            <if test="partnerId != null ">
-                #{partnerId},
+            <if test="appId != null ">
+                #{appId},
             </if>
-            <if test="partnerKey != null ">
-                #{partnerKey},
+            <if test="appSecretKey != null ">
+                #{appSecretKey},
             </if>
-            <if test="privateKey != null ">
-                #{privateKey},
+            <if test="merchantId != null ">
+                #{merchantId},
             </if>
-            <if test="pkcs12Url != null ">
-                #{pkcs12Url},
+            <if test="merchantSecretKey != null ">
+                #{merchantSecretKey},
             </if>
-            <if test="aliSellerId != null ">
-                #{aliSellerId},
+            <if test="thirdPartyKey != null ">
+                #{thirdPartyKey},
             </if>
-            <if test="payPlatformType != null ">
-                #{payPlatformType},
+            <if test="payedNotifyUrl != null ">
+                #{payedNotifyUrl},
+            </if>
+            <if test="refundNotifyUrl != null ">
+                #{refundNotifyUrl},
+            </if>
+            <if test="platform != null ">
+                #{platform},
             </if>
             <if test="remark != null ">
                 #{remark},
@@ -92,26 +108,32 @@
     <update id="update" parameterType="com.lhiot.dc.entity.PaymentConfig">
         update payment_config
         <set>
-            <if test="alias != null ">
-                alias = #{alias},
+            <if test="configName != null ">
+                config_name = #{configName},
             </if>
-            <if test="partnerId != null ">
-                partner_id = #{partnerId},
+            <if test="appId != null ">
+                app_id = #{appId},
             </if>
-            <if test="partnerKey != null ">
-                partner_key = #{partnerKey},
+            <if test="appSecretKey != null ">
+                app_secret_key = #{appSecretKey},
             </if>
-            <if test="privateKey != null ">
-                private_key = #{privateKey},
+            <if test="merchantId != null ">
+                merchant_id = #{merchantId},
             </if>
-            <if test="pkcs12Url != null ">
-                pkcs12_url = #{pkcs12Url},
+            <if test="merchantSecretKey != null ">
+                merchant_secret_key = #{merchantSecretKey},
             </if>
-            <if test="aliSellerId != null ">
-                ali_seller_id = #{aliSellerId},
+            <if test="thirdPartyKey != null ">
+                third_party_key = #{thirdPartyKey},
             </if>
-            <if test="payPlatformType != null ">
-                pay_platform_type = #{payPlatformType},
+            <if test="payedNotifyUrl != null ">
+                payed_notify_url = #{payedNotifyUrl},
+            </if>
+            <if test="refundNotifyUrl != null ">
+                refund_notify_url = #{refundNotifyUrl},
+            </if>
+            <if test="platform != null ">
+                platform = #{platform},
             </if>
             <if test="remark != null ">
                 remark = #{remark},
@@ -130,7 +152,7 @@
     <select id="selectByName" resultMap="baseResultMap" parameterType="String">
         select
         <include refid="columns"/>
-        from payment_config where alias = #{alias}
+        from payment_config where config_name = #{configName}
     </select>
 
 
