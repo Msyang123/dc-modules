@@ -223,19 +223,23 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="sectionId != null">and id in (select shelf_id from product_section_relation
-                where section_id = #{sectionId})
+            <if test="sectionId != null">and b_ps.id in (select b_psr.shelf_id from product_section_relation b_psr
+                where b_psr.section_id = #{sectionId})
             </if>
-            <if test="name != null and name != ''">and `name` like concat('%',#{name},'%')</if>
-            <if test="shelfStatus != null">and shelf_status = #{shelfStatus}</if>
-            <if test="shelfType != null">and shelf_type = #{shelfType}</if>
-            <if test="applicationType != null">and application_type = #{applicationType}</if>
-            <if test="minPrice != null">and price <![CDATA[ >= ]]> #{minPrice}</if>
-            <if test="maxPrice != null">and price <![CDATA[ <= ]]> #{maxPrice}</if>
-            <if test="minOriginalPrice != null">and original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
-            <if test="maxOriginalPrice != null">and original_price <![CDATA[ <= ]]> #{maxOriginalPrice}</if>
-            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="name != null and name != ''">and b_ps.`name` like concat('%',#{name},'%')</if>
+            <if test="shelfStatus != null">and b_ps.shelf_status = #{shelfStatus}</if>
+            <if test="shelfType != null">and b_ps.shelf_type = #{shelfType}</if>
+            <if test="applicationType != null">and b_ps.application_type = #{applicationType}</if>
+            <if test="minPrice != null">and b_ps.price <![CDATA[ >= ]]> #{minPrice}</if>
+            <if test="maxPrice != null">and b_ps.price <![CDATA[ <= ]]> #{maxPrice}</if>
+            <if test="minOriginalPrice != null">and b_ps.original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
+            <if test="maxOriginalPrice != null">and b_ps.original_price <![CDATA[ <= ]]> #{maxOriginalPrice}</if>
+            <if test="beginCreateAt != null">and b_ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and b_ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="keyword != null and keyword != ''">
+                and b_ps.`name` like concat('%',#{keyword},'%')
+                or b_psf.barcode like concat('%',#{keyword},'%')
+            </if>
         </trim>
     </sql>
 
@@ -245,24 +249,26 @@
         select
         <include refid="columns"/>
         from product_shelf ps
-        left join product_specification psf on ps.specification_id=psf.id
+        left join product_specification psf on ps.specification_id = psf.id
         inner join (
-        select id from product_shelf
+        select b_ps.id
+        from product_shelf b_ps
+        left join product_specification b_psf on b_ps.specification_id = b_psf.id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by b_ps.sorting asc , b_ps.id desc
             limit #{startRow} , #{rows}
         </if>
         ) pw on ps.id=pw.id
-        order by ps.sorting asc , id desc
+        order by ps.sorting asc , ps.id desc
     </select>
 
     <!--查询商品上架集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductShelfParam" resultType="int">
         select count(1)
-        from product_shelf
+        from product_shelf b_ps
+        left join product_specification b_psf on b_ps.specification_id = b_psf.id
         <include refid="filter"/>
     </select>
-
 
 </mapper>

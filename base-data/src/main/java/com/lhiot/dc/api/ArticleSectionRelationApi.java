@@ -1,5 +1,6 @@
 package com.lhiot.dc.api;
 
+import com.leon.microx.web.result.Tips;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ArticleSectionRelation;
 import com.lhiot.dc.service.ArticleSectionRelationService;
@@ -30,7 +31,11 @@ public class ArticleSectionRelationApi {
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSectionRelation", value = "文章版块与文章关系信息", dataType = "ArticleSectionRelation", required = true)
     @PostMapping("/article-section-relations")
     public ResponseEntity create(@RequestBody ArticleSectionRelation articleSectionRelation) {
-        Long relationId = relationService.addRelation(articleSectionRelation);
+        Tips tips = relationService.addRelation(articleSectionRelation);
+        if (tips.err()) {
+            return ResponseEntity.badRequest().body(tips.getMessage());
+        }
+        Long relationId = Long.valueOf(tips.getMessage());
         return relationId > 0 ?
                 ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().body("添加文章与版块关系记录失败！");
@@ -51,8 +56,9 @@ public class ArticleSectionRelationApi {
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "articleIds", value = "多个文章Id以英文逗号分隔", dataType = "String", required = true)
     })
     @PostMapping("/article-section-relations/batches")
-    public ResponseEntity createBatch(@RequestParam("sectionId") String sectionId, @RequestParam("articleIds") String articleIds) {
-        return relationService.addRelationList(Long.valueOf(sectionId), articleIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("批量添加版块与文章关系失败！");
+    public ResponseEntity createBatch(@RequestParam("sectionId") Long sectionId, @RequestParam("articleIds") String articleIds) {
+        Tips tips = relationService.addRelationList(sectionId, articleIds);
+        return tips.err() ? ResponseEntity.badRequest().body(tips.getMessage()) : ResponseEntity.ok().build();
     }
 
 
@@ -62,8 +68,8 @@ public class ArticleSectionRelationApi {
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "articleIds", value = "多个文章Id以英文逗号分隔,为空则删除此版块所有文章关系", dataType = "String")
     })
     @DeleteMapping("/article-section-relations/batches")
-    public ResponseEntity deleteBatch(@RequestParam("sectionId") String sectionId, @RequestParam(value = "articleIds", required = false) String articleIds) {
-        return relationService.deleteRelationList(Long.valueOf(sectionId), articleIds) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
+    public ResponseEntity deleteBatch(@RequestParam("sectionId") Long sectionId, @RequestParam(value = "articleIds", required = false) String articleIds) {
+        return relationService.deleteRelationList(sectionId, articleIds) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
     }
 
 

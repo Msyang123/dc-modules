@@ -1,6 +1,7 @@
 package com.lhiot.dc.service;
 
 import com.leon.microx.util.StringUtils;
+import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.entity.ProductSectionRelation;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,14 @@ public class ProductSectionRelationService {
      * @param productSectionRelation 商品上架与版块关系对象
      * @return 商品上架与版块关系Id
      */
-    public Long addRelation(ProductSectionRelation productSectionRelation) {
+    public Tips addRelation(ProductSectionRelation productSectionRelation) {
+        //先做幂等验证
+        List<ProductSectionRelation> poList=relationMapper.selectRelationList(productSectionRelation.getSectionId(),productSectionRelation.getShelfId()+"");
+        if(!poList.isEmpty()){
+            return Tips.warn("商品上架与版块关系重复，添加失败.");
+        }
         relationMapper.insert(productSectionRelation);
-        return productSectionRelation.getId();
+        return Tips.info(productSectionRelation.getId() + "");
     }
 
     /**
@@ -42,9 +48,15 @@ public class ProductSectionRelationService {
      *
      * @param sectionId 版块ID
      * @param shelfIds  商品上架ID集合
-     * @return 执行结果
+     * @return  Tips信息  执行结果
      */
-    public boolean addRelationList(Long sectionId, String shelfIds) {
+    public Tips addRelationList(Long sectionId, String shelfIds) {
+        //先做幂等验证
+        List<ProductSectionRelation> poList=relationMapper.selectRelationList(sectionId,shelfIds);
+        if(!poList.isEmpty()){
+            return Tips.warn("商品上架与版块关系重复，添加失败.");
+        }
+
         List<ProductSectionRelation> psrList = new ArrayList<>();
         String[] shelfIdArrays = StringUtils.tokenizeToStringArray(shelfIds, ",");
         List<String> shelfIdList = Stream.of(shelfIdArrays).collect(Collectors.toList());
@@ -55,7 +67,8 @@ public class ProductSectionRelationService {
             productSectionRelation.setShelfId(Long.valueOf(shelfId));
             psrList.add(productSectionRelation);
         }
-        return relationMapper.insertList(psrList) > 0;
+        int result = relationMapper.insertList(psrList);
+        return result > 0 ? Tips.info("添加成功") : Tips.warn("批量添加版块与商品上架关系失败！");
     }
 
 
