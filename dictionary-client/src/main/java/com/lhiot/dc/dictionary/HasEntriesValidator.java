@@ -27,7 +27,7 @@ public class HasEntriesValidator implements ConstraintValidator<HasEntries, Obje
     @Override
     public void initialize(HasEntries annotation) {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-        this.dictCode = annotation.value();
+        this.dictCode = annotation.from();
         this.message = StringUtils.isBlank(annotation.message())
                 ? "Dictionary validation failure!"
                 : annotation.message();
@@ -36,7 +36,7 @@ public class HasEntriesValidator implements ConstraintValidator<HasEntries, Obje
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (Objects.isNull(this.client)) {
-            log.warn("DictionaryClient is not enabled, DictValid Annotation is invalid!");
+            log.warn("DictionaryClient is not enabled, HasEntries Annotation is invalid!");
             return true;
         }
         if (value == null) {
