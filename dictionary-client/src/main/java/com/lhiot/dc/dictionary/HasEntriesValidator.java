@@ -17,12 +17,17 @@ import java.util.Objects;
 @Slf4j
 public class HasEntriesValidator implements ConstraintValidator<HasEntries, Object> {
 
-    @Autowired
-    private DictionaryClient client;
+    private final DictionaryClient client;
 
     private String dictCode;
 
     private String message;
+
+    @Autowired
+    public HasEntriesValidator(DictionaryClient client) {
+        log.info("HasEntries Validator initializing...");
+        this.client = client;
+    }
 
     @Override
     public void initialize(HasEntries annotation) {

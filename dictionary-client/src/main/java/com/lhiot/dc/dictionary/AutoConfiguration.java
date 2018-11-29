@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -33,6 +35,11 @@ public class AutoConfiguration {
     }
 
     private final RestTemplate restTemplate;
+
+    @Bean
+    public Validator localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
+    }
 
     @Bean("dictionaryClientRemoteInvoker")
     public RemoteInvoker httpClient() {
