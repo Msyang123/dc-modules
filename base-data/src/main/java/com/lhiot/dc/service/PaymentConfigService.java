@@ -24,12 +24,14 @@ public class PaymentConfigService {
     }
 
     public Tips addConfig(PaymentConfig config) {
-        PaymentConfig searchConfig = paymentConfigMapper.selectByName(config.getAlias());
+        if (Objects.isNull(config.getConfigName())) {
+            return Tips.warn("配置名称不能为空！");
+        }
+        PaymentConfig searchConfig = paymentConfigMapper.selectByName(config.getConfigName());
         if (Objects.nonNull(searchConfig)) {
             return Tips.warn("此名称的配置已存在！");
         }
         paymentConfigMapper.create(config);
         return Tips.empty();
     }
-
 }
