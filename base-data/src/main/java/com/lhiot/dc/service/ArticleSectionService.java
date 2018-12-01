@@ -26,12 +26,10 @@ import java.util.Objects;
 public class ArticleSectionService {
     private ArticleSectionMapper articleSectionMapper;
     private ArticleSectionRelationMapper relationMapper;
-    private DictionaryClient dictionaryClient;
 
-    public ArticleSectionService(ArticleSectionMapper articleSectionMapper, ArticleSectionRelationMapper relationMapper, DictionaryClient dictionaryClient) {
+    public ArticleSectionService(ArticleSectionMapper articleSectionMapper, ArticleSectionRelationMapper relationMapper) {
         this.articleSectionMapper = articleSectionMapper;
         this.relationMapper = relationMapper;
-        this.dictionaryClient = dictionaryClient;
     }
 
     /**
@@ -44,13 +42,7 @@ public class ArticleSectionService {
         if (Objects.isNull(articleSection.getNameCn())) {
             return Tips.warn("文章版块中文名称为空，添加失败.");
         }
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(articleSection.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, articleSection.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
+
         // 幂等添加
         List<ArticleSection> po = articleSectionMapper.findListByParentIdAndNameCn(articleSection.getParentId(), articleSection.getNameCn());
         if (!po.isEmpty()) {
@@ -70,13 +62,6 @@ public class ArticleSectionService {
      * @return Tips信息 执行结果
      */
     public Tips update(ArticleSection articleSection) {
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(articleSection.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, articleSection.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
         int result = articleSectionMapper.updateById(articleSection);
         return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }

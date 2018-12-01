@@ -27,12 +27,10 @@ import java.util.Objects;
 public class ProductShelfService {
     private ProductShelfMapper shelfMapper;
     private ProductSectionRelationMapper relationMapper;
-    private DictionaryClient dictionaryClient;
 
-    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper, DictionaryClient dictionaryClient) {
+    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper) {
         this.shelfMapper = shelfMapper;
         this.relationMapper = relationMapper;
-        this.dictionaryClient = dictionaryClient;
     }
 
     /**
@@ -42,13 +40,6 @@ public class ProductShelfService {
      * @return Tips信息  成功在message中返回Id
      */
     public Tips insert(ProductShelf productShelf) {
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(productShelf.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
         productShelf.setCreateAt(Date.from(Instant.now()));
         shelfMapper.insert(productShelf);
         return Tips.info(productShelf.getId() + "");
@@ -62,13 +53,6 @@ public class ProductShelfService {
      * @return Tips信息 执行结果
      */
     public Tips update(ProductShelf productShelf) {
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(productShelf.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
         int result = shelfMapper.updateById(productShelf);
         return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }
