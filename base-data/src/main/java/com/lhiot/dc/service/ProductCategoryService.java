@@ -38,8 +38,8 @@ public class ProductCategoryService {
             return Tips.warn("分类名为空，添加失败.");
         }
         // 幂等添加
-        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
-        if (Objects.nonNull(po)) {
+        List<ProductCategory> po = categoryMapper.findListByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
+        if (!po.isEmpty()) {
             return Tips.warn("商品分类重复，添加失败.");
         }
 

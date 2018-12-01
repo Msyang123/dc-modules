@@ -2,6 +2,7 @@ package com.lhiot.dc.mapper;
 
 import com.lhiot.dc.entity.PaymentConfig;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,12 +36,12 @@ public interface PaymentConfigMapper {
 
 
     /**
-     * Description:根据支付商户名称简称查找支付签名信息
+     * Description:根据配置名称查找支付签名信息
      *
      * @author yijun
      * 2018/09/20 09:01:25
      */
-    PaymentConfig selectByName(String paymentName);
+    PaymentConfig selectByName(@Param("configName") String configName);
 
 
     /**
