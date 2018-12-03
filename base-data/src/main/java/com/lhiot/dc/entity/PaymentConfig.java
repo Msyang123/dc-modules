@@ -64,6 +64,12 @@ public class PaymentConfig {
     private String refundNotifyUrl;
 
     /**
+     * 取消支付 - 回调地址
+     */
+    @ApiModelProperty(notes = "取消支付 - 回调地址", dataType = "String")
+    private String cancelNotifyUrl;
+
+    /**
      * 支付平台
      */
     @ApiModelProperty(notes = "支付平台", dataType = "PayPlatform")

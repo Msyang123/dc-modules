@@ -14,6 +14,7 @@
         <result column="third_party_key" property="thirdPartyKey"/>
         <result column="payed_notify_url" property="payedNotifyUrl"/>
         <result column="refund_notify_url" property="refundNotifyUrl"/>
+        <result column="cancel_notify_url" property="cancelNotifyUrl"/>
         <result column="platform" property="platform"/>
         <result column="remark" property="remark"/>
     </resultMap>
@@ -30,6 +31,7 @@
             third_party_key,
             payed_notify_url,
             refund_notify_url,
+            cancel_notify_url,
             platform,
             remark,
         </trim>
@@ -63,6 +65,9 @@
             <if test="refundNotifyUrl != null ">
                 refund_notify_url,
             </if>
+            <if test="cancelNotifyUrl != null ">
+                cancel_notify_url,
+            </if>
             <if test="platform != null ">
                 platform,
             </if>
@@ -94,6 +99,9 @@
             </if>
             <if test="refundNotifyUrl != null ">
                 #{refundNotifyUrl},
+            </if>
+            <if test="cancelNotifyUrl != null ">
+                #{cancelNotifyUrl},
             </if>
             <if test="platform != null ">
                 #{platform},
@@ -128,6 +136,9 @@
             </if>
             <if test="refundNotifyUrl != null ">
                 refund_notify_url = #{refundNotifyUrl},
+            </if>
+            <if test="cancelNotifyUrl != null ">
+                cancel_notify_url = #{cancelNotifyUrl},
             </if>
             <if test="platform != null ">
                 platform = #{platform},
