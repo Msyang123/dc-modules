@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 /**
@@ -35,7 +36,7 @@ public class ProductShelfApi {
     @ApiOperation("新增商品上架")
     @PostMapping("/product-shelves")
     @ApiHideBodyProperty("productSpecification")
-    public ResponseEntity create(@RequestBody ProductShelf productShelf) {
+    public ResponseEntity create(@Valid @RequestBody ProductShelf productShelf) {
         Tips tips = shelfService.insert(productShelf);
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
@@ -49,8 +50,8 @@ public class ProductShelfApi {
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-shelves/{id}")
-    @ApiHideBodyProperty({"id","productSpecification"})
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductShelf productShelf) {
+    @ApiHideBodyProperty({"id", "productSpecification"})
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ProductShelf productShelf) {
         productShelf.setId(id);
         Tips tips = shelfService.update(productShelf);
         if (tips.err()) {

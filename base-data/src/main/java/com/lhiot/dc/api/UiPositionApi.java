@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 /**
@@ -35,7 +36,7 @@ public class UiPositionApi {
     @ApiOperation("添加位置")
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "uiPosition", value = "位置信息", dataType = "UiPosition", required = true)
     @PostMapping("/ui-positions")
-    public ResponseEntity create(@RequestBody UiPosition uiPosition) {
+    public ResponseEntity create(@Valid @RequestBody UiPosition uiPosition) {
         Tips tips = positionService.addUiPosition(uiPosition);
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
@@ -51,8 +52,8 @@ public class UiPositionApi {
             @ApiImplicitParam(paramType = ApiParamType.BODY, name = "uiPosition", value = "位置信息", dataType = "UiPosition", required = true)
     })
     @PutMapping("/ui-positions/{id}")
-    @ApiHideBodyProperty({"id","code"})
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody UiPosition uiPosition) {
+    @ApiHideBodyProperty({"id", "code"})
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody UiPosition uiPosition) {
         uiPosition.setId(id);
 
         Tips tips = positionService.update(uiPosition);

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 /**
@@ -34,7 +35,7 @@ public class ArticleSectionApi {
     @ApiOperation("添加文章版块")
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", dataTypeClass = ArticleSection.class, required = true)
     @PostMapping("/article-sections")
-    public ResponseEntity create(@RequestBody ArticleSection articleSection) {
+    public ResponseEntity create(@Valid @RequestBody ArticleSection articleSection) {
         Tips tips = articleSectionService.addArticleSection(articleSection);
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
@@ -53,7 +54,7 @@ public class ArticleSectionApi {
     })
     @PutMapping("/article-sections/{id}")
     @ApiHideBodyProperty("id")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ArticleSection articleSection) {
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
         if (tips.err()) {

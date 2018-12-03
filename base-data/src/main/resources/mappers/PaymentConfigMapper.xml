@@ -12,8 +12,6 @@
         <result column="merchant_id" property="merchantId"/>
         <result column="merchant_secret_key" property="merchantSecretKey"/>
         <result column="third_party_key" property="thirdPartyKey"/>
-        <result column="payed_notify_url" property="payedNotifyUrl"/>
-        <result column="refund_notify_url" property="refundNotifyUrl"/>
         <result column="platform" property="platform"/>
         <result column="remark" property="remark"/>
     </resultMap>
@@ -28,8 +26,6 @@
             merchant_id,
             merchant_secret_key,
             third_party_key,
-            payed_notify_url,
-            refund_notify_url,
             platform,
             remark,
         </trim>
@@ -57,12 +53,6 @@
             <if test="thirdPartyKey != null ">
                 third_party_key,
             </if>
-            <if test="payedNotifyUrl != null ">
-                payed_notify_url,
-            </if>
-            <if test="refundNotifyUrl != null ">
-                refund_notify_url,
-            </if>
             <if test="platform != null ">
                 platform,
             </if>
@@ -88,12 +78,6 @@
             </if>
             <if test="thirdPartyKey != null ">
                 #{thirdPartyKey},
-            </if>
-            <if test="payedNotifyUrl != null ">
-                #{payedNotifyUrl},
-            </if>
-            <if test="refundNotifyUrl != null ">
-                #{refundNotifyUrl},
             </if>
             <if test="platform != null ">
                 #{platform},
@@ -122,12 +106,6 @@
             </if>
             <if test="thirdPartyKey != null ">
                 third_party_key = #{thirdPartyKey},
-            </if>
-            <if test="payedNotifyUrl != null ">
-                payed_notify_url = #{payedNotifyUrl},
-            </if>
-            <if test="refundNotifyUrl != null ">
-                refund_notify_url = #{refundNotifyUrl},
             </if>
             <if test="platform != null ">
                 platform = #{platform},
