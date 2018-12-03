@@ -226,6 +226,12 @@
             <if test="sectionId != null">and b_ps.id in (select b_psr.shelf_id from product_section_relation b_psr
                 where b_psr.section_id = #{sectionId})
             </if>
+            <if test="ids != null and ids != ''">
+                and b_ps.id in
+                <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+                    ${item}
+                </foreach>
+            </if>
             <if test="name != null and name != ''">and b_ps.`name` like concat('%',#{name},'%')</if>
             <if test="shelfStatus != null">and b_ps.shelf_status = #{shelfStatus}</if>
             <if test="shelfType != null">and b_ps.shelf_type = #{shelfType}</if>

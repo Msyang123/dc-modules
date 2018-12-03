@@ -17,6 +17,8 @@ import java.util.Date;
 public class ProductShelfParam {
     @ApiModelProperty(notes = "版块ID", dataType = "Long")
     private Long sectionId;
+    @ApiModelProperty(notes = "上架ID(多个以英文逗号分隔)", dataType = "String")
+    private String ids;
     @ApiModelProperty(notes = "上架名称", dataType = "String")
     private String name;
     @ApiModelProperty(notes = "上架状态：ON-上架，OFF-下架", dataType = "OnOff")
