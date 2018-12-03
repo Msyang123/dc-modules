@@ -2,11 +2,9 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.UiPosition;
 import com.lhiot.dc.model.UiPositionParam;
 import com.lhiot.dc.mapper.UiPositionMapper;
-import com.lhiot.dc.util.DictionaryCodes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
