@@ -99,8 +99,8 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionType != null ">and application_type = #{positionType}</if>
-            <if test="applicationType != null ">and position_type = #{applicationType}</if>
+            <if test="positionType != null ">and position_type = #{positionType}</if>
+            <if test="applicationType != null ">and application_type = #{applicationType}</if>
             <if test="codes != null and codes != ''">
                 and code in
                 <foreach item="item" index="index" collection="codes.split(',')" open="(" separator="," close=")">
