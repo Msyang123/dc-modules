@@ -35,12 +35,10 @@ public class StoreApi {
 
     private StoreService storeService;
     private StoreMapper storeMapper;
-    private DictionaryClient dictionaryClient;
 
-    public StoreApi(StoreService storeService, StoreMapper storeMapper, DictionaryClient dictionaryClient) {
+    public StoreApi(StoreService storeService, StoreMapper storeMapper) {
         this.storeService = storeService;
         this.storeMapper = storeMapper;
-        this.dictionaryClient = dictionaryClient;
     }
 
     @ApiOperation(value = "根据id查询门店", notes = "根据id查询门店")
@@ -96,13 +94,6 @@ public class StoreApi {
                 break;
         }
         log.debug("添加门店\t param:{}", store);
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(store.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, store.getApplicationType());
-            if (tips.err()) {
-                return ResponseEntity.badRequest().body(tips.getMessage());
-            }
-        }
         return ResponseEntity.ok(storeMapper.insert(store));
     }
 
@@ -113,13 +104,6 @@ public class StoreApi {
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Store store) {
         log.debug("根据id更新门店\t param:{}", store);
         store.setId(id);
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(store.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, store.getApplicationType());
-            if (tips.err()) {
-                return ResponseEntity.badRequest().body(tips.getMessage());
-            }
-        }
         return ResponseEntity.ok(storeMapper.update(store));
     }
 

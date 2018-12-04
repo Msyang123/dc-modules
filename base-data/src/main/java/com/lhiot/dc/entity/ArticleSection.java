@@ -1,11 +1,13 @@
 package com.lhiot.dc.entity;
 
+import com.lhiot.dc.dictionary.HasEntries;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import com.lhiot.dc.util.*;
 
 /**
  * @author xiaojian  created in  2018/11/21 15:36
@@ -29,6 +31,7 @@ public class ArticleSection {
     @ApiModelProperty(notes = "序号", dataType = "Integer")
     private Integer sorting;
     @ApiModelProperty(notes = "应用类型", dataType = "String")
+    @HasEntries(from = DictionaryCodes.APPLICATION_TYPE, message = "没有找到此应用类型")
     private String applicationType;
 
 }
