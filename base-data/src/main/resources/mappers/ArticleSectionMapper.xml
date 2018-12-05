@@ -119,7 +119,7 @@
     <delete id="deleteByIds" parameterType="String">
         delete from article_section where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
