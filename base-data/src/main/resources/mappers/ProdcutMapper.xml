@@ -142,6 +142,10 @@
             <if test="name != null and name != ''">and product_name like concat('%',#{name},'%')</if>
             <if test="categoryId != null">and category_id = #{categoryId}</if>
             <if test="sourceCode != null and sourceCode != ''">and source_code = #{sourceCode}</if>
+            <if test="keyword != null and keyword != ''">
+                and product_name like concat('%',#{keyword},'%')
+                or product_code like concat('%',#{keyword},'%')
+            </if>
         </trim>
     </sql>
 

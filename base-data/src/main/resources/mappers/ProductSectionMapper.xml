@@ -39,20 +39,40 @@
             <result column="original_price" property="originalPrice"/>
             <result column="product_image" property="productImage"/>
             <result column="shelf_type" property="shelfType"/>
-            <association property="productSpecification" javaType="com.lhiot.dc.entity.ProductSpecification">
-                <id column="psf_id" property="id"/>
-                <result column="product_id" property="productId"/>
-                <result column="barcode" property="barcode"/>
-                <result column="packaging_unit" property="packagingUnit"/>
-                <result column="weight" property="weight"/>
-                <result column="limit_inventory" property="limitInventory"/>
-                <result column="inventory_specification" property="inventorySpecification"/>
-                <result column="available_status" property="availableStatus"/>
-                <result column="psf_create_at" property="createAt"/>
-                <result column="specification_qty" property="specificationQty"/>
-            </association>
         </collection>
     </resultMap>
+
+
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="includeProductResultMap" type="com.lhiot.dc.entity.ProductSection">
+        <id column="id" property="id"/>
+        <result column="position_id" property="positionId"/>
+        <result column="section_name" property="sectionName"/>
+        <result column="section_img" property="sectionImg"/>
+        <result column="sorting" property="sorting"/>
+        <result column="create_at" property="createAt"/>
+        <result column="parent_id" property="parentId"/>
+        <collection property="productShelfList" ofType="com.lhiot.dc.entity.ProductShelf"
+                    column="{sectionId=id,includeShelvesQty=includeShelvesQty}"
+                    select="com.lhiot.dc.mapper.ProductShelfMapper.findListIncludeProductBySectionId">
+            <id column="ps_id" property="id"/>
+            <result column="ps_name" property="name"/>
+            <result column="specification_id" property="specificationId"/>
+            <result column="shelf_qty" property="shelfQty"/>
+            <result column="price" property="price"/>
+            <result column="description" property="description"/>
+            <result column="shelf_status" property="shelfStatus"/>
+            <result column="application_type" property="applicationType"/>
+            <result column="ps_sorting" property="sorting"/>
+            <result column="image" property="image"/>
+            <result column="ps_create_at" property="createAt"/>
+            <result column="original_price" property="originalPrice"/>
+            <result column="product_image" property="productImage"/>
+            <result column="shelf_type" property="shelfType"/>
+        </collection>
+    </resultMap>
+
+
 
 
     <!-- base查询字段  -->
@@ -148,6 +168,16 @@
     </select>
 
 
+    <!-- 根据id查找单个商品版块 包含商品上架信息和商品信息   -->
+    <select id="findByIdIncludeShelvesIncludeProduct" resultMap="includeProductResultMap">
+        select
+        <include refid="columns"/>
+        ,#{includeShelvesQty} includeShelvesQty
+        from product_section p
+        where p.id = #{id}
+    </select>
+
+
     <!-- 根据parentId和sectionName查找商品版块集合 -->
     <select id="findListByParentIdAndSectionName" resultMap="baseResultMap">
         select
@@ -195,6 +225,20 @@
     <!--查询商品版块集合 包含商品上架信息-->
     <select id="findListIncludeShelves" parameterType="com.lhiot.dc.model.ProductSectionParam"
             resultMap="associationResultMap">
+        select
+        <include refid="columns"/>
+        ,#{includeShelvesQty} includeShelvesQty
+        from product_section p
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by sorting asc , id desc
+            limit #{startRow} , #{rows}
+        </if>
+    </select>
+
+    <!--查询商品版块集合 包含商品上架信息-->
+    <select id="findListIncludeShelvesIncludeProduct" parameterType="com.lhiot.dc.model.ProductSectionParam"
+            resultMap="includeProductResultMap">
         select
         <include refid="columns"/>
         ,#{includeShelvesQty} includeShelvesQty
