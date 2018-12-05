@@ -67,11 +67,16 @@ public class ProductSectionService {
     /**
      * 根据商品版块ID查找单个商品版块
      *
-     * @param sectionId 商品版块ID
+     * @param sectionId         商品版块ID
+     * @param includeShelves    是否加载版块下商品上架信息
+     * @param includeShelvesQty 加载商品上架最大条数(includeShelves为true起作用，为空则加载所有)
+     * @param includeProduct    是否加载商品信息(includeShelves为true起作用，为空则加载所有)
      * @return 商品版块对象
      */
-    public ProductSection findById(Long sectionId, Boolean includeShelves, Long includeShelvesQty) {
-        return includeShelves != null && includeShelves ? sectionMapper.findByIdIncludeShelves(sectionId, includeShelvesQty) : sectionMapper.findById(sectionId);
+    public ProductSection findById(Long sectionId, Boolean includeShelves, Long includeShelvesQty, Boolean includeProduct) {
+        return includeShelves != null && includeShelves ?
+                includeProduct != null && includeProduct ? sectionMapper.findByIdIncludeShelvesIncludeProduct(sectionId, includeShelvesQty) : sectionMapper.findByIdIncludeShelves(sectionId, includeShelvesQty)
+                : sectionMapper.findById(sectionId);
     }
 
 
@@ -96,7 +101,9 @@ public class ProductSectionService {
      * @return 分页商品版块信息数据
      */
     public Pages<ProductSection> findList(ProductSectionParam param) {
-        List<ProductSection> list = Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves() ?  sectionMapper.findListIncludeShelves(param) : sectionMapper.findList(param);
+        List<ProductSection> list = Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves() ?
+                Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct() ? sectionMapper.findListIncludeShelvesIncludeProduct(param) : sectionMapper.findListIncludeShelves(param)
+                : sectionMapper.findList(param);
         boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? sectionMapper.findCount(param) : list.size();
         return Pages.of(total, list);

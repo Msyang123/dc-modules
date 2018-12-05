@@ -138,7 +138,7 @@
     <delete id="deleteByIds" parameterType="String">
         delete from advertisement where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 

@@ -60,10 +60,11 @@ public class ProductShelfService {
      * 根据商品上架ID查找单个商品上架
      *
      * @param shelfId 商品上架ID
+     * @param includeProduct 是否加载商品信息
      * @return 商品上架对象
      */
-    public ProductShelf findById(Long shelfId) {
-        return shelfMapper.findById(shelfId);
+    public ProductShelf findById(Long shelfId,Boolean includeProduct) {
+        return  includeProduct !=null && includeProduct ? shelfMapper.findByIdIncludeProduct(shelfId) : shelfMapper.findById(shelfId);
     }
 
 
@@ -99,7 +100,7 @@ public class ProductShelfService {
      * @return 分页上架信息数据
      */
     public Pages<ProductShelf> findList(ProductShelfParam param) {
-        List<ProductShelf> list = shelfMapper.findList(param);
+        List<ProductShelf> list = Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct() ?  shelfMapper.findListIncludeProduct(param) : shelfMapper.findList(param);
         boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? shelfMapper.findCount(param) : list.size();
         return Pages.of(total, list);

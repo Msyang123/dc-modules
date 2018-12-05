@@ -64,13 +64,15 @@ public class ProductSectionApi {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品版块Id", dataType = "Long", required = true),
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelves", dataType = "Boolean", value = "是否加载版块下商品上架信息(为空则默认为false)"),
-            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelvesQty", dataType = "Long", value = "加载商品上架最大条数(includeShelves为true起用，为空则加载所有)")
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelvesQty", dataType = "Long", value = "加载商品上架最大条数(includeShelves为true起作用，为空则加载所有)"),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeProduct", dataType = "Boolean", value = "是否加载商品信息((includeShelves为true起作用，为空则默认为false)")
     })
     @GetMapping("/product-sections/{id}")
     public ResponseEntity single(@PathVariable("id") Long sectionId,
                                  @RequestParam(value = "includeShelves", required = false) boolean includeShelves,
-                                 @RequestParam(value = "includeShelvesQty", required = false) Long includeShelvesQty) {
-        ProductSection productSection = sectionService.findById(sectionId, includeShelves, includeShelvesQty);
+                                 @RequestParam(value = "includeShelvesQty", required = false) Long includeShelvesQty,
+                                 @RequestParam(value = "includeProduct", required = false) boolean includeProduct) {
+        ProductSection productSection = sectionService.findById(sectionId, includeShelves, includeShelvesQty,includeProduct);
         return ResponseEntity.ok().body(productSection);
     }
 

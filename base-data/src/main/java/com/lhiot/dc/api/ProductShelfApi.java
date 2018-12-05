@@ -61,10 +61,13 @@ public class ProductShelfApi {
     }
 
     @ApiOperation(value = "根据Id查找商品上架", response = ProductShelf.class)
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true)
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品上架Id", dataType = "Long", required = true),
+        @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeProduct", dataType = "Boolean", value = "是否加载商品信息(为空则默认为false)")
+    })
     @GetMapping("/product-shelves/{id}")
-    public ResponseEntity single(@PathVariable("id") Long shelfId) {
-        ProductShelf productShelf = shelfService.findById(shelfId);
+    public ResponseEntity single(@PathVariable("id") Long shelfId,@RequestParam(value = "includeProduct", required = false) boolean includeProduct) {
+        ProductShelf productShelf = shelfService.findById(shelfId,includeProduct);
         return ResponseEntity.ok().body(productShelf);
     }
 
