@@ -4,6 +4,7 @@ import com.leon.microx.predefine.OnOff;
 import com.lhiot.dc.entity.type.ShelfType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
