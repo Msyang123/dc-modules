@@ -205,6 +205,7 @@
             </if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="shelfId != null">and id in (select section_id from product_section_relation where shelf_id = #{shelfId} ) </if>
         </trim>
     </sql>
 
