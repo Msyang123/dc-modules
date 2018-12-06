@@ -134,6 +134,7 @@
             <if test="applicationType != null">and application_type = #{applicationType}</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="articleId != null">and id in (select section_id from article_section_relation where article_id = #{articleId}) </if>
         </trim>
     </sql>
 
