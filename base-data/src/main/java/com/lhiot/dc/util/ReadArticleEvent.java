@@ -1,19 +1,21 @@
 package com.lhiot.dc.util;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
+import lombok.ToString;
 
 /**
  * @author xiaojian  created in  2018/12/6 8:52
  */
 @Data
+@ToString
+@AllArgsConstructor
 public class ReadArticleEvent {
-    private Object[] requestArgs;
-    private ResponseEntity responseEntity;
+    private Long articleId;
+    private Long addAmount = 1L;
 
-    public ReadArticleEvent(Object[] requestArgs, ResponseEntity responseEntity) {
-        this.requestArgs = requestArgs;
-        this.responseEntity = responseEntity;
+    public ReadArticleEvent(Long articleId){
+        this.articleId = articleId;
     }
 }
