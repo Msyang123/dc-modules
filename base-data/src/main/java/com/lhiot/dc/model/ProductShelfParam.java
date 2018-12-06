@@ -17,6 +17,8 @@ import java.util.Date;
 public class ProductShelfParam {
     @ApiModelProperty(notes = "版块ID", dataType = "Long")
     private Long sectionId;
+    @ApiModelProperty(notes = "上架ID(多个以英文逗号分隔)", dataType = "String")
+    private String ids;
     @ApiModelProperty(notes = "上架名称", dataType = "String")
     private String name;
     @ApiModelProperty(notes = "上架状态：ON-上架，OFF-下架", dataType = "OnOff")
@@ -39,6 +41,8 @@ public class ProductShelfParam {
     private Date endCreateAt;
     @ApiModelProperty(notes = "名称或条码关键字", dataType = "String")
     private String keyword;
+    @ApiModelProperty(notes = "是否加载商品信息(为空则默认为false)", dataType = "Boolean")
+    private Boolean includeProduct;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")

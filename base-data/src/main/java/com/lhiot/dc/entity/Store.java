@@ -1,9 +1,11 @@
 package com.lhiot.dc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.dc.entity.type.ApplicationType;
 import com.lhiot.dc.entity.type.StoreStatus;
 import com.lhiot.dc.entity.type.StoreType;
+import com.lhiot.dc.util.DictionaryCodes;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -82,6 +84,7 @@ public class Store {
     private BigDecimal longitude;
 
     @ApiModelProperty(notes = "启用该门店的应用类型", dataType = "String")
+    @HasEntries(from = DictionaryCodes.APPLICATION_TYPE, message = "没有找到此应用类型")
     private String applicationType;
 
 

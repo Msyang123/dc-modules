@@ -21,6 +21,8 @@ public class ProductSpecification {
     @NotNull(message = "商品ID不能为空")
     @ApiModelProperty(notes = "商品ID", dataType = "Long")
     private Long productId;
+    @ApiModelProperty(notes = "商品对象", dataType = "Product", readOnly = true)
+    private Product product;
     @ApiModelProperty(notes = "商品条码", dataType = "String")
     private String barcode;
     @ApiModelProperty(notes = "打包单位", dataType = "String")

@@ -73,7 +73,7 @@
     <delete id="deleteRelationByArticleIds" parameterType="String">
         delete from article_section_relation where article_id in
         <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
@@ -82,7 +82,7 @@
     <delete id="deleteRelationBySectionIds" parameterType="String">
         delete from article_section_relation where section_id in
         <foreach item="item" index="index" collection="sectionIds.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
@@ -93,7 +93,7 @@
         <if test="articleIds != null and articleIds != ''">
             and article_id in
             <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
-                ${item}
+                #{item}
             </foreach>
         </if>
     </delete>
@@ -108,7 +108,7 @@
         <if test="articleIds != null and articleIds != ''">
             and article_id in
             <foreach item="item" index="index" collection="articleIds.split(',')" open="(" separator="," close=")">
-                ${item}
+                #{item}
             </foreach>
         </if>
     </select>

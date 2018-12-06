@@ -2,12 +2,10 @@ package com.lhiot.dc.service;
 
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
-import com.lhiot.dc.dictionary.DictionaryClient;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.model.ProductShelfParam;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
 import com.lhiot.dc.mapper.ProductShelfMapper;
-import com.lhiot.dc.util.DictionaryCodes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +25,10 @@ import java.util.Objects;
 public class ProductShelfService {
     private ProductShelfMapper shelfMapper;
     private ProductSectionRelationMapper relationMapper;
-    private DictionaryClient dictionaryClient;
 
-    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper, DictionaryClient dictionaryClient) {
+    public ProductShelfService(ProductShelfMapper shelfMapper, ProductSectionRelationMapper relationMapper) {
         this.shelfMapper = shelfMapper;
         this.relationMapper = relationMapper;
-        this.dictionaryClient = dictionaryClient;
     }
 
     /**
@@ -42,13 +38,6 @@ public class ProductShelfService {
      * @return Tips信息  成功在message中返回Id
      */
     public Tips insert(ProductShelf productShelf) {
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(productShelf.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
         productShelf.setCreateAt(Date.from(Instant.now()));
         shelfMapper.insert(productShelf);
         return Tips.info(productShelf.getId() + "");
@@ -62,13 +51,6 @@ public class ProductShelfService {
      * @return Tips信息 执行结果
      */
     public Tips update(ProductShelf productShelf) {
-        //验证应用类型字典项及子项是否存在
-        if (Objects.nonNull(productShelf.getApplicationType())) {
-            Tips tips = DictionaryCodes.dictionaryCode(dictionaryClient, DictionaryCodes.APPLICATION_TYPE, productShelf.getApplicationType());
-            if (tips.err()) {
-                return tips;
-            }
-        }
         int result = shelfMapper.updateById(productShelf);
         return result > 0 ? Tips.info("修改成功") : Tips.warn("修改信息失败！");
     }
@@ -78,10 +60,11 @@ public class ProductShelfService {
      * 根据商品上架ID查找单个商品上架
      *
      * @param shelfId 商品上架ID
+     * @param includeProduct 是否加载商品信息
      * @return 商品上架对象
      */
-    public ProductShelf findById(Long shelfId) {
-        return shelfMapper.findById(shelfId);
+    public ProductShelf findById(Long shelfId,Boolean includeProduct) {
+        return  includeProduct !=null && includeProduct ? shelfMapper.findByIdIncludeProduct(shelfId) : shelfMapper.findById(shelfId);
     }
 
 
@@ -117,7 +100,7 @@ public class ProductShelfService {
      * @return 分页上架信息数据
      */
     public Pages<ProductShelf> findList(ProductShelfParam param) {
-        List<ProductShelf> list = shelfMapper.findList(param);
+        List<ProductShelf> list = Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct() ?  shelfMapper.findListIncludeProduct(param) : shelfMapper.findList(param);
         boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? shelfMapper.findCount(param) : list.size();
         return Pages.of(total, list);

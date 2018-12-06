@@ -52,18 +52,6 @@ public class PaymentConfig {
     private String thirdPartyKey;
 
     /**
-     * 支付完成 - 回调地址
-     */
-    @ApiModelProperty(notes = "支付完成 - 回调地址", dataType = "String")
-    private String payedNotifyUrl;
-
-    /**
-     * 退款 - 回调地址
-     */
-    @ApiModelProperty(notes = "退款 - 回调地址", dataType = "String")
-    private String refundNotifyUrl;
-
-    /**
      * 支付平台
      */
     @ApiModelProperty(notes = "支付平台", dataType = "PayPlatform")
