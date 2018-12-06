@@ -49,6 +49,8 @@ public class Article {
     private Date publishAt;
     @ApiModelProperty(notes = "关键字", dataType = "String")
     private String keywords;
+    @ApiModelProperty(notes = "阅读量", dataType = "Long")
+    private Long readAmount;
     @ApiModelProperty(notes = "jobTitle", dataType = "String")
     private String jobTitle;
 

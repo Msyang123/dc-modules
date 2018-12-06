@@ -7,6 +7,7 @@ import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.Article;
 import com.lhiot.dc.model.ArticleParam;
 import com.lhiot.dc.service.ArticleService;
+import com.lhiot.dc.util.ReadArticle;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -63,6 +64,7 @@ public class ArticleApi {
     @ApiOperation(value = "根据Id查找文章", response = Article.class)
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true)
     @GetMapping("/articles/{id}")
+    @ReadArticle
     public ResponseEntity single(@PathVariable("id") Long id) {
         Article article = articleService.findById(id);
         return ResponseEntity.ok().body(article);

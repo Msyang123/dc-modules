@@ -33,6 +33,16 @@ public interface ArticleMapper {
 
 
     /**
+     * 修改新增阅读量
+     *
+     * @param id        文章ID
+     * @param addAmount 新增阅读量
+     * @return 执行结果
+     */
+    int addReadAmountById(@Param("id") Long id, @Param("addAmount") Long addAmount);
+
+
+    /**
      * 根据ID查找单个文章
      *
      * @param id 文章ID
