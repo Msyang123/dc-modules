@@ -18,6 +18,8 @@ public class UiPositionParam {
     private String applicationType;
     @ApiModelProperty(notes = "位置编码", dataType = "String")
     private String codes;
+    @ApiModelProperty(notes = "位置描述", dataType = "String")
+    private String description;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
