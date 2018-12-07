@@ -26,7 +26,7 @@ import java.util.List;
  **/
 @RestController
 @Slf4j
-@Api(description = "商品规格接口")
+@Api(tags = {"商品规格接口"})
 public class ProductSpecificationApi {
 
     private ProductSpecificationService productSpecificationService;

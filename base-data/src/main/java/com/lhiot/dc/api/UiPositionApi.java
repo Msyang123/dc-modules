@@ -24,7 +24,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api(description = "UI位置接口")
+@Api(tags = {"UI位置接口"})
 public class UiPositionApi {
 
     private UiPositionService positionService;
