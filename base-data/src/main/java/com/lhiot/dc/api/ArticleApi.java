@@ -7,6 +7,7 @@ import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.Article;
 import com.lhiot.dc.model.ArticleParam;
 import com.lhiot.dc.service.ArticleService;
+import com.lhiot.dc.util.ReadArticle;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,14 +34,12 @@ public class ArticleApi {
 
 
     @ApiOperation("添加文章")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "article", value = "文章信息", dataType = "Article", dataTypeClass = Article.class, required = true)
     @PostMapping("/articles")
     public ResponseEntity create(@RequestBody Article article) {
         if (Objects.isNull(article.getTitle())) {
             return ResponseEntity.badRequest().body("标题为空，添加失败！");
         }
         Long id = articleService.addArticle(article);
-
         return id > 0 ?
                 ResponseEntity.created(URI.create("/articles/" + id)).body(Maps.of("id", id))
                 : ResponseEntity.badRequest().body("添加文章失败！");
@@ -49,8 +48,7 @@ public class ArticleApi {
 
     @ApiOperation("修改文章")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "article", value = "文章信息", dataType = "Article", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true)
     })
     @PutMapping("/articles/{id}")
     @ApiHideBodyProperty("id")
@@ -61,9 +59,13 @@ public class ArticleApi {
 
 
     @ApiOperation(value = "根据Id查找文章", response = Article.class)
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "addReadAmount", dataType = "Boolean", value = "是否添加阅读量(为空则默认为false)")
+    })
     @GetMapping("/articles/{id}")
-    public ResponseEntity single(@PathVariable("id") Long id) {
+    @ReadArticle("#addReadAmount")
+    public ResponseEntity single(@PathVariable("id") Long id, @RequestParam(value = "addReadAmount", required = false) boolean addReadAmount) {
         Article article = articleService.findById(id);
         return ResponseEntity.ok().body(article);
     }

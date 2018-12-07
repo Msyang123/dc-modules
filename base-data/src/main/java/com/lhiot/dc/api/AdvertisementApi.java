@@ -32,8 +32,8 @@ public class AdvertisementApi {
     }
 
     @ApiOperation("添加广告")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "advertisement", value = "广告信息", dataType = "Advertisement", required = true)
     @PostMapping("/advertisements")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
     public ResponseEntity create(@RequestBody Advertisement advertisement) {
         Long id = advertisementService.addAdvertisement(advertisement);
         return id > 0 ? ResponseEntity.created(URI.create("/advertisements/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加广告失败！");
@@ -42,11 +42,10 @@ public class AdvertisementApi {
 
     @ApiOperation("修改广告")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "广告Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "advertisement", value = "广告信息", dataType = "Advertisement", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "广告Id", dataType = "Long", required = true)
     })
     @PutMapping("/advertisements/{id}")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Advertisement advertisement) {
         advertisement.setId(id);
         return advertisementService.update(advertisement) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

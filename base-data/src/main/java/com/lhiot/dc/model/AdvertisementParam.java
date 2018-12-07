@@ -3,6 +3,7 @@ package com.lhiot.dc.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leon.microx.predefine.OnOff;
 import com.lhiot.dc.entity.type.AdvertiseType;
+import com.lhiot.dc.entity.type.RelationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,9 +20,11 @@ public class AdvertisementParam {
     private Long positionId;
     @ApiModelProperty(notes = "广告名", dataType = "String")
     private String advertiseName;
-    @ApiModelProperty(notes = "广告类别（PRODUCT_DETAILS- 商品详情 STORE_LIVE_TELECAST- 门店直播 MORE_AMUSEMENT- 多娱\n" +
-            "EXTERNAL_LINKS- 外部链接）", dataType = "AdvertiseType")
+    @ApiModelProperty(notes = "广告类别（IMAGE- 图片广告 TEXT -文字广告）", dataType = "AdvertiseType")
     private AdvertiseType advertiseType;
+    @ApiModelProperty(notes = "广告关联类别（PRODUCT_DETAILS- 商品详情 STORE_LIVE_TELECAST- 门店直播 MORE_AMUSEMENT- 多娱\n" +
+            "EXTERNAL_LINKS- 外部链接）", dataType = "RelationType")
+    private RelationType relationType;
     @ApiModelProperty(notes = "广告状态（ON- 开启 OFF-关闭）", dataType = "AdvertiseStatus")
     private OnOff advertiseStatus;
     @ApiModelProperty(notes = "起始创建时间", dataType = "Date")

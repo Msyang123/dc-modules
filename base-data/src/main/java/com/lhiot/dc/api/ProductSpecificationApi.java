@@ -39,8 +39,8 @@ public class ProductSpecificationApi {
 
 
     @ApiOperation("添加商品规格")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
     @PostMapping("/product-specifications")
+    @ApiHideBodyProperty({"id", "product"})
     public ResponseEntity create(@RequestBody ProductSpecification productSpecification) {
         Long id = productSpecificationService.addProductSpecification(productSpecification);
         return id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
@@ -49,11 +49,10 @@ public class ProductSpecificationApi {
 
     @ApiOperation("修改商品规格")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品规格Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品规格Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-specifications/{id}")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id", "product"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSpecification productSpecification) {
         productSpecification.setId(id);
         return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

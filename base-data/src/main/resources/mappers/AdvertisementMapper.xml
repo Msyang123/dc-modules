@@ -5,32 +5,47 @@
     <resultMap id="baseResultMap" type="com.lhiot.dc.entity.Advertisement">
         <id column="id" property="id"/>
         <result column="position_id" property="positionId"/>
-        <result column="image" property="image"/>
+        <result column="content" property="content"/>
+        <result column="advertise_type" property="advertiseType"/>
         <result column="advertise_name" property="advertiseName"/>
         <result column="advertise_relation" property="advertiseRelation"/>
-        <result column="advertise_type" property="advertiseType"/>
+        <result column="relation_type" property="relationType"/>
         <result column="advertise_status" property="advertiseStatus"/>
         <result column="sorting" property="sorting"/>
         <result column="begin_at" property="beginAt"/>
         <result column="end_at" property="endAt"/>
         <result column="create_at" property="createAt"/>
+        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
+            <id column="up_id" property="id"/>
+            <result column="up_application_type" property="applicationType"/>
+            <result column="up_position_type" property="positionType"/>
+            <result column="up_code" property="code"/>
+            <result column="up_description" property="description"/>
+        </association>
     </resultMap>
 
 
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
-            id,
-            position_id,
-            image,
-            advertise_name,
-            advertise_relation,
-            advertise_type,
-            advertise_status,
-            sorting,
-            begin_at,
-            end_at,
-            create_at,
+            a.id,
+            a.position_id,
+            a.content,
+            a.advertise_type,
+            a.advertise_name,
+            a.advertise_relation,
+            a.relation_type,
+            a.advertise_status,
+            a.sorting,
+            a.begin_at,
+            a.end_at,
+            a.create_at,
+
+            up.id up_id,
+            up.application_type up_application_type,
+            up.position_type up_position_type,
+            up.code up_code,
+            up.description up_description,
         </trim>
     </sql>
 
@@ -43,8 +58,11 @@
             <if test="positionId != null ">
                 position_id,
             </if>
-            <if test="image != null ">
-                image,
+            <if test="content != null ">
+                content,
+            </if>
+            <if test="advertiseType != null ">
+                advertise_type,
             </if>
             <if test="advertiseName != null ">
                 advertise_name,
@@ -52,8 +70,8 @@
             <if test="advertiseRelation != null ">
                 advertise_relation,
             </if>
-            <if test="advertiseType != null ">
-                advertise_type,
+            <if test="relationType != null ">
+                relation_type,
             </if>
             <if test="advertiseStatus != null ">
                 advertise_status,
@@ -75,8 +93,11 @@
             <if test="positionId != null ">
                 #{positionId},
             </if>
-            <if test="image != null ">
-                #{image},
+            <if test="content != null ">
+                #{content},
+            </if>
+            <if test="advertiseType != null ">
+                #{advertiseType},
             </if>
             <if test="advertiseName != null ">
                 #{advertiseName},
@@ -84,8 +105,8 @@
             <if test="advertiseRelation != null ">
                 #{advertiseRelation},
             </if>
-            <if test="advertiseType != null ">
-                #{advertiseType},
+            <if test="relationType != null ">
+                #{relationType},
             </if>
             <if test="advertiseStatus != null ">
                 #{advertiseStatus},
@@ -111,12 +132,13 @@
         update advertisement
         <trim prefix="set" suffixOverrides=",">
             <if test="positionId != null ">position_id = #{positionId},</if>
-            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="advertiseType != null ">advertise_type = #{advertiseType},</if>
             <if test="advertiseName != null and advertiseName != ''">advertise_name = #{advertiseName},</if>
             <if test="advertiseRelation != null and advertiseRelation != ''">
                 advertise_relation = #{advertiseRelation},
             </if>
-            <if test="advertiseType != null ">advertise_type = #{advertiseType},</if>
+            <if test="relationType != null ">relation_type = #{relationType},</if>
             <if test="advertiseStatus != null ">advertise_status = #{advertiseStatus},</if>
             <if test="sorting != null ">sorting = #{sorting},</if>
             <if test="beginAt != null ">begin_at = #{beginAt},</if>
@@ -130,7 +152,9 @@
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
         select
         <include refid="columns"/>
-        from advertisement where id = #{0}
+        from advertisement a
+        left join ui_position up on up.id = a.position_id
+        where a.id = #{0}
     </select>
 
 
@@ -146,12 +170,13 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null ">and position_id = #{positionId}</if>
-            <if test="advertiseName != null ">and advertise_name like concat('%',#{advertiseName},'%')</if>
-            <if test="advertiseType != null ">and advertise_type = #{advertiseType}</if>
-            <if test="advertiseStatus != null ">and advertise_status = #{advertiseStatus}</if>
-            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="positionId != null ">and a.position_id = #{positionId}</if>
+            <if test="advertiseName != null ">and a.advertise_name like concat('%',#{advertiseName},'%')</if>
+            <if test="advertiseType != null ">and a.advertise_type = #{advertiseType}</if>
+            <if test="relationType != null ">and a.relation_type = #{relationType}</if>
+            <if test="advertiseStatus != null ">and a.advertise_status = #{advertiseStatus}</if>
+            <if test="beginCreateAt != null">and a.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and a.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
         </trim>
     </sql>
 
@@ -160,10 +185,11 @@
     <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.AdvertisementParam">
         select
         <include refid="columns"/>
-        from advertisement
+        from advertisement a
+        left join ui_position up on up.id = a.position_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by a.sorting asc , a.id desc
             limit #{startRow} , #{rows}
         </if>
     </select>
@@ -171,7 +197,8 @@
     <!--查询广告集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.AdvertisementParam" resultType="int">
         select count(1)
-        from advertisement
+        from advertisement a
+        left join ui_position up on up.id = a.position_id
         <include refid="filter"/>
     </select>
 

@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+
 import com.lhiot.dc.util.*;
 
 /**
@@ -19,6 +20,8 @@ public class ArticleSection {
     private Long id;
     @ApiModelProperty(notes = "位置ID", dataType = "Long")
     private Long positionId;
+    @ApiModelProperty(notes = "位置对象", dataType = "UiPosition", readOnly = true)
+    private UiPosition uiPosition;
     @NotNull(message = "板块中文名称不能为空")
     @ApiModelProperty(notes = "板块中文名称", dataType = "String")
     private String nameCn;

@@ -14,8 +14,28 @@
     </resultMap>
 
 
+    <!-- 数据库字段对象关系映射 -->
+    <resultMap id="associationResultMap" type="com.lhiot.dc.entity.ArticleSection">
+        <id column="id" property="id"/>
+        <result column="position_id" property="positionId"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="create_at" property="createAt"/>
+        <result column="sorting" property="sorting"/>
+        <result column="application_type" property="applicationType"/>
+        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
+            <id column="up_id" property="id"/>
+            <result column="up_application_type" property="applicationType"/>
+            <result column="up_position_type" property="positionType"/>
+            <result column="up_code" property="code"/>
+            <result column="up_description" property="description"/>
+        </association>
+    </resultMap>
+
+
     <!-- base查询字段  -->
-    <sql id="columns">
+    <sql id="baseColumns">
         <trim suffixOverrides=",">
             id,
             position_id,
@@ -25,6 +45,24 @@
             create_at,
             application_type,
             sorting,
+        </trim>
+    </sql>
+    <sql id="columns">
+        <trim suffixOverrides=",">
+            a.id,
+            a.position_id,
+            a.name_cn,
+            a.name_en,
+            a.parent_id,
+            a.create_at,
+            a.application_type,
+            a.sorting,
+
+            up.id up_id,
+            up.application_type up_application_type,
+            up.position_type up_position_type,
+            up.code up_code,
+            up.description up_description,
         </trim>
     </sql>
 
@@ -98,18 +136,19 @@
 
 
     <!-- 根据id查找单个文章版块 -->
-    <select id="findById" parameterType="Long" resultMap="baseResultMap">
+    <select id="findById" parameterType="Long" resultMap="associationResultMap">
         select
         <include refid="columns"/>
-        from article_section
-        where id = #{0}
+        from article_section a
+        left join ui_position up on up.id = a.position_id
+        where a.id = #{0}
     </select>
 
 
     <!-- 根据parentId和nameCn查找文章版块集合 -->
     <select id="findListByParentIdAndNameCn" resultMap="baseResultMap">
         select
-        <include refid="columns"/>
+        <include refid="baseColumns"/>
         from article_section
         where parent_id = #{parentId} and name_cn = #{nameCn}
     </select>
@@ -127,25 +166,29 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null">and position_id = #{positionId}</if>
-            <if test="parentId != null">and parent_id = #{parentId}</if>
-            <if test="nameCn != null and nameCn != ''">and name_cn like concat('%',#{nameCn},'%')</if>
-            <if test="nameEn != null and nameEn != ''">and name_en like concat('%',#{nameEn},'%')</if>
-            <if test="applicationType != null">and application_type = #{applicationType}</if>
-            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="positionId != null">and a.position_id = #{positionId}</if>
+            <if test="parentId != null">and a.parent_id = #{parentId}</if>
+            <if test="nameCn != null and nameCn != ''">and a.name_cn like concat('%',#{nameCn},'%')</if>
+            <if test="nameEn != null and nameEn != ''">and a.name_en like concat('%',#{nameEn},'%')</if>
+            <if test="applicationType != null">and a.application_type = #{applicationType}</if>
+            <if test="beginCreateAt != null">and a.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and a.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="articleId != null">and a.id in (select section_id from article_section_relation where article_id =
+                #{articleId})
+            </if>
         </trim>
     </sql>
 
 
     <!--查询文章版块集合-->
-    <select id="findList" parameterType="com.lhiot.dc.model.ArticleSectionParam" resultMap="baseResultMap">
+    <select id="findList" parameterType="com.lhiot.dc.model.ArticleSectionParam" resultMap="associationResultMap">
         select
         <include refid="columns"/>
-        from article_section
+        from article_section a
+        left join ui_position up on up.id = a.position_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by a.sorting asc , a.id desc
             limit #{startRow} , #{rows}
         </if>
     </select>
@@ -154,7 +197,7 @@
     <!--查询文章版块集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ArticleSectionParam" resultType="int">
         select count(1)
-        from article_section
+        from article_section a
         <include refid="filter"/>
     </select>
 
