@@ -32,28 +32,19 @@ public class ReadArticleAspect {
         this.publisher = publisher;
     }
 
-
     @AfterReturning(returning = "result", pointcut = "@annotation(readArticle)")
     public void afterReturn(JoinPoint point, ResponseEntity result, ReadArticle readArticle) {
-        Boolean addReadAmount = Boolean.FALSE;
         if (!ObjectUtils.isEmpty(readArticle.value())) {
-            if ("TRUE".equals(readArticle.value().toUpperCase())) {
-                addReadAmount = Boolean.TRUE;
-            } else {
-                Object object = this.getValue(point, readArticle.value(), Boolean.class);
-                addReadAmount = !ObjectUtils.isEmpty(object) && object instanceof Boolean ? ((Boolean) object).booleanValue() : Boolean.FALSE;
-            }
-        }
-
-        if (addReadAmount && result.getStatusCode().equals(HttpStatus.OK) && result.hasBody()) {
-            Object body = result.getBody();
-            if (body instanceof Article) {
-                publisher.publishEvent(new ReadArticleEvent(((Article) result.getBody()).getId()));
+            Boolean addReadAmount = "TRUE".equals(readArticle.value().toUpperCase()) ? Boolean.TRUE : this.getValue(point, readArticle.value());
+            if (addReadAmount && result.getStatusCode().equals(HttpStatus.OK) && result.hasBody()) {
+                if (result.getBody() instanceof Article) {
+                    publisher.publishEvent(new ReadArticleEvent(((Article) result.getBody()).getId()));
+                }
             }
         }
     }
 
-    private Object getValue(JoinPoint point, String paramName, Class className) {
+    private Boolean getValue(JoinPoint point, String paramName) {
         String[] paramNames = discoverer.getParameterNames(((MethodSignature) point.getSignature()).getMethod());
         if (!ObjectUtils.isEmpty(paramNames)) {
             Object[] paramValues = point.getArgs();
@@ -62,9 +53,10 @@ public class ReadArticleAspect {
                 for (int i = 0; i < paramNames.length; i++) {
                     context.setVariable(paramNames[i], paramValues[i]);
                 }
-                return parser.parseExpression(paramName).getValue(context, className);
+                return parser.parseExpression(paramName).getValue(context, Boolean.class);
             }
         }
-        return null;
+        return Boolean.FALSE;
     }
+
 }
