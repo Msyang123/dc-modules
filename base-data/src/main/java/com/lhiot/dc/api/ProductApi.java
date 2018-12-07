@@ -36,8 +36,8 @@ public class ProductApi {
     }
 
     @ApiOperation("添加商品")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
     @PostMapping("/products")
+    @ApiHideBodyProperty({"id", "attachments", "createAt"})
     public ResponseEntity create(@RequestBody Product product) {
         Tips tips = productService.addProduct(product);
         if (tips.err()) {
@@ -49,11 +49,10 @@ public class ProductApi {
 
     @ApiOperation("修改商品")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "product", value = "商品信息", dataType = "Product", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品Id", dataType = "Long", required = true)
     })
     @PutMapping("/products/{id}")
-    @ApiHideBodyProperty({"id","code"})
+    @ApiHideBodyProperty({"id", "code", "attachments", "createAt"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Product product) {
         product.setId(id);
         return productService.update(product) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

@@ -34,7 +34,6 @@ public class ArticleApi {
 
 
     @ApiOperation("添加文章")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "article", value = "文章信息", dataType = "Article", dataTypeClass = Article.class, required = true)
     @PostMapping("/articles")
     public ResponseEntity create(@RequestBody Article article) {
         if (Objects.isNull(article.getTitle())) {
@@ -49,8 +48,7 @@ public class ArticleApi {
 
     @ApiOperation("修改文章")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "article", value = "文章信息", dataType = "Article", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章Id", dataType = "Long", required = true)
     })
     @PutMapping("/articles/{id}")
     @ApiHideBodyProperty("id")
