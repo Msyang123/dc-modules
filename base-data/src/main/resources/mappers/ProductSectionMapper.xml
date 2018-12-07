@@ -10,6 +10,13 @@
         <result column="sorting" property="sorting"/>
         <result column="create_at" property="createAt"/>
         <result column="parent_id" property="parentId"/>
+        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
+            <id column="up_id" property="id"/>
+            <result column="up_application_type" property="applicationType"/>
+            <result column="up_position_type" property="positionType"/>
+            <result column="up_code" property="code"/>
+            <result column="up_description" property="description"/>
+        </association>
     </resultMap>
 
 
@@ -22,6 +29,13 @@
         <result column="sorting" property="sorting"/>
         <result column="create_at" property="createAt"/>
         <result column="parent_id" property="parentId"/>
+        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
+            <id column="up_id" property="id"/>
+            <result column="up_application_type" property="applicationType"/>
+            <result column="up_position_type" property="positionType"/>
+            <result column="up_code" property="code"/>
+            <result column="up_description" property="description"/>
+        </association>
         <collection property="productShelfList" ofType="com.lhiot.dc.entity.ProductShelf"
                     column="{sectionId=id,includeShelvesQty=includeShelvesQty}"
                     select="com.lhiot.dc.mapper.ProductShelfMapper.findListBySectionId">
@@ -52,6 +66,13 @@
         <result column="sorting" property="sorting"/>
         <result column="create_at" property="createAt"/>
         <result column="parent_id" property="parentId"/>
+        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
+            <id column="up_id" property="id"/>
+            <result column="up_application_type" property="applicationType"/>
+            <result column="up_position_type" property="positionType"/>
+            <result column="up_code" property="code"/>
+            <result column="up_description" property="description"/>
+        </association>
         <collection property="productShelfList" ofType="com.lhiot.dc.entity.ProductShelf"
                     column="{sectionId=id,includeShelvesQty=includeShelvesQty}"
                     select="com.lhiot.dc.mapper.ProductShelfMapper.findListIncludeProductBySectionId">
@@ -73,8 +94,6 @@
     </resultMap>
 
 
-
-
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
@@ -85,6 +104,12 @@
             p.sorting,
             p.create_at,
             p.parent_id,
+
+            up.id up_id,
+            up.application_type up_application_type,
+            up.position_type up_position_type,
+            up.code up_code,
+            up.description up_description,
         </trim>
     </sql>
 
@@ -155,6 +180,7 @@
         select
         <include refid="columns"/>
         from product_section p
+        left join ui_position up on up.id = p.position_id
         where p.id = #{0}
     </select>
 
@@ -164,6 +190,7 @@
         <include refid="columns"/>
         ,#{includeShelvesQty} includeShelvesQty
         from product_section p
+        left join ui_position up on up.id = p.position_id
         where p.id = #{id}
     </select>
 
@@ -174,6 +201,7 @@
         <include refid="columns"/>
         ,#{includeShelvesQty} includeShelvesQty
         from product_section p
+        left join ui_position up on up.id = p.position_id
         where p.id = #{id}
     </select>
 
@@ -183,6 +211,7 @@
         select
         <include refid="columns"/>
         from product_section p
+        left join ui_position up on up.id = p.position_id
         where p.parent_id = #{parentId} and p.section_name = #{sectionName}
     </select>
 
@@ -199,12 +228,15 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null">and position_id = #{positionId}</if>
-            <if test="parentId != null">and parent_id = #{parentId}</if>
-            <if test="sectionName != null and sectionName != ''">and section_name like concat('%',#{sectionName},'%')
+            <if test="positionId != null">and p.position_id = #{positionId}</if>
+            <if test="parentId != null">and p.parent_id = #{parentId}</if>
+            <if test="sectionName != null and sectionName != ''">and p.section_name like concat('%',#{sectionName},'%')
             </if>
-            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="beginCreateAt != null">and p.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and p.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="shelfId != null">and p.id in (select section_id from product_section_relation where shelf_id =
+                #{shelfId} )
+            </if>
         </trim>
     </sql>
 
@@ -214,9 +246,10 @@
         select
         <include refid="columns"/>
         from product_section p
+        left join ui_position up on up.id = p.position_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by p.sorting asc , p.id desc
             limit #{startRow} , #{rows}
         </if>
     </select>
@@ -229,9 +262,10 @@
         <include refid="columns"/>
         ,#{includeShelvesQty} includeShelvesQty
         from product_section p
+        left join ui_position up on up.id = p.position_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by p.sorting asc , p.id desc
             limit #{startRow} , #{rows}
         </if>
     </select>
@@ -243,9 +277,10 @@
         <include refid="columns"/>
         ,#{includeShelvesQty} includeShelvesQty
         from product_section p
+        left join ui_position up on up.id = p.position_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by sorting asc , id desc
+            order by p.sorting asc , p.id desc
             limit #{startRow} , #{rows}
         </if>
     </select>
@@ -254,7 +289,7 @@
     <!--查询商品版块集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductSectionParam" resultType="int">
         select count(1)
-        from product_section
+        from product_section p
         <include refid="filter"/>
     </select>
 

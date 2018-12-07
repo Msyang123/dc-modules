@@ -32,7 +32,6 @@ public class ProductCategoryApi {
     }
 
     @ApiOperation("添加商品分类")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productCategory", value = "商品分类信息", dataType = "ProductCategory", required = true)
     @PostMapping("/product-categories")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
         Tips tips = categoryService.addProductCategory(productCategory);
@@ -46,8 +45,7 @@ public class ProductCategoryApi {
 
     @ApiOperation("修改商品分类")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品分类Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productCategory", value = "商品分类信息", dataType = "ProductCategory", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品分类Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-categories/{id}")
     @ApiHideBodyProperty("id")

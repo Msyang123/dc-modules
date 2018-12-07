@@ -107,6 +107,7 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="description != null ">and description like concat('%',#{description},'%')</if>
         </trim>
     </sql>
 
