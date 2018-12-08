@@ -270,7 +270,7 @@
         </if>
     </select>
 
-    <!--查询商品版块集合 包含商品上架信息-->
+    <!--查询商品版块集合 包含商品上架信息和商品信息-->
     <select id="findListIncludeShelvesIncludeProduct" parameterType="com.lhiot.dc.model.ProductSectionParam"
             resultMap="includeProductResultMap">
         select
