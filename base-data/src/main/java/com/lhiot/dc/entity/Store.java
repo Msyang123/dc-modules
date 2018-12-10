@@ -3,6 +3,7 @@ package com.lhiot.dc.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lhiot.dc.dictionary.HasEntries;
 import com.lhiot.dc.entity.type.ApplicationType;
+import com.lhiot.dc.entity.type.CoordinateType;
 import com.lhiot.dc.entity.type.StoreStatus;
 import com.lhiot.dc.entity.type.StoreType;
 import com.lhiot.dc.util.DictionaryCodes;
@@ -92,5 +93,5 @@ public class Store {
     @ApiModelProperty(hidden = true)
     private Double distance;
 
-
+    private CoordinateType coordinateType;
 }

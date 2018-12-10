@@ -1,11 +1,14 @@
 package com.lhiot.dc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.leon.microx.util.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author xiaojian  created in  2018/11/17 14:33
@@ -13,6 +16,9 @@ import java.util.Date;
 @ApiModel
 @Data
 public class ProductSectionParam {
+
+    @ApiModelProperty(notes = "板块主键Id集合",dataType = "String")
+    private String ids;
     @ApiModelProperty(notes = "位置ID", dataType = "Long")
     private Long positionId;
     @ApiModelProperty(notes = "父级ID", dataType = "Long")
@@ -45,5 +51,12 @@ public class ProductSectionParam {
             return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @ApiModelProperty(hidden = true)
+    private List<String> idList;
+
+    public List<String> getIdList(){
+      return Arrays.asList(StringUtils.tokenizeToStringArray(this.ids,","));
     }
 }
