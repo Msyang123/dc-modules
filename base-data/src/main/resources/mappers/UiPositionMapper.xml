@@ -91,22 +91,23 @@
     <delete id="deleteByIds" parameterType="String">
         delete from ui_position where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
 
-    <!-- filter查询条件  -->
+    <!-- filter查询条件 -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionType != null ">and application_type = #{positionType}</if>
-            <if test="applicationType != null ">and position_type = #{applicationType}</if>
+            <if test="positionType != null ">and position_type = #{positionType}</if>
+            <if test="applicationType != null ">and application_type = #{applicationType}</if>
             <if test="codes != null and codes != ''">
                 and code in
                 <foreach item="item" index="index" collection="codes.split(',')" open="(" separator="," close=")">
-                    '${item}'
+                    #{item}
                 </foreach>
             </if>
+            <if test="description != null ">and description like concat('%',#{description},'%')</if>
         </trim>
     </sql>
 

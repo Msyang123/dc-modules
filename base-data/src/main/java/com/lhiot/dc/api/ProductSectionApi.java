@@ -33,8 +33,8 @@ public class ProductSectionApi {
     }
 
     @ApiOperation("添加商品版块")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSection", value = "商品版块信息", dataType = "ProductSection", required = true)
     @PostMapping("/product-sections")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "productShelfList"})
     public ResponseEntity create(@RequestBody ProductSection productSection) {
         Tips tips = sectionService.addSection(productSection);
         if (tips.err()) {
@@ -49,11 +49,10 @@ public class ProductSectionApi {
 
     @ApiOperation("修改商品版块")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品版块Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSection", value = "商品版块信息", dataType = "ProductSection", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品版块Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-sections/{id}")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "productShelfList"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSection productSection) {
         productSection.setId(id);
         return sectionService.update(productSection) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
@@ -64,13 +63,15 @@ public class ProductSectionApi {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品版块Id", dataType = "Long", required = true),
             @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelves", dataType = "Boolean", value = "是否加载版块下商品上架信息(为空则默认为false)"),
-            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelvesQty", dataType = "Long", value = "加载商品上架最大条数(includeShelves为true起用，为空则加载所有)")
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeShelvesQty", dataType = "Long", value = "加载商品上架最大条数(includeShelves为true起作用，为空则加载所有)"),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeProduct", dataType = "Boolean", value = "是否加载商品信息((includeShelves为true起作用，为空则默认为false)")
     })
     @GetMapping("/product-sections/{id}")
     public ResponseEntity single(@PathVariable("id") Long sectionId,
                                  @RequestParam(value = "includeShelves", required = false) boolean includeShelves,
-                                 @RequestParam(value = "includeShelvesQty", required = false) Long includeShelvesQty) {
-        ProductSection productSection = sectionService.findById(sectionId, includeShelves, includeShelvesQty);
+                                 @RequestParam(value = "includeShelvesQty", required = false) Long includeShelvesQty,
+                                 @RequestParam(value = "includeProduct", required = false) boolean includeProduct) {
+        ProductSection productSection = sectionService.findById(sectionId, includeShelves, includeShelvesQty, includeProduct);
         return ResponseEntity.ok().body(productSection);
     }
 

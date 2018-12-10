@@ -34,7 +34,6 @@ public class UiPositionApi {
     }
 
     @ApiOperation("添加位置")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "uiPosition", value = "位置信息", dataType = "UiPosition", required = true)
     @PostMapping("/ui-positions")
     public ResponseEntity create(@Valid @RequestBody UiPosition uiPosition) {
         Tips tips = positionService.addUiPosition(uiPosition);
@@ -48,8 +47,7 @@ public class UiPositionApi {
 
     @ApiOperation("修改位置")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "位置Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "uiPosition", value = "位置信息", dataType = "UiPosition", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "位置Id", dataType = "Long", required = true)
     })
     @PutMapping("/ui-positions/{id}")
     @ApiHideBodyProperty({"id", "code"})

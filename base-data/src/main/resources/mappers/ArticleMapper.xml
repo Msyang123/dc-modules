@@ -19,6 +19,7 @@
         <result column="edit_at" property="editAt"/>
         <result column="publish_at" property="publishAt"/>
         <result column="keywords" property="keywords"/>
+        <result column="read_amount" property="readAmount"/>
         <result column="job_title" property="jobTitle"/>
     </resultMap>
 
@@ -42,6 +43,7 @@
             edit_at,
             publish_at,
             keywords,
+            read_amount,
             job_title,
         </trim>
     </sql>
@@ -97,6 +99,9 @@
             <if test="keywords != null ">
                 keywords,
             </if>
+            <if test="readAmount != null ">
+                read_amount,
+            </if>
             <if test="jobTitle != null ">
                 job_title,
             </if>
@@ -147,12 +152,14 @@
             <if test="keywords != null ">
                 #{keywords},
             </if>
+            <if test="readAmount != null ">
+                #{readAmount},
+            </if>
             <if test="jobTitle != null ">
                 #{jobTitle},
             </if>
         </trim>
     </insert>
-
 
 
     <!--修改文章-->
@@ -179,6 +186,14 @@
     </update>
 
 
+    <!--修改新增阅读量-->
+    <update id="addReadAmountById">
+        update article
+        set read_amount = read_amount + #{addAmount}
+        where id = #{id}
+    </update>
+
+
     <!-- 根据id查找单个文章 -->
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
         select
@@ -192,7 +207,7 @@
     <delete id="deleteByIds" parameterType="String">
         delete from article where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
@@ -208,7 +223,9 @@
             <if test="keywords != null and keywords != ''">and keywords like concat('%',#{keywords},'%')</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
-            <if test="sectionId != null">and id in (select asr.article_id from article_section_relation asr where asr.section_id = #{sectionId})</if>
+            <if test="sectionId != null">and id in (select asr.article_id from article_section_relation asr where
+                asr.section_id = #{sectionId})
+            </if>
         </trim>
     </sql>
 
@@ -232,7 +249,6 @@
         from article
         <include refid="filter"/>
     </select>
-
 
 
 </mapper>

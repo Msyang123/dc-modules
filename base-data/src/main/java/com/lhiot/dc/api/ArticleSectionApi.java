@@ -33,8 +33,8 @@ public class ArticleSectionApi {
     }
 
     @ApiOperation("添加文章版块")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", dataTypeClass = ArticleSection.class, required = true)
     @PostMapping("/article-sections")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
     public ResponseEntity create(@Valid @RequestBody ArticleSection articleSection) {
         Tips tips = articleSectionService.addArticleSection(articleSection);
         if (tips.err()) {
@@ -49,11 +49,10 @@ public class ArticleSectionApi {
 
     @ApiOperation("修改文章版块")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
     })
     @PutMapping("/article-sections/{id}")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
     public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
