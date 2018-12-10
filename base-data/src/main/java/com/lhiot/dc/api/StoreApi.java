@@ -25,6 +25,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import static com.lhiot.dc.entity.type.CoordinateType.BD09;
+import static com.lhiot.dc.entity.type.CoordinateType.WGS84;
+
 /**
  * @author zhangfeng created in 2018/9/22 8:57
  **/
