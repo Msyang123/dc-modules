@@ -6,6 +6,7 @@ import com.lhiot.dc.entity.ProductSection;
 import com.lhiot.dc.model.ProductSectionParam;
 import com.lhiot.dc.mapper.ProductSectionMapper;
 import com.lhiot.dc.mapper.ProductSectionRelationMapper;
+import com.lhiot.dc.model.ProductShelfParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaojian  created in  2018/11/15 16:44
@@ -25,10 +27,12 @@ public class ProductSectionService {
 
     private ProductSectionMapper sectionMapper;
     private ProductSectionRelationMapper relationMapper;
+    private ProductShelfService productShelfService;
 
-    public ProductSectionService(ProductSectionMapper sectionMapper, ProductSectionRelationMapper relationMapper) {
+    public ProductSectionService(ProductSectionMapper sectionMapper, ProductSectionRelationMapper relationMapper, ProductShelfService productShelfService) {
         this.sectionMapper = sectionMapper;
         this.relationMapper = relationMapper;
+        this.productShelfService = productShelfService;
     }
 
     /**
@@ -46,7 +50,6 @@ public class ProductSectionService {
         if (!po.isEmpty()) {
             return Tips.warn("商品版块重复，添加失败.");
         }
-
         productSection.setCreateAt(Date.from(Instant.now()));
         sectionMapper.insert(productSection);
         return Tips.info(productSection.getId() + "");
@@ -74,9 +77,20 @@ public class ProductSectionService {
      * @return 商品版块对象
      */
     public ProductSection findById(Long sectionId, Boolean includeShelves, Long includeShelvesQty, Boolean includeProduct) {
-        return includeShelves != null && includeShelves ?
-                includeProduct != null && includeProduct ? sectionMapper.findByIdIncludeShelvesIncludeProduct(sectionId, includeShelvesQty) : sectionMapper.findByIdIncludeShelves(sectionId, includeShelvesQty)
-                : sectionMapper.findById(sectionId);
+        ProductSection productSection = sectionMapper.findById(sectionId);
+        if (includeShelves != null && includeShelves) {
+            ProductShelfParam paramShelf = new ProductShelfParam();
+            paramShelf.setSectionId(productSection.getId());
+            if (includeShelvesQty != null) {
+                paramShelf.setPage(1);
+                paramShelf.setRows(includeShelvesQty.intValue());
+            }
+            if (includeProduct != null && includeProduct) {
+                paramShelf.setIncludeProduct(Boolean.TRUE);
+            }
+            productSection.setProductShelfList(productShelfService.findListByParam(paramShelf));
+        }
+        return productSection;
     }
 
 
@@ -89,7 +103,6 @@ public class ProductSectionService {
     public boolean batchDeleteByIds(String ids) {
         //根据商品版块ID集合删除相关关系
         relationMapper.deleteRelationBySectionIds(ids);
-
         return sectionMapper.deleteByIds(ids) > 0;
     }
 
@@ -101,10 +114,23 @@ public class ProductSectionService {
      * @return 分页商品版块信息数据
      */
     public Pages<ProductSection> findList(ProductSectionParam param) {
-        List<ProductSection> list = Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves() ?
-                Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()
-                        ? sectionMapper.findListIncludeShelvesIncludeProduct(param) : sectionMapper.findListIncludeShelves(param)
-                : sectionMapper.findList(param);
+        List<ProductSection> list = sectionMapper.findList(param);
+        if (Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves()) {
+            ProductShelfParam paramShelf = new ProductShelfParam();
+            if (param.getIncludeShelvesQty() != null) {
+                paramShelf.setPage(1);
+                paramShelf.setRows(param.getIncludeShelvesQty().intValue());
+            }
+            list = list.stream().peek(productSection ->
+                    {
+                        paramShelf.setSectionId(productSection.getId());
+                        if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
+                            paramShelf.setIncludeProduct(Boolean.TRUE);
+                        }
+                        productSection.setProductShelfList(productShelfService.findListByParam(paramShelf));
+                    }
+            ).collect(Collectors.toList());
+        }
         boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
         int total = pageFlag ? sectionMapper.findCount(param) : list.size();
         return Pages.of(total, list);
