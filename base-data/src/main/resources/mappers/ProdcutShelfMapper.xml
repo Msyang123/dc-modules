@@ -20,55 +20,6 @@
         <result column="shelf_type" property="shelfType"/>
     </resultMap>
 
-    <!-- 数据库字段对象关系映射 -->
-    <resultMap id="associationResultMap" type="com.lhiot.dc.entity.ProductShelf">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="specification_id" property="specificationId"/>
-        <result column="shelf_qty" property="shelfQty"/>
-        <result column="price" property="price"/>
-        <result column="description" property="description"/>
-        <result column="shelf_status" property="shelfStatus"/>
-        <result column="application_type" property="applicationType"/>
-        <result column="sorting" property="sorting"/>
-        <result column="image" property="image"/>
-        <result column="create_at" property="createAt"/>
-        <result column="original_price" property="originalPrice"/>
-        <result column="product_image" property="productImage"/>
-        <result column="shelf_type" property="shelfType"/>
-        <association property="productSpecification" javaType="com.lhiot.dc.entity.ProductSpecification"
-                     column="specification_id" select="com.lhiot.dc.mapper.ProductSpecificationMapper.findById">
-            <id column="id" property="id"/>
-            <result column="product_id" property="productId"/>
-            <result column="barcode" property="barcode"/>
-            <result column="packaging_unit" property="packagingUnit"/>
-            <result column="weight" property="weight"/>
-            <result column="limit_inventory" property="limitInventory"/>
-            <result column="inventory_specification" property="inventorySpecification"/>
-            <result column="available_status" property="availableStatus"/>
-            <result column="create_at" property="createAt"/>
-            <result column="specification_qty" property="specificationQty"/>
-            <association property="product" javaType="com.lhiot.dc.entity.Product">
-                <id column="pd_id" property="id"/>
-                <result column="pd_product_code" property="code"/>
-                <result column="pd_product_name" property="name"/>
-                <result column="pd_category_id" property="categoryId"/>
-                <result column="pd_source_code" property="sourceCode"/>
-                <result column="pd_benefit" property="benefit"/>
-                <result column="pd_description" property="description"/>
-                <result column="pd_create_at" property="createAt"/>
-                <collection property="attachments" ofType="com.lhiot.dc.entity.ProductAttachment">
-                    <id column="pda_id" property="id"/>
-                    <result column="pda_url" property="url"/>
-                    <result column="pda_product_id" property="productId"/>
-                    <result column="pda_sorting" property="sorting"/>
-                    <result column="pda_attachment_type" property="attachmentType"/>
-                </collection>
-            </association>
-        </association>
-    </resultMap>
-
-
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
@@ -207,15 +158,6 @@
         where ps.id = #{0}
     </select>
 
-    <!-- 查找单个商品上架（包含商品信息） -->
-    <select id="findByIdIncludeProduct" parameterType="Long" resultMap="associationResultMap">
-        select
-        <include refid="columns"/>
-        from product_shelf ps
-        where ps.id = #{0}
-    </select>
-
-
 
     <!-- 删除商品上架集合 -->
     <delete id="deleteByIds" parameterType="String">
@@ -236,35 +178,6 @@
             #{item}
         </foreach>
     </select>
-
-
-    <!--根据商品版块Id查询商品上架集合 -->
-    <select id="findListBySectionId" resultMap="baseResultMap" parameterType="java.util.Map">
-        select
-        <include refid="columns"/>
-        from product_shelf ps
-        left join product_section_relation psr on ps.id=psr.shelf_id
-        where psr.section_id = #{sectionId}
-        order by ps.sorting asc , ps.id desc
-        <if test="includeShelvesQty != null and includeShelvesQty >= 0 ">
-            limit 0 , #{includeShelvesQty}
-        </if>
-    </select>
-
-    <!--根据商品版块Id查询商品上架集合 （包含商品信息） -->
-    <select id="findListIncludeProductBySectionId" resultMap="associationResultMap" parameterType="java.util.Map">
-        select
-        <include refid="columns"/>
-        from product_shelf ps
-        left join product_section_relation psr on ps.id=psr.shelf_id
-        where psr.section_id = #{sectionId}
-        order by ps.sorting asc , ps.id desc
-        <if test="includeShelvesQty != null and includeShelvesQty >= 0 ">
-            limit 0 , #{includeShelvesQty}
-        </if>
-    </select>
-
-
 
     <!-- filter查询条件  -->
     <sql id="filter">
@@ -298,19 +211,6 @@
 
     <!--查询商品上架集合-->
     <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductShelfParam">
-        select
-        <include refid="columns"/>
-        from product_shelf ps
-        left join product_specification psf on ps.specification_id = psf.id
-        <include refid="filter"/>
-        <if test="rows != null and rows > 0 ">
-            order by ps.sorting asc , ps.id desc
-            limit #{startRow} , #{rows}
-        </if>
-    </select>
-
-    <!--查询商品上架集合(包含商品信息)-->
-    <select id="findListIncludeProduct" resultMap="associationResultMap" parameterType="com.lhiot.dc.model.ProductShelfParam">
         select
         <include refid="columns"/>
         from product_shelf ps

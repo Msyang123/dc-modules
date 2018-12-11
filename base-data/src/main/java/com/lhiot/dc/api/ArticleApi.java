@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @RestController
 @Slf4j
-@Api(description = "文章接口")
+@Api(tags = {"文章接口"})
 public class ArticleApi {
     private ArticleService articleService;
 

@@ -24,7 +24,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api(description = "文章版块接口")
+@Api(tags = {"文章版块接口"})
 public class ArticleSectionApi {
     private ArticleSectionService articleSectionService;
 

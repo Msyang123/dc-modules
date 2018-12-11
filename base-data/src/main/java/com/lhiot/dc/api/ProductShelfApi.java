@@ -24,7 +24,7 @@ import java.net.URI;
  **/
 @RestController
 @Slf4j
-@Api(description = "商品上架接口")
+@Api(tags = {"商品上架接口"})
 public class ProductShelfApi {
     private ProductShelfService shelfService;
 
