@@ -116,13 +116,12 @@ public class ProductSectionService {
     public Pages<ProductSection> findList(ProductSectionParam param) {
         List<ProductSection> list = sectionMapper.findList(param);
         if (Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves()) {
-            ProductShelfParam shelfParam = new ProductShelfParam();
-            if (Objects.nonNull(param.getIncludeShelvesQty())) {
-                shelfParam.setPage(1);
-                shelfParam.setRows(param.getIncludeShelvesQty().intValue());
-            }
-            list = list.stream().peek(productSection ->
-                {
+            list = list.stream().peek(productSection -> {
+                    ProductShelfParam shelfParam = new ProductShelfParam();
+                    if (Objects.nonNull(param.getIncludeShelvesQty())) {
+                        shelfParam.setPage(1);
+                        shelfParam.setRows(param.getIncludeShelvesQty().intValue());
+                    }
                     shelfParam.setSectionId(productSection.getId());
                     if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
                         shelfParam.setIncludeProduct(Boolean.TRUE);
