@@ -122,13 +122,13 @@ public class ProductSectionService {
                 shelfParam.setRows(param.getIncludeShelvesQty().intValue());
             }
             list = list.stream().peek(productSection ->
-                    {
-                        shelfParam.setSectionId(productSection.getId());
-                        if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
-                            shelfParam.setIncludeProduct(Boolean.TRUE);
-                        }
-                        productSection.setProductShelfList(productShelfService.findListByParam(shelfParam));
+                {
+                    shelfParam.setSectionId(productSection.getId());
+                    if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
+                        shelfParam.setIncludeProduct(Boolean.TRUE);
                     }
+                    productSection.setProductShelfList(productShelfService.findListByParam(shelfParam));
+                }
             ).collect(Collectors.toList());
         }
         int total = param.getPageFlag() ? sectionMapper.findCount(param) : list.size();
