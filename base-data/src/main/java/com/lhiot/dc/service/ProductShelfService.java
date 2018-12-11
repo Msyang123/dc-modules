@@ -127,8 +127,7 @@ public class ProductShelfService {
      */
     public Pages<ProductShelf> findList(ProductShelfParam param) {
         List<ProductShelf> list = this.findListByParam(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? shelfMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? shelfMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

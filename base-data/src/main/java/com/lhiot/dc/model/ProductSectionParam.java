@@ -9,6 +9,7 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/17 14:33
@@ -17,7 +18,7 @@ import java.util.List;
 @Data
 public class ProductSectionParam {
 
-    @ApiModelProperty(notes = "板块主键Id集合",dataType = "String")
+    @ApiModelProperty(notes = "板块主键Id集合", dataType = "String")
     private String ids;
     @ApiModelProperty(notes = "位置ID(多个以英文逗号分隔)", dataType = "String")
     private String positionIds;
@@ -44,6 +45,10 @@ public class ProductSectionParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
+    @ApiModelProperty(hidden = true)
+    private List<String> idList;
 
     @JsonIgnore
     public Integer getStartRow() {
@@ -53,10 +58,12 @@ public class ProductSectionParam {
         return null;
     }
 
-    @ApiModelProperty(hidden = true)
-    private List<String> idList;
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
+    }
 
-    public List<String> getIdList(){
-      return Arrays.asList(StringUtils.tokenizeToStringArray(this.ids,","));
+    public List<String> getIdList() {
+        return Arrays.asList(StringUtils.tokenizeToStringArray(this.ids, ","));
     }
 }

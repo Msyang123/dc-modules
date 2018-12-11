@@ -81,8 +81,7 @@ public class AdvertisementService {
      */
     public Pages<Advertisement> findList(AdvertisementParam param) {
         List<Advertisement> list = advertisementMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? advertisementMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? advertisementMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

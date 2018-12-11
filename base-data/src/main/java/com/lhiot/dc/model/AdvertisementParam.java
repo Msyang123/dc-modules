@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/21 12:21
@@ -39,6 +40,8 @@ public class AdvertisementParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
 
     @JsonIgnore
     public Integer getStartRow() {
@@ -46,5 +49,10 @@ public class AdvertisementParam {
             return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
     }
 }

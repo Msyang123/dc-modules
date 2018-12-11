@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/16 11:20
@@ -50,6 +51,8 @@ public class ProductShelfParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
 
     @JsonIgnore
     public Integer getStartRow() {
@@ -57,6 +60,11 @@ public class ProductShelfParam {
             return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
     }
 
 }

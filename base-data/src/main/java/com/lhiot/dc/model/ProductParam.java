@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * @author xiaojian  created in  2018/11/17 12:18
  */
@@ -28,6 +30,8 @@ public class ProductParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
 
     @JsonIgnore
     public Integer getStartRow() {
@@ -35,5 +39,10 @@ public class ProductParam {
             return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
     }
 }
