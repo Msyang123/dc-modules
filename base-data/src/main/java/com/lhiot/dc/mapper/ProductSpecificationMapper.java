@@ -44,6 +44,15 @@ public interface ProductSpecificationMapper {
 
 
     /**
+     * 根据ID集合查找单个商品规格对象集合
+     *
+     * @param idList 商品规格ID集合
+     * @return 商品规格对象集合
+     */
+    List<ProductSpecification> findListByIdList(@Param("idList") List<Long> idList);
+
+
+    /**
      * 根据商品Id集合 查找出有商品规格的商品
      *
      * @param productIds 商品id集合

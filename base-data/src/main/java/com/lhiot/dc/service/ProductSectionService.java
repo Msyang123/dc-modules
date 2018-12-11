@@ -78,7 +78,7 @@ public class ProductSectionService {
      */
     public ProductSection findById(Long sectionId, Boolean includeShelves, Long includeShelvesQty, Boolean includeProduct) {
         ProductSection productSection = sectionMapper.findById(sectionId);
-        if (Objects.nonNull(includeShelves) && includeShelves) {
+        if (Objects.nonNull(productSection) && Objects.nonNull(includeShelves) && includeShelves) {
             ProductShelfParam shelfParam = new ProductShelfParam();
             shelfParam.setSectionId(productSection.getId());
             if (Objects.nonNull(includeShelvesQty)) {
