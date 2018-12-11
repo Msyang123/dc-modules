@@ -158,6 +158,21 @@
     </select>
 
 
+    <!--查询商品分类集合-->
+    <select id="findListByIdList" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_specification ps
+        left join product pd on pd.id=ps.product_id
+        left join product_attachment pda on pd.id=pda.product_id
+        where ps.id in
+        <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by ps.id desc
+    </select>
+
+
     <!-- 根据Id集合删除所属商品规格集合 -->
     <delete id="deleteByIds" parameterType="String">
         delete from product_specification where id in
@@ -209,14 +224,14 @@
         left join product pd on pd.id=ps.product_id
         left join product_attachment pda on pd.id=pda.product_id
         inner join (
-            select b_ps.id
-            from product_specification b_ps
-            left join product b_pd on b_pd.id=b_ps.product_id
-            <include refid="filter"/>
-            <if test="rows != null and rows > 0 ">
-                order by b_ps.id desc
-                limit #{startRow} , #{rows}
-            </if>
+        select b_ps.id
+        from product_specification b_ps
+        left join product b_pd on b_pd.id=b_ps.product_id
+        <include refid="filter"/>
+        <if test="rows != null and rows > 0 ">
+            order by b_ps.id desc
+            limit #{startRow} , #{rows}
+        </if>
         ) pw on ps.id=pw.id
         order by ps.id desc
     </select>

@@ -47,7 +47,7 @@ public class ProductService {
         int result = productMapper.insert(product);
         //保存商品附件
         List<ProductAttachment> attachments = product.getAttachments();
-        if (result > 0 && attachments != null && !attachments.isEmpty()) {
+        if (result > 0 && Objects.nonNull(attachments) && !attachments.isEmpty()) {
             attachments = attachments.stream()
                     .peek(attach -> attach.setProductId(product.getId()))
                     .collect(Collectors.toList());
@@ -65,13 +65,13 @@ public class ProductService {
     public boolean update(Product product) {
         //查询出原有商品附件 进行排序
         List<ProductAttachment> oldAttachments = attachmentMapper.findByProductId(product.getId());
-        oldAttachments = oldAttachments != null ? oldAttachments.stream()
+        oldAttachments = Objects.nonNull(oldAttachments) ? oldAttachments.stream()
                 .sorted(Comparator.comparing(ProductAttachment::getUrl))
                 .collect(Collectors.toList()) : new ArrayList();
 
         //得到最新的商品附件 进行排序 和设置商品id值
         List<ProductAttachment> newAttachments = product.getAttachments();
-        newAttachments = newAttachments != null ? newAttachments.stream()
+        newAttachments = Objects.nonNull(newAttachments) ? newAttachments.stream()
                 .peek(attach -> attach.setProductId(product.getId()))
                 .sorted(Comparator.comparing(ProductAttachment::getUrl))
                 .collect(Collectors.toList()) : new ArrayList();
@@ -120,8 +120,7 @@ public class ProductService {
      */
     public Pages<Product> findList(ProductParam param) {
         List<Product> list = productMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? productMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? productMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

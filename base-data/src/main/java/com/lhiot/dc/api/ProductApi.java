@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/12 17:07
@@ -73,7 +74,7 @@ public class ProductApi {
     @DeleteMapping("/products/{ids}")
     public ResponseEntity batchDelete(@PathVariable("ids") String ids) {
         List<String> searchProductNameList = productSpecificationService.findHaveSpecificationByProductIds(ids);
-        if (searchProductNameList != null && !searchProductNameList.isEmpty()) {
+        if (Objects.nonNull(searchProductNameList) && !searchProductNameList.isEmpty()) {
             return ResponseEntity.badRequest().body("以下商品存在规格不可删除：" + searchProductNameList.toString());
         }
         return productService.batchDeleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");
