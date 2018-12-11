@@ -52,8 +52,8 @@ public class ProductSectionParam {
 
     @JsonIgnore
     public Integer getStartRow() {
-        if (this.rows != null && this.rows > 0) {
-            return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
+        if (Objects.nonNull(this.rows) && this.rows > 0) {
+            return (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
     }

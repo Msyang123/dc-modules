@@ -78,17 +78,17 @@ public class ProductSectionService {
      */
     public ProductSection findById(Long sectionId, Boolean includeShelves, Long includeShelvesQty, Boolean includeProduct) {
         ProductSection productSection = sectionMapper.findById(sectionId);
-        if (includeShelves != null && includeShelves) {
-            ProductShelfParam paramShelf = new ProductShelfParam();
-            paramShelf.setSectionId(productSection.getId());
-            if (includeShelvesQty != null) {
-                paramShelf.setPage(1);
-                paramShelf.setRows(includeShelvesQty.intValue());
+        if (Objects.nonNull(includeShelves) && includeShelves) {
+            ProductShelfParam shelfParam = new ProductShelfParam();
+            shelfParam.setSectionId(productSection.getId());
+            if (Objects.nonNull(includeShelvesQty)) {
+                shelfParam.setPage(1);
+                shelfParam.setRows(includeShelvesQty.intValue());
             }
-            if (includeProduct != null && includeProduct) {
-                paramShelf.setIncludeProduct(Boolean.TRUE);
+            if (Objects.nonNull(includeProduct) && includeProduct) {
+                shelfParam.setIncludeProduct(Boolean.TRUE);
             }
-            productSection.setProductShelfList(productShelfService.findListByParam(paramShelf));
+            productSection.setProductShelfList(productShelfService.findListByParam(shelfParam));
         }
         return productSection;
     }
@@ -116,18 +116,18 @@ public class ProductSectionService {
     public Pages<ProductSection> findList(ProductSectionParam param) {
         List<ProductSection> list = sectionMapper.findList(param);
         if (Objects.nonNull(param.getIncludeShelves()) && param.getIncludeShelves()) {
-            ProductShelfParam paramShelf = new ProductShelfParam();
-            if (param.getIncludeShelvesQty() != null) {
-                paramShelf.setPage(1);
-                paramShelf.setRows(param.getIncludeShelvesQty().intValue());
+            ProductShelfParam shelfParam = new ProductShelfParam();
+            if (Objects.nonNull(param.getIncludeShelvesQty())) {
+                shelfParam.setPage(1);
+                shelfParam.setRows(param.getIncludeShelvesQty().intValue());
             }
             list = list.stream().peek(productSection ->
                     {
-                        paramShelf.setSectionId(productSection.getId());
+                        shelfParam.setSectionId(productSection.getId());
                         if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
-                            paramShelf.setIncludeProduct(Boolean.TRUE);
+                            shelfParam.setIncludeProduct(Boolean.TRUE);
                         }
-                        productSection.setProductShelfList(productShelfService.findListByParam(paramShelf));
+                        productSection.setProductShelfList(productShelfService.findListByParam(shelfParam));
                     }
             ).collect(Collectors.toList());
         }

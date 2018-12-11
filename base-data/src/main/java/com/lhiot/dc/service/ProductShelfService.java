@@ -69,7 +69,7 @@ public class ProductShelfService {
      */
     public ProductShelf findById(Long shelfId, Boolean includeProduct) {
          ProductShelf productShelf = shelfMapper.findById(shelfId);
-        if(includeProduct && productShelf.getSpecificationId() != null){
+        if(includeProduct && Objects.nonNull(productShelf.getSpecificationId())){
             productShelf.setProductSpecification(specificationMapper.findById(productShelf.getSpecificationId()));
         }
         return productShelf;
@@ -110,7 +110,7 @@ public class ProductShelfService {
         List<ProductShelf> list = shelfMapper.findList(param);
         if (Objects.nonNull(param.getIncludeProduct()) && param.getIncludeProduct()) {
             list = list.stream().peek(productShelf -> {
-                if (productShelf.getSpecificationId() != null) {
+                if (Objects.nonNull(productShelf.getSpecificationId())) {
                     productShelf.setProductSpecification(specificationMapper.findById(productShelf.getSpecificationId()));
                 }
             }).collect(Collectors.toList());
