@@ -237,6 +237,11 @@
             <if test="shelfId != null">and p.id in (select section_id from product_section_relation where shelf_id =
                 #{shelfId} )
             </if>
+            <if test="ids !=null and ids != ''"> and p.id in
+              <foreach collection="idList" separator="," close=")" open="(" item="item">
+                  #{item}
+              </foreach>
+            </if>
         </trim>
     </sql>
 
