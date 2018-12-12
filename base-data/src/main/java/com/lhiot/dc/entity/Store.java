@@ -88,9 +88,6 @@ public class Store {
     @HasEntries(from = DictionaryCodes.APPLICATION_TYPE, message = "没有找到此应用类型")
     private String applicationType;
 
-
-    @JsonIgnore
-    @ApiModelProperty(hidden = true)
     private Double distance;
 
     private CoordinateType coordinateType;

@@ -59,7 +59,7 @@ public class StoreApi {
     }
     @PostMapping("/stores")
     @ApiOperation(value = "添加门店")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "store", value = "要添加的门店", required = true, dataType = "Store")
+    @ApiHideBodyProperty("distance")
     public ResponseEntity create(@RequestBody Store store) {
         Position.GCJ02 amap;
         switch (store.getCoordinateType()) {
@@ -84,7 +84,7 @@ public class StoreApi {
     @PutMapping("/stores/{id}")
     @ApiOperation(value = "根据id更新门店")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "要更新的门店id", required = true, dataType = "Long")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id","distance"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Store store) {
         log.debug("根据id更新门店\t param:{}", store);
         store.setId(id);
