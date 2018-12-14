@@ -43,13 +43,6 @@ public interface ProductShelfMapper {
      */
     ProductShelf findById(Long shelfId);
 
-    /**
-     * 根据ID查找单个商品上架(包含商品信息)
-     *
-     * @param shelfId 商品上架ID
-     * @return 商品上架对象
-     */
-    ProductShelf findByIdIncludeProduct(Long shelfId);
 
     /**
      * 删除商品上架集合
@@ -77,14 +70,6 @@ public interface ProductShelfMapper {
      */
     List<ProductShelf> findList(ProductShelfParam param);
 
-
-    /**
-     * 查询商品上架信息列表   包含商品信息
-     *
-     * @param param 参数
-     * @return 商品上架信息列表
-     */
-    List<ProductShelf> findListIncludeProduct(ProductShelfParam param);
 
     /**
      * 查询商品上架信息总数

@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaojian created in 2018/11/13 11:55
  **/
 @RestController
 @Slf4j
-@Api(description = "商品规格接口")
+@Api(tags = {"商品规格接口"})
 public class ProductSpecificationApi {
 
     private ProductSpecificationService productSpecificationService;
@@ -73,7 +74,7 @@ public class ProductSpecificationApi {
     @DeleteMapping("/product-specifications/{ids}")
     public ResponseEntity deleteByProductId(@PathVariable("ids") String ids) {
         List<ProductShelf> productShelfList = shelfService.findListBySpecificationIds(ids);
-        if (productShelfList != null && !productShelfList.isEmpty()) {
+        if (Objects.nonNull(productShelfList) && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("商品规格存在上架信息不可删除！");
         }
         return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");

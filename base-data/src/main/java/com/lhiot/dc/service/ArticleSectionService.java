@@ -98,8 +98,7 @@ public class ArticleSectionService {
      */
     public Pages<ArticleSection> findList(ArticleSectionParam param) {
         List<ArticleSection> list = articleSectionMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? articleSectionMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? articleSectionMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

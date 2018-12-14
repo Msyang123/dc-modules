@@ -22,7 +22,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api(description = "广告接口")
+@Api(tags = {"广告接口"})
 public class AdvertisementApi {
 
     private AdvertisementService advertisementService;

@@ -19,81 +19,6 @@
         </association>
     </resultMap>
 
-
-    <!-- 数据库字段对象关系映射 -->
-    <resultMap id="associationResultMap" type="com.lhiot.dc.entity.ProductSection">
-        <id column="id" property="id"/>
-        <result column="position_id" property="positionId"/>
-        <result column="section_name" property="sectionName"/>
-        <result column="section_img" property="sectionImg"/>
-        <result column="sorting" property="sorting"/>
-        <result column="create_at" property="createAt"/>
-        <result column="parent_id" property="parentId"/>
-        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
-            <id column="up_id" property="id"/>
-            <result column="up_application_type" property="applicationType"/>
-            <result column="up_position_type" property="positionType"/>
-            <result column="up_code" property="code"/>
-            <result column="up_description" property="description"/>
-        </association>
-        <collection property="productShelfList" ofType="com.lhiot.dc.entity.ProductShelf"
-                    column="{sectionId=id,includeShelvesQty=includeShelvesQty}"
-                    select="com.lhiot.dc.mapper.ProductShelfMapper.findListBySectionId">
-            <id column="ps_id" property="id"/>
-            <result column="ps_name" property="name"/>
-            <result column="specification_id" property="specificationId"/>
-            <result column="shelf_qty" property="shelfQty"/>
-            <result column="price" property="price"/>
-            <result column="description" property="description"/>
-            <result column="shelf_status" property="shelfStatus"/>
-            <result column="application_type" property="applicationType"/>
-            <result column="ps_sorting" property="sorting"/>
-            <result column="image" property="image"/>
-            <result column="ps_create_at" property="createAt"/>
-            <result column="original_price" property="originalPrice"/>
-            <result column="product_image" property="productImage"/>
-            <result column="shelf_type" property="shelfType"/>
-        </collection>
-    </resultMap>
-
-
-    <!-- 数据库字段对象关系映射 -->
-    <resultMap id="includeProductResultMap" type="com.lhiot.dc.entity.ProductSection">
-        <id column="id" property="id"/>
-        <result column="position_id" property="positionId"/>
-        <result column="section_name" property="sectionName"/>
-        <result column="section_img" property="sectionImg"/>
-        <result column="sorting" property="sorting"/>
-        <result column="create_at" property="createAt"/>
-        <result column="parent_id" property="parentId"/>
-        <association property="uiPosition" javaType="com.lhiot.dc.entity.UiPosition">
-            <id column="up_id" property="id"/>
-            <result column="up_application_type" property="applicationType"/>
-            <result column="up_position_type" property="positionType"/>
-            <result column="up_code" property="code"/>
-            <result column="up_description" property="description"/>
-        </association>
-        <collection property="productShelfList" ofType="com.lhiot.dc.entity.ProductShelf"
-                    column="{sectionId=id,includeShelvesQty=includeShelvesQty}"
-                    select="com.lhiot.dc.mapper.ProductShelfMapper.findListIncludeProductBySectionId">
-            <id column="ps_id" property="id"/>
-            <result column="ps_name" property="name"/>
-            <result column="specification_id" property="specificationId"/>
-            <result column="shelf_qty" property="shelfQty"/>
-            <result column="price" property="price"/>
-            <result column="description" property="description"/>
-            <result column="shelf_status" property="shelfStatus"/>
-            <result column="application_type" property="applicationType"/>
-            <result column="ps_sorting" property="sorting"/>
-            <result column="image" property="image"/>
-            <result column="ps_create_at" property="createAt"/>
-            <result column="original_price" property="originalPrice"/>
-            <result column="product_image" property="productImage"/>
-            <result column="shelf_type" property="shelfType"/>
-        </collection>
-    </resultMap>
-
-
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
@@ -184,27 +109,6 @@
         where p.id = #{0}
     </select>
 
-    <!-- 根据id查找单个商品版块 包含商品上架信息 -->
-    <select id="findByIdIncludeShelves" resultMap="associationResultMap">
-        select
-        <include refid="columns"/>
-        ,#{includeShelvesQty} includeShelvesQty
-        from product_section p
-        left join ui_position up on up.id = p.position_id
-        where p.id = #{id}
-    </select>
-
-
-    <!-- 根据id查找单个商品版块 包含商品上架信息和商品信息   -->
-    <select id="findByIdIncludeShelvesIncludeProduct" resultMap="includeProductResultMap">
-        select
-        <include refid="columns"/>
-        ,#{includeShelvesQty} includeShelvesQty
-        from product_section p
-        left join ui_position up on up.id = p.position_id
-        where p.id = #{id}
-    </select>
-
 
     <!-- 根据parentId和sectionName查找商品版块集合 -->
     <select id="findListByParentIdAndSectionName" resultMap="baseResultMap">
@@ -228,7 +132,12 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null">and p.position_id = #{positionId}</if>
+            <if test="positionIds != null and positionIds != ''">
+                and p.position_id in
+                <foreach item="item" index="index" collection="positionIds.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="parentId != null">and p.parent_id = #{parentId}</if>
             <if test="sectionName != null and sectionName != ''">and p.section_name like concat('%',#{sectionName},'%')
             </if>
@@ -237,14 +146,14 @@
             <if test="shelfId != null">and p.id in (select section_id from product_section_relation where shelf_id =
                 #{shelfId} )
             </if>
-            <if test="ids !=null and ids != ''"> and p.id in
-              <foreach collection="idList" separator="," close=")" open="(" item="item">
-                  #{item}
-              </foreach>
+            <if test="ids !=null and ids != ''">
+                and p.id in
+                <foreach collection="idList" separator="," close=")" open="(" item="item">
+                    #{item}
+                </foreach>
             </if>
         </trim>
     </sql>
-
 
     <!--查询商品版块集合-->
     <select id="findList" parameterType="com.lhiot.dc.model.ProductSectionParam" resultMap="baseResultMap">
@@ -258,38 +167,6 @@
             limit #{startRow} , #{rows}
         </if>
     </select>
-
-
-    <!--查询商品版块集合 包含商品上架信息-->
-    <select id="findListIncludeShelves" parameterType="com.lhiot.dc.model.ProductSectionParam"
-            resultMap="associationResultMap">
-        select
-        <include refid="columns"/>
-        ,#{includeShelvesQty} includeShelvesQty
-        from product_section p
-        left join ui_position up on up.id = p.position_id
-        <include refid="filter"/>
-        <if test="rows != null and rows > 0 ">
-            order by p.sorting asc , p.id desc
-            limit #{startRow} , #{rows}
-        </if>
-    </select>
-
-    <!--查询商品版块集合 包含商品上架信息-->
-    <select id="findListIncludeShelvesIncludeProduct" parameterType="com.lhiot.dc.model.ProductSectionParam"
-            resultMap="includeProductResultMap">
-        select
-        <include refid="columns"/>
-        ,#{includeShelvesQty} includeShelvesQty
-        from product_section p
-        left join ui_position up on up.id = p.position_id
-        <include refid="filter"/>
-        <if test="rows != null and rows > 0 ">
-            order by p.sorting asc , p.id desc
-            limit #{startRow} , #{rows}
-        </if>
-    </select>
-
 
     <!--查询商品版块集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductSectionParam" resultType="int">

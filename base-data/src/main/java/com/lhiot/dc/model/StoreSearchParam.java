@@ -1,6 +1,5 @@
 package com.lhiot.dc.model;
 
-import com.lhiot.dc.entity.type.ApplicationType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,7 +16,7 @@ public class StoreSearchParam {
     private String code;
 
     private String applicationType;
-    private Integer distance;
+    private Double distance = 0D;
     @ApiModelProperty(notes = "纬度",dataType = "Double")
     private Double lat;
     @ApiModelProperty(notes = "经度",dataType = "Double")
