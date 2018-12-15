@@ -30,6 +30,10 @@ public class ArticleSectionParam {
     private Date endCreateAt;
     @ApiModelProperty(notes = "版块内文章ID", dataType = "Long")
     private Long articleId;
+    @ApiModelProperty(notes = "是否加载版块下文章信息(为空则默认为false)", dataType = "Boolean")
+    private Boolean includeArticles;
+    @ApiModelProperty(notes = "加载文章最大条数(includeArticles为true起用，为空则加载所有)", dataType = "Long")
+    private Long includeArticlesQty;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
