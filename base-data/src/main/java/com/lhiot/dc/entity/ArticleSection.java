@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 import com.lhiot.dc.util.*;
 
@@ -36,5 +37,7 @@ public class ArticleSection {
     @ApiModelProperty(notes = "应用类型", dataType = "String")
     @HasEntries(from = DictionaryCodes.APPLICATION_TYPE, message = "没有找到此应用类型")
     private String applicationType;
+    @ApiModelProperty(notes = "文章信息", dataType = "Article", readOnly = true)
+    private List<Article> articleList;
 
 }

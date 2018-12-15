@@ -34,7 +34,7 @@ public class ArticleSectionApi {
 
     @ApiOperation("添加文章版块")
     @PostMapping("/article-sections")
-    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList"})
     public ResponseEntity create(@Valid @RequestBody ArticleSection articleSection) {
         Tips tips = articleSectionService.addArticleSection(articleSection);
         if (tips.err()) {
@@ -52,7 +52,7 @@ public class ArticleSectionApi {
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
     })
     @PutMapping("/article-sections/{id}")
-    @ApiHideBodyProperty({"id", "uiPosition", "createAt"})
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList"})
     public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
@@ -64,10 +64,16 @@ public class ArticleSectionApi {
 
 
     @ApiOperation(value = "根据Id查找文章版块", response = ArticleSection.class)
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeArticles", dataType = "Boolean", value = "是否加载版块下文章信息(为空则默认为false)"),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeArticlesQty", dataType = "Long", value = "加载文章最大条数(includeArticles为true起作用，为空则加载所有)")
+    })
     @GetMapping("/article-sections/{id}")
-    public ResponseEntity single(@PathVariable("id") Long id) {
-        ArticleSection articleSection = articleSectionService.findById(id);
+    public ResponseEntity single(@PathVariable("id") Long id,
+                                 @RequestParam(value = "includeArticles", required = false) boolean includeArticles,
+                                 @RequestParam(value = "includeArticlesQty", required = false) Long includeArticlesQty) {
+        ArticleSection articleSection = articleSectionService.findById(id, includeArticles, includeArticlesQty);
         return ResponseEntity.ok().body(articleSection);
     }
 

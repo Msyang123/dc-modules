@@ -78,6 +78,18 @@ public class ArticleService {
 
 
     /**
+     * 根据参数，查询所属的文章集合
+     *
+     * @param param 参数
+     * @return 文章信息集合
+     */
+    public List<Article> findListByParam(ArticleParam param) {
+        List<Article> list = articleMapper.findList(param);
+        return list;
+    }
+
+
+    /**
      * 查询文章信息列表
      *
      * @param param 参数
