@@ -166,7 +166,12 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="positionId != null">and a.position_id = #{positionId}</if>
+            <if test="positionIds != null and positionIds != ''">
+                and a.position_id in
+                <foreach item="item" index="index" collection="positionIds.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="parentId != null">and a.parent_id = #{parentId}</if>
             <if test="nameCn != null and nameCn != ''">and a.name_cn like concat('%',#{nameCn},'%')</if>
             <if test="nameEn != null and nameEn != ''">and a.name_en like concat('%',#{nameEn},'%')</if>

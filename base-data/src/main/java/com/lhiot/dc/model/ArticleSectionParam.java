@@ -14,8 +14,8 @@ import java.util.Objects;
 @ApiModel
 @Data
 public class ArticleSectionParam {
-    @ApiModelProperty(notes = "位置ID", dataType = "Long")
-    private Long positionId;
+    @ApiModelProperty(notes = "位置ID(多个以英文逗号分隔)", dataType = "String")
+    private String positionIds;
     @ApiModelProperty(notes = "父级ID", dataType = "Long")
     private Long parentId;
     @ApiModelProperty(notes = "板块中文名称", dataType = "String")
