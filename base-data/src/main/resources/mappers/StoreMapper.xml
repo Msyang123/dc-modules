@@ -138,10 +138,8 @@
         <include refid="columns"/>
         from store
         <trim prefix="where" suffixOverrides="and">
-            <where>
-                <if test="name != null">store_name like concat('%',#{name},'%') and</if>
-                <if test="code != null">store_code like concat('%',#{code},'%') and</if>
-            </where>
+                <if test="name != null and name != ''">store_name like concat('%',#{name},'%') and</if>
+                <if test="code != null and code !=''">store_code like concat('%',#{code},'%') and</if>
         </trim>
     </select>
 
