@@ -223,6 +223,8 @@
             <if test="keywords != null and keywords != ''">and keywords like concat('%',#{keywords},'%')</if>
             <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="beginPublishAt != null">and publish_at <![CDATA[ >= ]]> #{beginPublishAt}</if>
+            <if test="endPublishAt != null">and publish_at <![CDATA[ <= ]]> #{endPublishAt}</if>
             <if test="sectionId != null">and id in (select asr.article_id from article_section_relation asr where
                 asr.section_id = #{sectionId})
             </if>
