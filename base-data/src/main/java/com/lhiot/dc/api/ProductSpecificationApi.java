@@ -3,6 +3,7 @@ package com.lhiot.dc.api;
 
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductShelf;
 import com.lhiot.dc.entity.ProductSpecification;
@@ -19,13 +20,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaojian created in 2018/11/13 11:55
  **/
 @RestController
 @Slf4j
-@Api(description = "商品规格接口")
+@Api(tags = {"商品规格接口"})
 public class ProductSpecificationApi {
 
     private ProductSpecificationService productSpecificationService;
@@ -38,8 +40,8 @@ public class ProductSpecificationApi {
 
 
     @ApiOperation("添加商品规格")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
     @PostMapping("/product-specifications")
+    @ApiHideBodyProperty({"id", "product"})
     public ResponseEntity create(@RequestBody ProductSpecification productSpecification) {
         Long id = productSpecificationService.addProductSpecification(productSpecification);
         return id > 0 ? ResponseEntity.created(URI.create("/product-specifications/" + id)).body(Maps.of("id", id)) : ResponseEntity.badRequest().body("添加商品规格失败！");
@@ -48,10 +50,10 @@ public class ProductSpecificationApi {
 
     @ApiOperation("修改商品规格")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品规格Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productSpecification", value = "商品规格信息", dataType = "ProductSpecification", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品规格Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-specifications/{id}")
+    @ApiHideBodyProperty({"id", "product"})
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductSpecification productSpecification) {
         productSpecification.setId(id);
         return productSpecificationService.update(productSpecification) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");
@@ -72,7 +74,7 @@ public class ProductSpecificationApi {
     @DeleteMapping("/product-specifications/{ids}")
     public ResponseEntity deleteByProductId(@PathVariable("ids") String ids) {
         List<ProductShelf> productShelfList = shelfService.findListBySpecificationIds(ids);
-        if (productShelfList != null && !productShelfList.isEmpty()) {
+        if (Objects.nonNull(productShelfList) && !productShelfList.isEmpty()) {
             return ResponseEntity.badRequest().body("商品规格存在上架信息不可删除！");
         }
         return productSpecificationService.deleteByIds(ids) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().body("删除信息失败！");

@@ -81,7 +81,7 @@
     <delete id="batchDeleteByProductIds" parameterType="String">
         delete from product_attachment where product_id in
         <foreach item="item" index="index" collection="productIds.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 

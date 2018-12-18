@@ -3,6 +3,7 @@ package com.lhiot.dc.api;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ArticleSection;
 import com.lhiot.dc.model.ArticleSectionParam;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 /**
@@ -22,7 +24,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api(description = "文章版块接口")
+@Api(tags = {"文章版块接口"})
 public class ArticleSectionApi {
     private ArticleSectionService articleSectionService;
 
@@ -31,9 +33,9 @@ public class ArticleSectionApi {
     }
 
     @ApiOperation("添加文章版块")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", dataTypeClass = ArticleSection.class, required = true)
     @PostMapping("/article-sections")
-    public ResponseEntity create(@RequestBody ArticleSection articleSection) {
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList"})
+    public ResponseEntity create(@Valid @RequestBody ArticleSection articleSection) {
         Tips tips = articleSectionService.addArticleSection(articleSection);
         if (tips.err()) {
             return ResponseEntity.badRequest().body(tips.getMessage());
@@ -47,11 +49,11 @@ public class ArticleSectionApi {
 
     @ApiOperation("修改文章版块")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "articleSection", value = "文章版块信息", dataType = "ArticleSection", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
     })
     @PutMapping("/article-sections/{id}")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ArticleSection articleSection) {
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList"})
+    public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
         if (tips.err()) {
@@ -62,10 +64,16 @@ public class ArticleSectionApi {
 
 
     @ApiOperation(value = "根据Id查找文章版块", response = ArticleSection.class)
-    @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeArticles", dataType = "Boolean", value = "是否加载版块下文章信息(为空则默认为false)"),
+            @ApiImplicitParam(paramType = ApiParamType.QUERY, name = "includeArticlesQty", dataType = "Long", value = "加载文章最大条数(includeArticles为true起作用，为空则加载所有)")
+    })
     @GetMapping("/article-sections/{id}")
-    public ResponseEntity single(@PathVariable("id") Long id) {
-        ArticleSection articleSection = articleSectionService.findById(id);
+    public ResponseEntity single(@PathVariable("id") Long id,
+                                 @RequestParam(value = "includeArticles", required = false) boolean includeArticles,
+                                 @RequestParam(value = "includeArticlesQty", required = false) Long includeArticlesQty) {
+        ArticleSection articleSection = articleSectionService.findById(id, includeArticles, includeArticlesQty);
         return ResponseEntity.ok().body(articleSection);
     }
 

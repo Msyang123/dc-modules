@@ -49,6 +49,9 @@ public class ArticleService {
      * @return 执行结果 true 或者 false
      */
     public boolean update(Article article) {
+        if (Objects.isNull(article.getEditAt())) {
+            article.setEditAt(Date.from(Instant.now()));
+        }
         return articleMapper.updateById(article) > 0;
     }
 
@@ -79,6 +82,18 @@ public class ArticleService {
 
 
     /**
+     * 根据参数，查询所属的文章集合
+     *
+     * @param param 参数
+     * @return 文章信息集合
+     */
+    public List<Article> findListByParam(ArticleParam param) {
+        List<Article> list = articleMapper.findList(param);
+        return list;
+    }
+
+
+    /**
      * 查询文章信息列表
      *
      * @param param 参数
@@ -86,8 +101,7 @@ public class ArticleService {
      */
     public Pages<Article> findList(ArticleParam param) {
         List<Article> list = articleMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? articleMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? articleMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

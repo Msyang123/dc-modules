@@ -38,8 +38,8 @@ public class ProductCategoryService {
             return Tips.warn("分类名为空，添加失败.");
         }
         // 幂等添加
-        ProductCategory po = categoryMapper.findByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
-        if (Objects.nonNull(po)) {
+        List<ProductCategory> po = categoryMapper.findListByParentIdAndGroupName(productCategory.getParentId(), productCategory.getGroupName());
+        if (!po.isEmpty()) {
             return Tips.warn("商品分类重复，添加失败.");
         }
 
@@ -90,8 +90,7 @@ public class ProductCategoryService {
      */
     public Pages<ProductCategory> findList(ProductCategoryParam param) {
         List<ProductCategory> list = categoryMapper.findList(param);
-        boolean pageFlag = Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows()) && param.getPage() > 0 && param.getRows() > 0;
-        int total = pageFlag ? categoryMapper.findCount(param) : list.size();
+        int total = param.getPageFlag() ? categoryMapper.findCount(param) : list.size();
         return Pages.of(total, list);
     }
 

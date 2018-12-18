@@ -70,6 +70,7 @@ public interface ProductShelfMapper {
      */
     List<ProductShelf> findList(ProductShelfParam param);
 
+
     /**
      * 查询商品上架信息总数
      *

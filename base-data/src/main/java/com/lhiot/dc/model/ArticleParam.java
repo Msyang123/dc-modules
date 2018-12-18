@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/22 9:33
@@ -33,6 +34,10 @@ public class ArticleParam {
     private Date beginCreateAt;
     @ApiModelProperty(notes = "截止创建时间", dataType = "Date")
     private Date endCreateAt;
+    @ApiModelProperty(notes = "起始发布时间", dataType = "Date")
+    private Date beginPublishAt;
+    @ApiModelProperty(notes = "截止发布时间", dataType = "Date")
+    private Date endPublishAt;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
@@ -40,13 +45,20 @@ public class ArticleParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
 
     @JsonIgnore
     public Integer getStartRow() {
-        if (this.rows != null && this.rows > 0) {
-            return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
+        if (Objects.nonNull(this.rows) && this.rows > 0) {
+            return (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
     }
 
 }

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/16 11:20
@@ -17,6 +18,8 @@ import java.util.Date;
 public class ProductShelfParam {
     @ApiModelProperty(notes = "版块ID", dataType = "Long")
     private Long sectionId;
+    @ApiModelProperty(notes = "上架ID(多个以英文逗号分隔)", dataType = "String")
+    private String ids;
     @ApiModelProperty(notes = "上架名称", dataType = "String")
     private String name;
     @ApiModelProperty(notes = "上架状态：ON-上架，OFF-下架", dataType = "OnOff")
@@ -39,6 +42,8 @@ public class ProductShelfParam {
     private Date endCreateAt;
     @ApiModelProperty(notes = "名称或条码关键字", dataType = "String")
     private String keyword;
+    @ApiModelProperty(notes = "是否加载商品信息(为空则默认为false)", dataType = "Boolean")
+    private Boolean includeProduct;
     @ApiModelProperty(notes = "每页查询条数(为空或0不分页查所有)", dataType = "Integer")
     private Integer rows;
     @ApiModelProperty(notes = "当前页", dataType = "Integer")
@@ -46,13 +51,20 @@ public class ProductShelfParam {
 
     @ApiModelProperty(hidden = true)
     private Integer startRow;
+    @ApiModelProperty(hidden = true)
+    private Boolean pageFlag;
 
     @JsonIgnore
     public Integer getStartRow() {
-        if (this.rows != null && this.rows > 0) {
-            return (this.page != null && this.page > 0 ? this.page - 1 : 0) * this.rows;
+        if (Objects.nonNull(this.rows) && this.rows > 0) {
+            return (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
         return null;
+    }
+
+    @JsonIgnore
+    public Boolean getPageFlag() {
+        return Objects.nonNull(this.page) && Objects.nonNull(this.rows) && this.page > 0 && this.rows > 0;
     }
 
 }

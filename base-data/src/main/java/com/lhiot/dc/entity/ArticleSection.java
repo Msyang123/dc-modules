@@ -1,11 +1,15 @@
 package com.lhiot.dc.entity;
 
+import com.lhiot.dc.dictionary.HasEntries;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
+
+import com.lhiot.dc.util.*;
 
 /**
  * @author xiaojian  created in  2018/11/21 15:36
@@ -17,6 +21,8 @@ public class ArticleSection {
     private Long id;
     @ApiModelProperty(notes = "位置ID", dataType = "Long")
     private Long positionId;
+    @ApiModelProperty(notes = "位置对象", dataType = "UiPosition", readOnly = true)
+    private UiPosition uiPosition;
     @NotNull(message = "板块中文名称不能为空")
     @ApiModelProperty(notes = "板块中文名称", dataType = "String")
     private String nameCn;
@@ -29,6 +35,9 @@ public class ArticleSection {
     @ApiModelProperty(notes = "序号", dataType = "Integer")
     private Integer sorting;
     @ApiModelProperty(notes = "应用类型", dataType = "String")
+    @HasEntries(from = DictionaryCodes.APPLICATION_TYPE, message = "没有找到此应用类型")
     private String applicationType;
+    @ApiModelProperty(notes = "文章信息", dataType = "Article", readOnly = true)
+    private List<Article> articleList;
 
 }

@@ -1,65 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lhiot.dc.mapper.ProductShelfMapper">
+
     <!-- 数据库字段对象关系映射 -->
     <resultMap id="baseResultMap" type="com.lhiot.dc.entity.ProductShelf">
-        <id column="ps_id" property="id"/>
-        <result column="ps_name" property="name"/>
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
         <result column="specification_id" property="specificationId"/>
         <result column="shelf_qty" property="shelfQty"/>
         <result column="price" property="price"/>
         <result column="description" property="description"/>
         <result column="shelf_status" property="shelfStatus"/>
         <result column="application_type" property="applicationType"/>
-        <result column="ps_sorting" property="sorting"/>
+        <result column="sorting" property="sorting"/>
         <result column="image" property="image"/>
-        <result column="ps_create_at" property="createAt"/>
+        <result column="create_at" property="createAt"/>
         <result column="original_price" property="originalPrice"/>
         <result column="product_image" property="productImage"/>
         <result column="shelf_type" property="shelfType"/>
-        <association property="productSpecification" javaType="com.lhiot.dc.entity.ProductSpecification">
-            <id column="psf_id" property="id"/>
-            <result column="product_id" property="productId"/>
-            <result column="barcode" property="barcode"/>
-            <result column="packaging_unit" property="packagingUnit"/>
-            <result column="weight" property="weight"/>
-            <result column="limit_inventory" property="limitInventory"/>
-            <result column="inventory_specification" property="inventorySpecification"/>
-            <result column="available_status" property="availableStatus"/>
-            <result column="psf_create_at" property="createAt"/>
-            <result column="specification_qty" property="specificationQty"/>
-        </association>
     </resultMap>
-
 
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
-            ps.id ps_id,
-            ps.`name` ps_name,
+            ps.id,
+            ps.`name`,
             ps.specification_id,
             ps.shelf_qty,
             ps.price,
             ps.description,
             ps.shelf_status,
             ps.application_type,
-            ps.sorting ps_sorting,
+            ps.sorting,
             ps.image,
-            ps.create_at ps_create_at,
+            ps.create_at,
             ps.original_price,
             ps.product_image,
             ps.shelf_type,
-
-            psf.id psf_id,
-            psf.product_id,
-            psf.barcode,
-            psf.packaging_unit,
-            psf.weight,
-            psf.limit_inventory,
-            psf.inventory_specification,
-            psf.available_status,
-            psf.create_at psf_create_at,
-            psf.specification_qty,
         </trim>
     </sql>
 
@@ -178,7 +155,6 @@
         select
         <include refid="columns"/>
         from product_shelf ps
-        left join product_specification psf on ps.specification_id=psf.id
         where ps.id = #{0}
     </select>
 
@@ -187,7 +163,7 @@
     <delete id="deleteByIds" parameterType="String">
         delete from product_shelf where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
@@ -197,48 +173,37 @@
         select
         <include refid="columns"/>
         from product_shelf ps
-        left join product_specification psf on ps.specification_id=psf.id
         where ps.specification_id in
         <foreach item="item" index="index" collection="specificationIds.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </select>
-
-
-    <!--根据商品版块Id查询商品上架集合 -->
-    <select id="findListBySectionId" resultMap="baseResultMap" parameterType="java.util.Map">
-        select
-        <include refid="columns"/>
-        from product_shelf ps
-        left join product_specification psf on ps.specification_id=psf.id
-        left join product_section_relation psr on ps.id=psr.shelf_id
-        where psr.section_id = #{sectionId}
-        order by ps.sorting asc , ps.id desc
-        <if test="includeShelvesQty != null and includeShelvesQty >= 0 ">
-            limit 0 , #{includeShelvesQty}
-        </if>
-    </select>
-
 
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="sectionId != null">and b_ps.id in (select b_psr.shelf_id from product_section_relation b_psr
-                where b_psr.section_id = #{sectionId})
+            <if test="sectionId != null">and ps.id in (select psr.shelf_id from product_section_relation psr
+                where psr.section_id = #{sectionId})
             </if>
-            <if test="name != null and name != ''">and b_ps.`name` like concat('%',#{name},'%')</if>
-            <if test="shelfStatus != null">and b_ps.shelf_status = #{shelfStatus}</if>
-            <if test="shelfType != null">and b_ps.shelf_type = #{shelfType}</if>
-            <if test="applicationType != null">and b_ps.application_type = #{applicationType}</if>
-            <if test="minPrice != null">and b_ps.price <![CDATA[ >= ]]> #{minPrice}</if>
-            <if test="maxPrice != null">and b_ps.price <![CDATA[ <= ]]> #{maxPrice}</if>
-            <if test="minOriginalPrice != null">and b_ps.original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
-            <if test="maxOriginalPrice != null">and b_ps.original_price <![CDATA[ <= ]]> #{maxOriginalPrice}</if>
-            <if test="beginCreateAt != null">and b_ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and b_ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="ids != null and ids != ''">
+                and ps.id in
+                <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="name != null and name != ''">and ps.`name` like concat('%',#{name},'%')</if>
+            <if test="shelfStatus != null">and ps.shelf_status = #{shelfStatus}</if>
+            <if test="shelfType != null">and ps.shelf_type = #{shelfType}</if>
+            <if test="applicationType != null">and ps.application_type = #{applicationType}</if>
+            <if test="minPrice != null">and ps.price <![CDATA[ >= ]]> #{minPrice}</if>
+            <if test="maxPrice != null">and ps.price <![CDATA[ <= ]]> #{maxPrice}</if>
+            <if test="minOriginalPrice != null">and ps.original_price <![CDATA[ >= ]]> #{minOriginalPrice}</if>
+            <if test="maxOriginalPrice != null">and ps.original_price <![CDATA[ <= ]]> #{maxOriginalPrice}</if>
+            <if test="beginCreateAt != null">and ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
             <if test="keyword != null and keyword != ''">
-                and b_ps.`name` like concat('%',#{keyword},'%')
-                or b_psf.barcode like concat('%',#{keyword},'%')
+                and ps.`name` like concat('%',#{keyword},'%')
+                or psf.barcode like concat('%',#{keyword},'%')
             </if>
         </trim>
     </sql>
@@ -250,24 +215,18 @@
         <include refid="columns"/>
         from product_shelf ps
         left join product_specification psf on ps.specification_id = psf.id
-        inner join (
-        select b_ps.id
-        from product_shelf b_ps
-        left join product_specification b_psf on b_ps.specification_id = b_psf.id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by b_ps.sorting asc , b_ps.id desc
+            order by ps.sorting asc , ps.id desc
             limit #{startRow} , #{rows}
         </if>
-        ) pw on ps.id=pw.id
-        order by ps.sorting asc , ps.id desc
     </select>
 
     <!--查询商品上架集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductShelfParam" resultType="int">
         select count(1)
-        from product_shelf b_ps
-        left join product_specification b_psf on b_ps.specification_id = b_psf.id
+        from product_shelf ps
+        left join product_specification psf on ps.specification_id = psf.id
         <include refid="filter"/>
     </select>
 

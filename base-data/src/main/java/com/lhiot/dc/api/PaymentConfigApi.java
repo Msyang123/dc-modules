@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +23,7 @@ import java.util.Objects;
  **/
 @RestController
 @Slf4j
-@Api(description = "支付签名配置接口")
+@Api(tags = {"支付签名配置接口"})
 public class PaymentConfigApi {
 
     private PaymentConfigService paymentConfigService;
@@ -48,13 +47,12 @@ public class PaymentConfigApi {
 
     @ApiOperation("修改支付配置信息")
     @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "支付配置Id", required = true, dataType = "Long")
-    @ApiHideBodyProperty("id")
+    @ApiHideBodyProperty({"id","configName"})
     @PutMapping("/payment-config/{id}")
     public ResponseEntity updateConfig(@PathVariable("id") Long id, @RequestBody PaymentConfig config) {
         config.setId(id);
-        Tips tips = paymentConfigService.updateConfig(config);
-        if (tips.err()) {
-            return ResponseEntity.badRequest().body(tips.getMessage());
+        if (paymentConfigMapper.update(config) < 0) {
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
     }

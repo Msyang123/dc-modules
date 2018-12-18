@@ -3,6 +3,7 @@ package com.lhiot.dc.api;
 import com.leon.microx.util.Maps;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
+import com.leon.microx.web.swagger.ApiHideBodyProperty;
 import com.leon.microx.web.swagger.ApiParamType;
 import com.lhiot.dc.entity.ProductCategory;
 import com.lhiot.dc.model.ProductCategoryParam;
@@ -22,7 +23,7 @@ import java.net.URI;
  */
 @RestController
 @Slf4j
-@Api(description = "商品分类接口")
+@Api(tags = {"商品分类接口"})
 public class ProductCategoryApi {
     private ProductCategoryService categoryService;
 
@@ -31,7 +32,6 @@ public class ProductCategoryApi {
     }
 
     @ApiOperation("添加商品分类")
-    @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productCategory", value = "商品分类信息", dataType = "ProductCategory", required = true)
     @PostMapping("/product-categories")
     public ResponseEntity create(@RequestBody ProductCategory productCategory) {
         Tips tips = categoryService.addProductCategory(productCategory);
@@ -45,10 +45,10 @@ public class ProductCategoryApi {
 
     @ApiOperation("修改商品分类")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品分类Id", dataType = "Long", required = true),
-            @ApiImplicitParam(paramType = ApiParamType.BODY, name = "productCategory", value = "商品分类信息", dataType = "ProductCategory", required = true)
+            @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "商品分类Id", dataType = "Long", required = true)
     })
     @PutMapping("/product-categories/{id}")
+    @ApiHideBodyProperty("id")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProductCategory productCategory) {
         productCategory.setId(id);
         return categoryService.update(productCategory) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("修改信息失败！");

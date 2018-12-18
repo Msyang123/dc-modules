@@ -14,22 +14,54 @@
         <result column="available_status" property="availableStatus"/>
         <result column="create_at" property="createAt"/>
         <result column="specification_qty" property="specificationQty"/>
+        <association property="product" javaType="com.lhiot.dc.entity.Product">
+            <id column="pd_id" property="id"/>
+            <result column="pd_product_code" property="code"/>
+            <result column="pd_product_name" property="name"/>
+            <result column="pd_category_id" property="categoryId"/>
+            <result column="pd_source_code" property="sourceCode"/>
+            <result column="pd_benefit" property="benefit"/>
+            <result column="pd_description" property="description"/>
+            <result column="pd_create_at" property="createAt"/>
+            <collection property="attachments" ofType="com.lhiot.dc.entity.ProductAttachment">
+                <id column="pda_id" property="id"/>
+                <result column="pda_url" property="url"/>
+                <result column="pda_product_id" property="productId"/>
+                <result column="pda_sorting" property="sorting"/>
+                <result column="pda_attachment_type" property="attachmentType"/>
+            </collection>
+        </association>
     </resultMap>
 
 
     <!-- base查询字段  -->
     <sql id="columns">
         <trim suffixOverrides=",">
-            id,
-            product_id,
-            barcode,
-            packaging_unit,
-            weight,
-            limit_inventory,
-            inventory_specification,
-            available_status,
-            create_at,
-            specification_qty,
+            ps.id,
+            ps.product_id,
+            ps.barcode,
+            ps.packaging_unit,
+            ps.weight,
+            ps.limit_inventory,
+            ps.inventory_specification,
+            ps.available_status,
+            ps.create_at,
+            ps.specification_qty,
+
+            pd.id pd_id,
+            pd.product_code pd_product_code,
+            pd.product_name pd_product_name,
+            pd.category_id pd_category_id,
+            pd.source_code pd_source_code,
+            pd.benefit pd_benefit,
+            pd.description pd_description,
+            pd.create_at pd_create_at,
+
+            pda.id pda_id,
+            pda.url pda_url,
+            pda.product_id pda_product_id,
+            pda.sorting pda_sorting,
+            pda.attachment_type pda_attachment_type,
         </trim>
     </sql>
 
@@ -119,8 +151,25 @@
     <select id="findById" parameterType="Long" resultMap="baseResultMap">
         select
         <include refid="columns"/>
-        from product_specification
-        where id = #{0}
+        from product_specification ps
+        left join product pd on pd.id=ps.product_id
+        left join product_attachment pda on pd.id=pda.product_id
+        where ps.id = #{0}
+    </select>
+
+
+    <!--查询商品分类集合-->
+    <select id="findListByIdList" resultMap="baseResultMap">
+        select
+        <include refid="columns"/>
+        from product_specification ps
+        left join product pd on pd.id=ps.product_id
+        left join product_attachment pda on pd.id=pda.product_id
+        where ps.id in
+        <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by ps.id desc
     </select>
 
 
@@ -128,18 +177,18 @@
     <delete id="deleteByIds" parameterType="String">
         delete from product_specification where id in
         <foreach item="item" index="index" collection="ids.split(',')" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </delete>
 
 
     <!--根据商品Id集合 查找出有商品规格的商品-->
     <select id="findHaveSpecificationByProductIds" parameterType="String" resultType="map">
-        select ps.product_id productId,p.product_name productName
+        select ps.product_id productId,pd.product_name productName
         from product_specification ps
-        left join product p on ps.product_id=p.id
+        left join product pd on ps.product_id=pd.id
         where ps.product_id in (#{0})
-        group by ps.product_id,p.product_name
+        group by ps.product_id,pd.product_name
         having count(ps.id)>0
     </select>
 
@@ -147,18 +196,22 @@
     <!-- filter查询条件  -->
     <sql id="filter">
         <trim prefix="where" prefixOverrides="and|or">
-            <if test="productId != null">and product_id = #{productId}</if>
+            <if test="productId != null">and b_ps.product_id = #{productId}</if>
             <if test="barCodes != null and barCodes != ''">
-                and barcode in
+                and b_ps.barcode in
                 <foreach item="item" index="index" collection="barCodes.split(',')" open="(" separator="," close=")">
-                    '${item}'
+                    #{item}
                 </foreach>
             </if>
-            <if test="packagingUnit != null and packagingUnit != ''">and packaging_unit = #{packagingUnit}</if>
-            <if test="inventorySpecification != null">and inventory_specification = #{inventorySpecification}</if>
-            <if test="availableStatus != null">and available_status = #{availableStatus}</if>
-            <if test="beginCreateAt != null">and create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
-            <if test="endCreateAt != null">and create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="packagingUnit != null and packagingUnit != ''">and b_ps.packaging_unit = #{packagingUnit}</if>
+            <if test="inventorySpecification != null">and b_ps.inventory_specification = #{inventorySpecification}</if>
+            <if test="availableStatus != null">and b_ps.available_status = #{availableStatus}</if>
+            <if test="beginCreateAt != null">and b_ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
+            <if test="endCreateAt != null">and b_ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
+            <if test="keyword != null and keyword != ''">
+                and b_ps.barcode like concat('%',#{keyword},'%')
+                or b_pd.product_name like concat('%',#{keyword},'%')
+            </if>
         </trim>
     </sql>
 
@@ -167,18 +220,27 @@
     <select id="findList" resultMap="baseResultMap" parameterType="com.lhiot.dc.model.ProductSpecificationParam">
         select
         <include refid="columns"/>
-        from product_specification
+        from product_specification ps
+        left join product pd on pd.id=ps.product_id
+        left join product_attachment pda on pd.id=pda.product_id
+        inner join (
+        select b_ps.id
+        from product_specification b_ps
+        left join product b_pd on b_pd.id=b_ps.product_id
         <include refid="filter"/>
         <if test="rows != null and rows > 0 ">
-            order by id desc
+            order by b_ps.id desc
             limit #{startRow} , #{rows}
         </if>
+        ) pw on ps.id=pw.id
+        order by ps.id desc
     </select>
 
     <!--查询商品分类集合总数-->
     <select id="findCount" parameterType="com.lhiot.dc.model.ProductSpecificationParam" resultType="int">
         select count(1)
-        from product_specification
+        from product_specification b_ps
+        left join product b_pd on b_pd.id=b_ps.product_id
         <include refid="filter"/>
     </select>
 
