@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xiaojian  created in  2018/11/22 8:53
@@ -48,6 +49,9 @@ public class ArticleService {
      * @return 执行结果 true 或者 false
      */
     public boolean update(Article article) {
+        if (Objects.isNull(article.getEditAt())) {
+            article.setEditAt(Date.from(Instant.now()));
+        }
         return articleMapper.updateById(article) > 0;
     }
 
