@@ -38,7 +38,7 @@ public class StoreApi {
     @GetMapping("/stores/{id}")
     public ResponseEntity findStore(@PathVariable("id") Long id, @RequestParam("applicationType") String applicationType) {
         Store store = storeMapper.selectById(id);
-        if (Objects.isNull(store) || store.getApplicationType().contains(applicationType)) {
+        if (Objects.isNull(store) || !store.getApplicationType().contains(applicationType)) {
             return ResponseEntity.badRequest().body("门店不存在");
         }
         return ResponseEntity.ok(store);
