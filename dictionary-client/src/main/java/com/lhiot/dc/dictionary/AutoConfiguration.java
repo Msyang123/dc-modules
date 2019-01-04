@@ -28,17 +28,11 @@ public class AutoConfiguration {
     private String baseUrl;
     private Long cacheSeconds = DEFAULT_LOCAL_CACHE_TTL;
 
-    public AutoConfiguration(ObjectProvider<RestTemplate> provider) {
-        this.restTemplate = provider.getIfAvailable(RestTemplate::new);
-    }
-
-    private final RestTemplate restTemplate;
-
     @Bean("dictionaryClientRemoteInvoker")
-    public RemoteInvoker httpClient() {
+    public RemoteInvoker httpClient(ObjectProvider<RestTemplate> provider) {
         RemoteProperties properties = new RemoteProperties();
         properties.setServers(Maps.of(CONFIG_KEY, new RemoteProperties.RemoteServer(this.baseUrl)));
-        return RemoteInvoker.of(this.restTemplate, properties);
+        return RemoteInvoker.of(provider.getIfAvailable(RestTemplate::new), properties);
     }
 
     @Bean
