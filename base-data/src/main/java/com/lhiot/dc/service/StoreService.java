@@ -48,18 +48,18 @@ public class StoreService {
         if (Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
             //根据经纬度过滤
             storeStream = storeStream.peek(store -> this.distance(store, param))
-                    .filter(store -> param.getDistance() >= store.getDistance())
+                    .filter(store -> Objects.nonNull(store.getDistance()) && param.getDistance() >= store.getDistance())
                     .sorted(Comparator.comparing(Store::getDistance));
         }
-        int total = 0;
+
+        List<Store> result = storeStream.collect(Collectors.toList());
+        int total = result.size();
         if (Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows())) {
             //分页
-            List<Store> result = storeStream.collect(Collectors.toList());
-            total = result.size();
-            storeStream = result.stream().skip((param.getPage() - 1) * param.getRows())
-                    .limit(param.getRows());
+            result = result.stream().skip((param.getPage() - 1) * param.getRows())
+                    .limit(param.getRows()).collect(Collectors.toList());
         }
-        return Pages.of(total, storeStream.collect(Collectors.toList()));
+        return Pages.of(total, result);
     }
 
     private boolean typeNotEmpty(Store store, StoreSearchParam param) {
@@ -70,8 +70,10 @@ public class StoreService {
     }
 
     private void distance(Store store, StoreSearchParam param) {
-        Position.GCJ02 gcj02 = Position.GCJ02.of(param.getLng(), param.getLat());
-        BigDecimal distance = gcj02.distance(Position.GCJ02.of(store.getLongitude().doubleValue(), store.getLatitude().doubleValue()));
-        store.setDistance(distance.doubleValue());
+        if (Objects.nonNull(store.getLongitude()) && Objects.nonNull(store.getLatitude())) {
+            Position.GCJ02 gcj02 = Position.GCJ02.of(param.getLng(), param.getLat());
+            BigDecimal distance = gcj02.distance(Position.GCJ02.of(store.getLongitude().doubleValue(), store.getLatitude().doubleValue()));
+            store.setDistance(distance.doubleValue());
+        }
     }
 }
