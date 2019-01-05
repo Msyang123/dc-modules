@@ -25,7 +25,7 @@ public interface DictionaryMapper {
 
     List<Dictionary> list(SearchParameter search);
 
-    List<Dictionary> tree(String code);
+    List<Dictionary> tree(SearchParameter search);
 
     int count(SearchParameter search);
 }

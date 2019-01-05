@@ -1,7 +1,11 @@
 package com.lhiot.dc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Objects;
 
 /**
  * @author Leon (234239150@qq.com) created in 15:58 18.10.15
@@ -16,8 +20,18 @@ public class SearchParameter {
 
     private String entryCode;
 
-    private Long page = 1L;
+    private Integer page = 1;
 
-    private Long rows = 10L;
+    private Integer rows = 10;
 
+    @ApiModelProperty(hidden = true)
+    private Integer startRow;
+
+    @JsonIgnore
+    public Integer getStartRow() {
+        if (Objects.nonNull(this.rows) && this.rows > 0) {
+            startRow = (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
+        }
+        return startRow;
+    }
 }
