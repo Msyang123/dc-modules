@@ -2,6 +2,7 @@ package com.lhiot.dc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Objects;
@@ -23,11 +24,14 @@ public class SearchParameter {
 
     private Integer rows = 10;
 
+    @ApiModelProperty(hidden = true)
+    private Integer startRow;
+
     @JsonIgnore
     public Integer getStartRow() {
         if (Objects.nonNull(this.rows) && this.rows > 0) {
-            return (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
+            startRow = (Objects.nonNull(this.page) && this.page > 0 ? this.page - 1 : 0) * this.rows;
         }
-        return null;
+        return startRow;
     }
 }
