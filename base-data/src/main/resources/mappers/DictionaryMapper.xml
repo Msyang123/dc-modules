@@ -104,21 +104,36 @@
         select
         <include refid="columns"/>
         from dictionary
-        where code = #{dictionaryCode}
+        where 1 = 1
+        <if test="dictionaryCode != null and dictionaryCode != ''">
+            and code = #{dictionaryCode}
+        </if>
+        <if test="startRow != null and rows != null and rows > 0 ">
+            order by id desc limit #{startRow} , #{rows}
+        </if>
     </select>
 
-    <select id="tree" resultMap="associationResultMap" parameterType="java.lang.String">
+    <select id="tree" resultMap="associationResultMap" parameterType="com.lhiot.dc.model.SearchParameter">
         select
          id,parent_id,name,code,description
         from dictionary
-        where code = #{0}
+        where 1 = 1
+        <if test="dictionaryCode != null and dictionaryCode != ''">
+            and code = #{dictionaryCode}
+        </if>
+        <if test="startRow != null and rows != null and rows > 0 ">
+            order by id desc limit #{startRow} , #{rows}
+        </if>
     </select>
 
     <!--查询字典总记录-->
     <select id="count" resultType="int" parameterType="com.lhiot.dc.model.SearchParameter">
         select count(1)
         from dictionary
-        where code = #{dictionaryCode}
+        where 1 = 1
+        <if test="dictionaryCode != null and dictionaryCode != ''">
+            and code = #{dictionaryCode}
+        </if>
     </select>
 
 </mapper>
