@@ -209,8 +209,8 @@
             <if test="beginCreateAt != null">and b_ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and b_ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
             <if test="keyword != null and keyword != ''">
-                and b_ps.barcode like concat('%',#{keyword},'%')
-                or b_pd.product_name like concat('%',#{keyword},'%')
+                and ( b_ps.barcode like concat('%',#{keyword},'%') or b_pd.product_name like concat('%',#{keyword},'%')
+                )
             </if>
         </trim>
     </sql>

@@ -202,8 +202,7 @@
             <if test="beginCreateAt != null">and ps.create_at <![CDATA[ >= ]]> #{beginCreateAt}</if>
             <if test="endCreateAt != null">and ps.create_at <![CDATA[ <= ]]> #{endCreateAt}</if>
             <if test="keyword != null and keyword != ''">
-                and ps.`name` like concat('%',#{keyword},'%')
-                or psf.barcode like concat('%',#{keyword},'%')
+                and ( ps.`name` like concat('%',#{keyword},'%') or psf.barcode like concat('%',#{keyword},'%') )
             </if>
         </trim>
     </sql>
