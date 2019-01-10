@@ -11,6 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * 字典项验证注解
+ *
  * @author Leon (234239150@qq.com) created in 14:56 18.11.28
  */
 @Documented
@@ -21,12 +22,14 @@ public @interface HasEntries {
 
     /**
      * 哪个字典
+     *
      * @return dictionaryCode
      */
     String from();
 
     /**
      * 验证失败提示
+     *
      * @return string
      */
     String message() default "";
