@@ -5,7 +5,6 @@ import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Pages;
 import com.lhiot.dc.entity.Store;
 import com.lhiot.dc.model.StoreSearchParam;
-import com.lhiot.dc.mapper.StoreMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,23 +25,8 @@ import java.util.stream.Stream;
 @Transactional
 public class StoreService {
 
-    private StoreMapper storeMapper;
-
-    public StoreService(StoreMapper storeMapper) {
-        this.storeMapper = storeMapper;
-    }
-
-    public List<Store> findList(StoreSearchParam param) {
-        List<Store> list;
-        if (StringUtils.isNotBlank(param.getStoreIds())) {
-            list = storeMapper.selectListByIds(Arrays.asList(StringUtils.tokenizeToStringArray(param.getStoreIds(), ",")));
-        } else {
-            list = storeMapper.selectList(param);
-        }
-        return list;
-    }
-
     public Pages<Store> filtrate(List<Store> list, StoreSearchParam param) {
+        int total = list.size();
         //根据应用类型过滤
         Stream<Store> storeStream = list.stream().filter(store -> this.typeNotEmpty(store, param));
         if (Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
@@ -53,7 +37,6 @@ public class StoreService {
         }
 
         List<Store> result = storeStream.collect(Collectors.toList());
-        int total = result.size();
         if (Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows())) {
             //分页
             result = result.stream().skip((param.getPage() - 1) * param.getRows())
