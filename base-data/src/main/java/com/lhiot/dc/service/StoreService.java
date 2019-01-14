@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 public class StoreService {
 
     public Pages<Store> filtrate(List<Store> list, StoreSearchParam param) {
-        int total = list.size();
         //根据应用类型过滤
         Stream<Store> storeStream = list.stream().filter(store -> this.typeNotEmpty(store, param));
         if (Objects.nonNull(param.getLat()) && Objects.nonNull(param.getLng())) {
@@ -37,6 +36,7 @@ public class StoreService {
         }
 
         List<Store> result = storeStream.collect(Collectors.toList());
+        int total = result.size();
         if (Objects.nonNull(param.getPage()) && Objects.nonNull(param.getRows())) {
             //分页
             result = result.stream().skip((param.getPage() - 1) * param.getRows())
