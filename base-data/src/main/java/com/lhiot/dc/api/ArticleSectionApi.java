@@ -52,7 +52,7 @@ public class ArticleSectionApi {
             @ApiImplicitParam(paramType = ApiParamType.PATH, name = "id", value = "文章版块Id", dataType = "Long", required = true)
     })
     @PutMapping("/article-sections/{id}")
-    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList"})
+    @ApiHideBodyProperty({"id", "uiPosition", "createAt", "articleList", "articleIds"})
     public ResponseEntity update(@PathVariable("id") Long id, @Valid @RequestBody ArticleSection articleSection) {
         articleSection.setId(id);
         Tips tips = articleSectionService.update(articleSection);
