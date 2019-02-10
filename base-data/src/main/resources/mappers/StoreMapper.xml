@@ -132,27 +132,24 @@
         where store_code = #{0}
     </select>
 
-    <!--根据门店code，门店名称模糊查询-->
+    <!--门店模糊查询-->
     <select id="selectList" parameterType="com.lhiot.dc.model.StoreSearchParam" resultMap="baseResultMap">
         select
         <include refid="columns"/>
         from store
         <trim prefix="where" suffixOverrides="and">
-            <where>
-                <if test="name != null">store_name like concat('%',#{name},'%') and</if>
-                <if test="code != null">store_code like concat('%',#{code},'%') and</if>
-            </where>
+            <if test="name != null and name != ''">store_name like concat('%',#{name},'%') and</if>
+            <if test="code != null and code !=''">store_code like concat('%',#{code},'%') and</if>
+            <if test="storeIds != null and storeIds != ''">
+                id in
+                <foreach item="item" index="index" collection="storeIds.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                and
+            </if>
+            <if test="storeType != null ">store_type = #{storeType} and</if>
+            <if test="area != null ">area = #{area} and</if>
         </trim>
-    </select>
-
-    <!--根据ids获取门店信息(id和名称)-->
-    <select id="selectListByIds" resultMap="baseResultMap" parameterType="List">
-        select
-        <include refid="columns"/>
-        from store where id in
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
     </select>
 
 </mapper>

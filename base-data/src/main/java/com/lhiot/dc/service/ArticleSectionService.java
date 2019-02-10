@@ -1,8 +1,10 @@
 package com.lhiot.dc.service;
 
+import com.leon.microx.util.StringUtils;
 import com.leon.microx.web.result.Pages;
 import com.leon.microx.web.result.Tips;
 import com.lhiot.dc.entity.ArticleSection;
+import com.lhiot.dc.entity.ArticleSectionRelation;
 import com.lhiot.dc.mapper.ArticleSectionMapper;
 import com.lhiot.dc.mapper.ArticleSectionRelationMapper;
 import com.lhiot.dc.model.ArticleParam;
@@ -12,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,9 +50,21 @@ public class ArticleSectionService {
         if (!po.isEmpty()) {
             return Tips.warn("文章版块重复，添加失败.");
         }
-
         articleSection.setCreateAt(Date.from(Instant.now()));
         articleSectionMapper.insert(articleSection);
+
+        if (Objects.nonNull(articleSection.getArticleIds())){
+           List< String > articleIdList = Arrays.asList(StringUtils.tokenizeToStringArray(articleSection.getArticleIds(), ","));
+           List< ArticleSectionRelation > relationList = new ArrayList<>();
+           articleIdList.stream().forEach(articleId -> {
+               ArticleSectionRelation articleSectionRelation = new ArticleSectionRelation();
+               articleSectionRelation.setSectionId(articleSection.getId());
+               articleSectionRelation.setArticleId(Long.parseLong(articleId));
+               relationList.add(articleSectionRelation);
+           });
+           relationMapper.insertList(relationList);
+        }
+
         return Tips.info(articleSection.getId() + "");
     }
 

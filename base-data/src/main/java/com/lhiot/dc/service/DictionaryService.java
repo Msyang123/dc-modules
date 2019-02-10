@@ -34,7 +34,7 @@ public class DictionaryService {
 
     public Pages pages(SearchParameter search) {
         List<Dictionary> dictionaries = search.isIncludeChildren()
-                ? mapper.tree(search.getDictionaryCode())
+                ? mapper.tree(search)
                 : mapper.list(search);
         return Pages.of(mapper.count(search), dictionaries);
     }

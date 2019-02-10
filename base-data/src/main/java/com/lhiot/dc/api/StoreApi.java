@@ -38,7 +38,7 @@ public class StoreApi {
     @GetMapping("/stores/{id}")
     public ResponseEntity findStore(@PathVariable("id") Long id, @RequestParam("applicationType") String applicationType) {
         Store store = storeMapper.selectById(id);
-        if (Objects.isNull(store) || store.getApplicationType().contains(applicationType)) {
+        if (Objects.isNull(store) || !store.getApplicationType().contains(applicationType)) {
             return ResponseEntity.badRequest().body("门店不存在");
         }
         return ResponseEntity.ok(store);
@@ -98,11 +98,11 @@ public class StoreApi {
         return ResponseEntity.ok(storeMapper.deleteById(id));
     }
     @PostMapping("/stores/search")
-    @ApiOperation("根据位置查询门店所有列表根据距离排序")
+    @ApiOperation("根据条件查询门店列表")
     @ApiImplicitParam(paramType = ApiParamType.BODY, name = "param", value = "查询条件", dataType = "StoreSearchParam", required = true)
     public ResponseEntity search(@RequestBody StoreSearchParam param) {
-        log.debug("根据位置查询门店列表\t param:{}", param);
-        List<Store> storeList = storeService.findList(param);
+        log.debug("根据条件查询门店列表\t param:{}", param);
+        List<Store> storeList = storeMapper.selectList(param);
         Pages<Store> pages = storeService.filtrate(storeList, param);
         return ResponseEntity.ok(pages);
     }
